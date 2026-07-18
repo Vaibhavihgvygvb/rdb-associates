@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #FAF9F6;
+  color: #0A192F;
+}
+
+::selection { background: #C5A059; color: #0A192F; }
+
+@layer base {
+  :root {
+    --background: 42 33% 97%;
+    --foreground: 216 65% 12%;
+    --border: 40 30% 85%;
+    --radius: 0.25rem;
+  }
+  * { @apply border-border; }
+  h1, h2, h3, h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+  }
+}
+
+.paper-grain { position: relative; }
+.paper-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.05 0 0 0 0 0.1 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.gold-hairline {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #C5A059 20%, #C5A059 80%, transparent);
+}
+
+.gold-underline { position: relative; display: inline-block; }
+.gold-underline::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 1px;
+  background: #C5A059;
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 400ms ease;
+}
+.gold-underline:hover::after { transform: scaleX(1); }
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 0.4em;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
