@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
-import ssl
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
@@ -16,10 +15,7 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 mongo_url = os.environ['MONGO_URL']
-ssl_ctx = ssl.create_default_context()
-ssl_ctx.check_hostname = False
-ssl_ctx.verify_mode = ssl.CERT_NONE
-client = AsyncIOMotorClient(mongo_url, tls=True, tlsInsecure=True, ssl_context=ssl_ctx)
+client = AsyncIOMotorClient(mongo_url, tls=True, tlsInsecure=True)
 db = client[os.environ['DB_NAME']]
 
 app = FastAPI(title="RDB Associates API")
