@@ -15,7 +15,6 @@ export default function useReveal(options = { threshold: 0.15 }) {
     }, options);
     io.observe(node);
     return () => io.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return ref;
 }
