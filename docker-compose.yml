@@ -1,11 +1,15 @@
 services:
-  mongodb:
-    image: mongo:7
+  postgres:
+    image: postgres:16-alpine
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: rdb_associates
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
-      - mongo_data:/data/db
+      - pg_data:/var/lib/postgresql/data
 
   backend:
     build: ./backend
@@ -13,11 +17,10 @@ services:
     ports:
       - "8001:8001"
     environment:
-      MONGO_URL: "mongodb://mongodb:27017"
-      DB_NAME: "rdb_associates"
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/rdb_associates"
       CORS_ORIGINS: "*"
     depends_on:
-      - mongodb
+      - postgres
 
   frontend:
     build: ./frontend
@@ -28,4 +31,4 @@ services:
       - backend
 
 volumes:
-  mongo_data:
+  pg_data:
