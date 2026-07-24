@@ -9,19 +9,19 @@ module.exports = {
         sans: ['"IBM Plex Sans"', "system-ui", "sans-serif"],
       },
       colors: {
-        navy: {
-          DEFAULT: "#0A192F",
-          light: "#112240",
-          deep: "#050D1C",
+        sage: {
+          DEFAULT: "#4A5D45",
+          light: "#5F7358",
+          deep: "#33422E",
         },
-        gold: {
-          DEFAULT: "#C5A059",
-          light: "#D4AF37",
-          soft: "#E8D9B0",
+        brown: {
+          DEFAULT: "#6F4E37",
+          light: "#8B5E3C",
+          soft: "#C9AF8B",
         },
         cream: {
-          DEFAULT: "#FAF9F6",
-          dark: "#F2EFE7",
+          DEFAULT: "#FFFFFF",
+          dark: "#F6F5F1",
         },
         border: "hsl(var(--border))",
       },

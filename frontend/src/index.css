@@ -9,11 +9,20 @@ body {
   font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #FAF9F6;
-  color: #0A192F;
+  background-color: #FFFFFF;
+  color: #6F4E37;
+  transition: background-color 500ms ease, color 500ms ease;
 }
 
-::selection { background: #C5A059; color: #0A192F; }
+.page-transition {
+  animation: page-fade-in 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+::selection { background: #C9AF8B; color: #33422E; }
 
 @layer base {
   :root {
@@ -40,23 +49,23 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.05 0 0 0 0 0.1 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.gold-hairline {
+.brown-hairline {
   height: 1px;
-  background: linear-gradient(to right, transparent, #C5A059 20%, #C5A059 80%, transparent);
+  background: linear-gradient(to right, transparent, #6F4E37 20%, #6F4E37 80%, transparent);
 }
 
-.gold-underline { position: relative; display: inline-block; }
-.gold-underline::after {
+.brown-underline { position: relative; display: inline-block; }
+.brown-underline::after {
   content: "";
   position: absolute;
   left: 0; right: 0; bottom: -6px;
   height: 1px;
-  background: #C5A059;
+  background: #6F4E37;
   transform-origin: left;
   transform: scaleX(0);
   transition: transform 400ms ease;
 }
-.gold-underline:hover::after { transform: scaleX(1); }
+.brown-underline:hover::after { transform: scaleX(1); }
 
 .vertical-text {
   writing-mode: vertical-rl;

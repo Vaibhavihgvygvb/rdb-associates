@@ -26,11 +26,11 @@ export default function Expertise() {
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="max-w-3xl mb-16">
           <div className="flex items-center gap-4 mb-6">
-            <span className="h-px w-10 bg-gold" />
-            <span className="text-gold text-xs uppercase tracking-widest-plus">Areas of Expertise</span>
+            <span className="h-px w-10 bg-brown" />
+            <span className="text-brown text-xs uppercase tracking-widest-plus">Areas of Expertise</span>
           </div>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-navy leading-[1.05]">
-            A method for <span className="italic text-gold">every stage</span> of a matter.
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-brown leading-[1.05]">
+            A method for <span className="italic text-brown">every stage</span> of a matter.
           </h2>
         </div>
 
@@ -38,12 +38,12 @@ export default function Expertise() {
           {items.map((it, idx) => (
             <button key={it.n} onClick={() => setSelected(it)}
               data-testid={`expertise-item-${it.n}`}
-              className={`p-10 border-gold/25 hover:bg-white transition-colors duration-500 border-t text-left cursor-pointer ${
+              className={`p-10 border-brown/25 hover:bg-white transition-colors duration-500 border-t text-left cursor-pointer ${
                 idx % 3 !== 2 ? "md:border-r" : ""
               } ${idx >= items.length - 3 ? "md:border-b-0" : "border-b"}`}>
-              <div className="text-gold font-serif text-3xl mb-4">{it.n}</div>
-              <h3 className="font-serif text-2xl text-navy mb-3">{it.t}</h3>
-              <p className="text-navy/70 text-sm leading-relaxed">{it.d}</p>
+              <div className="text-brown font-serif text-3xl mb-4">{it.n}</div>
+              <h3 className="font-serif text-2xl text-brown mb-3">{it.t}</h3>
+              <p className="text-brown/70 text-sm leading-relaxed">{it.d}</p>
             </button>
           ))}
         </div>
@@ -52,19 +52,19 @@ export default function Expertise() {
       {selected && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
           onClick={() => setSelected(null)}>
-          <div className="absolute inset-0 bg-navy/80 backdrop-blur-sm" />
-          <div className="relative max-w-2xl w-full bg-white border border-gold/40 p-10 md:p-14 max-h-[85vh] overflow-y-auto shadow-2xl"
+          <div className="absolute inset-0 bg-sage/80 backdrop-blur-sm" />
+          <div className="relative max-w-2xl w-full bg-white border border-brown/40 p-10 md:p-14 max-h-[85vh] overflow-y-auto shadow-2xl"
             onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setSelected(null)}
-              className="absolute top-4 right-4 text-navy/40 hover:text-gold transition-colors p-1">
+              className="absolute top-4 right-4 text-brown/40 hover:text-brown transition-colors p-1">
               <X size={22} strokeWidth={1.5} />
             </button>
-            <div className="text-gold font-serif text-3xl mb-4">{selected.n}</div>
-            <h3 className="font-serif text-3xl md:text-4xl text-navy mb-6">{selected.t}</h3>
-            <p className="text-navy/80 text-base md:text-lg leading-relaxed">{selected.detail}</p>
+            <div className="text-brown font-serif text-3xl mb-4">{selected.n}</div>
+            <h3 className="font-serif text-3xl md:text-4xl text-brown mb-6">{selected.t}</h3>
+            <p className="text-brown/80 text-base md:text-lg leading-relaxed">{selected.detail}</p>
             <div className="mt-8 flex justify-end">
               <button onClick={() => setSelected(null)}
-                className="border border-gold text-gold px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-gold hover:text-navy transition-colors duration-300">
+                className="border border-brown text-brown px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-cream transition-colors duration-300">
                 Close
               </button>
             </div>
