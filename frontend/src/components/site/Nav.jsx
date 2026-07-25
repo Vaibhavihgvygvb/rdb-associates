@@ -31,6 +31,7 @@ const firmLinks = [
 
 const topLinks = [
   { label: "About", to: "/about" },
+  { label: "Newsroom", to: "/newsroom" },
   { label: "Insights", to: "/insights" },
   { label: "Careers", to: "/careers" },
 ];

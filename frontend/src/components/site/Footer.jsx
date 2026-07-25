@@ -29,8 +29,8 @@ export default function Footer() {
               {[
                 ["About", "/about"], ["Practice Areas", "/practice-areas"], ["Expertise", "/expertise"],
                 ["Journey", "/journey"], ["Credentials", "/credentials"], ["Our Work", "/work"],
-                ["Stages of a Matter", "/stages"], ["Careers", "/careers"], ["Insights", "/insights"],
-                ["Newsletter", "/newsletter"], ["Contact", "/contact"],
+                ["Stages of a Matter", "/stages"], ["Careers", "/careers"], ["Newsroom", "/newsroom"],
+                ["Insights", "/insights"], ["Newsletter", "/newsletter"], ["Contact", "/contact"],
               ].map(([l, h]) => (
                 <li key={l}>
                   <Link to={h} className="text-cream/75 hover:text-brown transition-colors duration-300">{l}</Link>

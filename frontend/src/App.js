@@ -13,6 +13,8 @@ import StagesPage from "@/pages/StagesPage";
 import CareersPage from "@/pages/CareersPage";
 import NewsletterPage from "@/pages/NewsletterPage";
 import InsightsPage from "@/pages/InsightsPage";
+import NewsroomPage from "@/pages/NewsroomPage";
+import NewsroomItemPage from "@/pages/NewsroomItemPage";
 import ContactPage from "@/pages/ContactPage";
 
 function ScrollToTop() {
@@ -40,6 +42,8 @@ function App() {
           <Route path="/careers" element={<CareersPage />} />
           <Route path="/newsletter" element={<NewsletterPage />} />
           <Route path="/insights" element={<InsightsPage />} />
+          <Route path="/newsroom" element={<NewsroomPage />} />
+          <Route path="/newsroom/:slug" element={<NewsroomItemPage />} />
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </BrowserRouter>
