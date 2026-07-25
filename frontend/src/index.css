@@ -10,7 +10,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #FFFFFF;
-  color: #15181C;
+  color: #1F1F1F;
   transition: background-color 500ms ease, color 500ms ease;
 }
 
@@ -22,21 +22,24 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-::selection { background: #0B57D0; color: #FFFFFF; }
+::selection { background: #007A5A; color: #FFFFFF; }
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 210 13% 9%;
-    --border: 220 13% 91%;
+    --foreground: 0 0% 12%;
+    --border: 0 0% 85%;
     --radius: 0.125rem;
   }
   * { @apply border-border; }
   h1, h2, h3, h4 {
     font-family: "Inter Tight", "Inter", system-ui, sans-serif;
-    font-weight: 600;
     letter-spacing: -0.02em;
   }
+  h1 { font-weight: 300; letter-spacing: -0.03em; line-height: 1.05; }
+  h2 { font-weight: 400; }
+  h3 { font-weight: 500; letter-spacing: -0.01em; }
+  h4 { font-weight: 500; }
 }
 
 .paper-grain { position: relative; }
@@ -52,7 +55,7 @@ body {
 
 .brown-hairline {
   height: 1px;
-  background: linear-gradient(to right, transparent, #0B57D0 20%, #0B57D0 80%, transparent);
+  background: linear-gradient(to right, transparent, #007A5A 20%, #007A5A 80%, transparent);
 }
 
 .brown-underline { position: relative; display: inline-block; }
@@ -61,7 +64,7 @@ body {
   position: absolute;
   left: 0; right: 0; bottom: -6px;
   height: 1px;
-  background: #0B57D0;
+  background: #007A5A;
   transform-origin: left;
   transform: scaleX(0);
   transition: transform 400ms ease;
@@ -81,3 +84,21 @@ body {
               transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+/* ============================================================
+   Editorial hover typography effect (global — no markup changes)
+   Text links: emerald colour + slight letter-spacing expand + soft
+   fade on hover. No underline. Skips buttons ([class*="bg-"]),
+   tab-style nav items ([class*="border-b-2"]) and the logo.
+   Headings are intentionally left unaffected.
+   ============================================================ */
+a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data-testid="nav-logo"]) {
+  transition: color 320ms cubic-bezier(0.16, 1, 0.3, 1),
+              letter-spacing 320ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data-testid="nav-logo"]):hover {
+  color: #007A5A;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}

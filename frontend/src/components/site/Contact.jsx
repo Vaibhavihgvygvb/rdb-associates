@@ -125,15 +125,15 @@ export default function Contact() {
           width: 100%;
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(21, 24, 28, 0.18);
+          border-bottom: 1px solid #D9D9D9;
           padding: 12px 0 10px;
           font-family: "Inter", system-ui, sans-serif;
           font-size: 15px;
-          color: #15181C;
+          color: #1F1F1F;
           outline: none;
           transition: border-color 300ms ease;
         }
-        .input-line:focus { border-bottom-color: #0B57D0; }
+        .input-line:focus { border-bottom-color: #007A5A; }
       `}</style>
     </section>
   );

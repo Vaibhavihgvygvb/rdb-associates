@@ -10,27 +10,27 @@ module.exports = {
         sans: ['"Inter"', "system-ui", "sans-serif"],
       },
       colors: {
-        // Dark sections (footer, hero overlay, accent blocks) — near-black.
+        // Dark sections (footer, hero overlay, accent blocks) — neutral near-black.
         sage: {
-          DEFAULT: "#12151A",
-          light: "#20242B",
-          deep: "#0A0C0F",
+          DEFAULT: "#121212",
+          light: "#1E1E1E",
+          deep: "#0A0A0A",
         },
-        // Accent — corporate blue (links, CTAs, eyebrows, detail lines).
+        // Accent — emerald (links, CTAs, eyebrows, detail lines).
         brown: {
-          DEFAULT: "#0B57D0",
-          light: "#2E74E8",
-          soft: "#9DBEF2",
+          DEFAULT: "#007A5A",
+          light: "#005C43",
+          soft: "#EAF5F1",
         },
         // Light surfaces — white + light gray. Also white text on dark.
         cream: {
           DEFAULT: "#FFFFFF",
-          dark: "#F4F5F7",
+          dark: "#F5F5F4",
         },
         // Readable text on light surfaces — near-black ink + muted gray.
         ink: {
-          DEFAULT: "#15181C",
-          soft: "#565C66",
+          DEFAULT: "#1F1F1F",
+          soft: "#666666",
         },
         border: "hsl(var(--border))",
       },
