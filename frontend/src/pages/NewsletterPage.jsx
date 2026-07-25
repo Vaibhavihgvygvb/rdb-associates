@@ -4,7 +4,7 @@ import Footer from "@/components/site/Footer";
 
 export default function NewsletterPage() {
   return (
-    <main data-testid="newsletter-page" className="bg-cream text-brown page-transition">
+    <main data-testid="newsletter-page" className="bg-cream text-ink page-transition">
       <Nav />
       <div className="pt-20" />
       <Newsletter variant="page" />

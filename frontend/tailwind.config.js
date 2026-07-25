@@ -9,19 +9,27 @@ module.exports = {
         sans: ['"IBM Plex Sans"', "system-ui", "sans-serif"],
       },
       colors: {
+        // Dark section surfaces (nav, hero, footer, panels) — deep ink navy.
         sage: {
-          DEFAULT: "#4A5D45",
-          light: "#5F7358",
-          deep: "#33422E",
+          DEFAULT: "#152439",
+          light: "#20334F",
+          deep: "#0E1A2C",
         },
+        // Accent — brass / gold. Decorative only; never body text on light.
         brown: {
-          DEFAULT: "#6F4E37",
-          light: "#8B5E3C",
-          soft: "#C9AF8B",
+          DEFAULT: "#B08D57",
+          light: "#C6A472",
+          soft: "#DBC7A4",
         },
+        // Light surfaces + text on dark sections — warm ivory / clean white.
         cream: {
-          DEFAULT: "#FFFFFF",
-          dark: "#F6F5F1",
+          DEFAULT: "#F8F6F0",
+          dark: "#ECE8DE",
+        },
+        // Readable text on light surfaces — near-black navy ink.
+        ink: {
+          DEFAULT: "#1A2438",
+          soft: "#4C566B",
         },
         border: "hsl(var(--border))",
       },

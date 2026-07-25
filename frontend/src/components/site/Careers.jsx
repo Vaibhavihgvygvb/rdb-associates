@@ -57,10 +57,10 @@ export default function Careers() {
             <span className="h-px w-10 bg-brown" />
             <span className="text-brown text-xs uppercase tracking-widest-plus">Careers</span>
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-brown leading-[1.05]">
-            Join the <span className="italic">chambers</span>.
+          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
+            Join the <span className="italic text-brown">chambers</span>.
           </h1>
-          <p className="mt-8 text-brown/70 text-base md:text-lg leading-relaxed">
+          <p className="mt-8 text-ink/70 text-base md:text-lg leading-relaxed">
             RDB Associates welcomes applications from qualified advocates seeking recruitment opportunities
             as well as law students seeking internships. Every application is reviewed personally.
           </p>
@@ -70,14 +70,14 @@ export default function Careers() {
           {tracks.map(({ key, Icon, title, body }) => (
             <div key={key} className="bg-white border border-brown/25 p-8">
               <Icon size={26} strokeWidth={1.3} className="text-brown mb-5" />
-              <h3 className="font-serif text-2xl text-brown mb-3">{title}</h3>
-              <p className="text-brown/70 text-sm leading-relaxed">{body}</p>
+              <h3 className="font-serif text-2xl text-ink mb-3">{title}</h3>
+              <p className="text-ink/70 text-sm leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
 
         <form data-testid="careers-form" onSubmit={onSubmit}
-          className="bg-white border border-brown/30 p-8 md:p-12 shadow-[0_16px_50px_rgb(51,66,46,0.06)] max-w-3xl">
+          className="bg-white border border-brown/30 p-8 md:p-12 shadow-[0_16px_50px_rgb(21,36,57,0.08)] max-w-3xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Field label="Full Name *">
               <input data-testid="careers-name" name="name" required value={form.name} onChange={onChange} className="input-line-careers" />
@@ -106,10 +106,10 @@ export default function Careers() {
             </div>
             <div className="md:col-span-2">
               <label className="block">
-                <span className="text-[10px] uppercase tracking-widest-plus text-brown/60">Resume / CV (PDF or Word, max 5MB)</span>
+                <span className="text-[10px] uppercase tracking-widest-plus text-ink/60">Resume / CV (PDF or Word, max 5MB)</span>
                 <div className="mt-2 flex items-center gap-3 border border-dashed border-brown/40 px-5 py-4 cursor-pointer hover:border-brown transition-colors duration-300">
                   <Upload size={18} strokeWidth={1.4} className="text-brown flex-shrink-0" />
-                  <span className="text-sm text-brown/70 truncate">{resume ? resume.name : "Choose a file to upload"}</span>
+                  <span className="text-sm text-ink/70 truncate">{resume ? resume.name : "Choose a file to upload"}</span>
                   <input
                     data-testid="careers-resume"
                     type="file"
@@ -123,7 +123,7 @@ export default function Careers() {
           </div>
 
           <button type="submit" data-testid="careers-submit" disabled={loading}
-            className="mt-8 inline-flex items-center gap-3 bg-brown text-cream px-10 py-4 text-xs uppercase tracking-widest-plus hover:bg-sage transition-colors duration-300 disabled:opacity-60 group">
+            className="mt-8 inline-flex items-center gap-3 bg-brown text-sage px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-sage hover:text-cream transition-colors duration-300 disabled:opacity-60 group">
             {loading ? "Submitting..." : "Submit Application"}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
           </button>
@@ -135,15 +135,15 @@ export default function Careers() {
           width: 100%;
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(111, 78, 55, 0.25);
+          border-bottom: 1px solid rgba(26, 36, 56, 0.2);
           padding: 12px 0 10px;
           font-family: "IBM Plex Sans", sans-serif;
           font-size: 15px;
-          color: #6F4E37;
+          color: #1A2438;
           outline: none;
           transition: border-color 300ms ease;
         }
-        .input-line-careers:focus { border-bottom-color: #6F4E37; }
+        .input-line-careers:focus { border-bottom-color: #B08D57; }
       `}</style>
     </section>
   );
@@ -152,7 +152,7 @@ export default function Careers() {
 function Field({ label, children }) {
   return (
     <label className="block">
-      <span className="text-[10px] uppercase tracking-widest-plus text-brown/60">{label}</span>
+      <span className="text-[10px] uppercase tracking-widest-plus text-ink/60">{label}</span>
       <div className="mt-1">{children}</div>
     </label>
   );

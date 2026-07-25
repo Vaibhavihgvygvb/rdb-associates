@@ -48,9 +48,9 @@ function App() {
         theme="light"
         toastOptions={{
           style: {
-            background: "#33422E",
-            color: "#FFFFFF",
-            border: "1px solid #6F4E37",
+            background: "#152439",
+            color: "#F8F6F0",
+            border: "1px solid #B08D57",
             fontFamily: "IBM Plex Sans, sans-serif",
           },
         }}

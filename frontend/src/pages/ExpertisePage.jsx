@@ -4,7 +4,7 @@ import Footer from "@/components/site/Footer";
 
 export default function ExpertisePage() {
   return (
-    <main data-testid="expertise-page" className="bg-cream text-brown page-transition">
+    <main data-testid="expertise-page" className="bg-cream text-ink page-transition">
       <Nav />
       <div className="pt-20" />
       <Expertise />

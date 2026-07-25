@@ -50,10 +50,10 @@ export default function Contact() {
               <span className="h-px w-10 bg-brown" />
               <span className="text-brown text-xs uppercase tracking-widest-plus">Contact</span>
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-brown leading-[1.05]">
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
               Speak with <span className="italic text-brown">the chambers</span>.
             </h2>
-            <p className="mt-8 text-brown/70 text-base md:text-lg leading-relaxed">
+            <p className="mt-8 text-ink/70 text-base md:text-lg leading-relaxed">
               Share a brief on your matter and preferred means of contact. Every enquiry is reviewed personally and responded to within one working day. All communication is treated in the strictest confidence.
             </p>
 
@@ -67,8 +67,8 @@ export default function Contact() {
                 <div key={label} className="flex items-start gap-4 border-b border-brown/25 pb-5">
                   <Icon size={20} strokeWidth={1.4} className="text-brown mt-1" />
                   <div>
-                    <div className="text-[10px] uppercase tracking-widest-plus text-brown/60">{label}</div>
-                    <div className="font-serif text-lg text-brown mt-1">{val}</div>
+                    <div className="text-[10px] uppercase tracking-widest-plus text-ink/60">{label}</div>
+                    <div className="font-serif text-lg text-ink mt-1">{val}</div>
                   </div>
                 </div>
               ))}
@@ -77,7 +77,7 @@ export default function Contact() {
 
           <div className="lg:col-span-7">
             <form data-testid="contact-form" onSubmit={onSubmit}
-              className="bg-white border border-brown/30 p-8 md:p-12 shadow-[0_16px_50px_rgb(51,66,46,0.06)]">
+              className="bg-white border border-brown/30 p-8 md:p-12 shadow-[0_16px_50px_rgb(21,36,57,0.08)]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Field label="Full Name *">
                   <input data-testid="contact-name" name="name" required value={form.name} onChange={onChange} className="input-line" />
@@ -106,7 +106,7 @@ export default function Contact() {
                 </div>
               </div>
 
-              <p className="mt-6 text-xs text-brown/50 leading-relaxed">
+              <p className="mt-6 text-xs text-ink/50 leading-relaxed">
                 Submitting this form does not create an attorney–client relationship. Please do not share privileged information until a formal engagement is in place.
               </p>
 
@@ -125,15 +125,15 @@ export default function Contact() {
           width: 100%;
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(111, 78, 55, 0.25);
+          border-bottom: 1px solid rgba(26, 36, 56, 0.2);
           padding: 12px 0 10px;
           font-family: "IBM Plex Sans", sans-serif;
           font-size: 15px;
-          color: #6F4E37;
+          color: #1A2438;
           outline: none;
           transition: border-color 300ms ease;
         }
-        .input-line:focus { border-bottom-color: #6F4E37; }
+        .input-line:focus { border-bottom-color: #B08D57; }
       `}</style>
     </section>
   );
@@ -142,7 +142,7 @@ export default function Contact() {
 function Field({ label, children }) {
   return (
     <label className="block">
-      <span className="text-[10px] uppercase tracking-widest-plus text-brown/60">{label}</span>
+      <span className="text-[10px] uppercase tracking-widest-plus text-ink/60">{label}</span>
       <div className="mt-1">{children}</div>
     </label>
   );

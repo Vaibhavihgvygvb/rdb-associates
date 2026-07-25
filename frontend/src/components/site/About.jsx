@@ -27,16 +27,16 @@ export default function About() {
               <span className="h-px w-10 bg-brown" />
               <span className="text-brown text-xs uppercase tracking-widest-plus">About the Advocate</span>
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-brown leading-[1.05]">
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
               A practice grounded in
               <span className="italic text-brown"> discipline</span>, shaped by the{" "}
               <span className="italic">craft of advocacy</span>.
             </h2>
 
-            <div className="mt-10 space-y-6 text-brown/80 leading-relaxed text-base md:text-lg">
+            <div className="mt-10 space-y-6 text-ink/80 leading-relaxed text-base md:text-lg">
               <p>
                 Ramandeep Bawa is a litigating advocate based in New Delhi and the founder of{" "}
-                <span className="text-brown font-medium">RDB Associates</span>. He practises principally before the High Court of Delhi, and represents clients before District Courts and specialised tribunals across India in matters spanning civil, commercial, medical and cyber law.
+                <span className="text-ink font-semibold">RDB Associates</span>. He practises principally before the High Court of Delhi, and represents clients before District Courts and specialised tribunals across India in matters spanning civil, commercial, medical and cyber law.
               </p>
               <p>
                 Trained under Senior Advocate Ajay Burman from 2011, he developed a rigorous foundation in courtroom advocacy, drafting and litigation strategy — moving to independent practice in 2013. His approach is measured, meticulous and deeply client-centric: less noise, more counsel.
@@ -48,10 +48,10 @@ export default function About() {
 
             <div className="mt-12 relative border-l-2 border-brown pl-8 py-4">
               <Quote className="absolute -top-3 -left-4 bg-cream text-brown p-1" size={26} strokeWidth={1.2} />
-              <p className="font-serif italic text-brown text-xl md:text-2xl leading-snug">
+              <p className="font-serif italic text-ink text-xl md:text-2xl leading-snug">
                 &ldquo;I never lose. I either win or learn.&rdquo;
               </p>
-              <p className="mt-3 text-xs uppercase tracking-widest-plus text-brown/60">
+              <p className="mt-3 text-xs uppercase tracking-widest-plus text-ink/60">
                 — Nelson Mandela · Guiding Principle
               </p>
             </div>
@@ -65,7 +65,7 @@ export default function About() {
               ].map((f) => (
                 <div key={f.v} className="border-t border-brown/40 pt-4">
                   <div className="font-serif text-3xl md:text-4xl text-brown">{f.k}</div>
-                  <div className="text-[11px] uppercase tracking-widest-plus text-brown/60 mt-2">{f.v}</div>
+                  <div className="text-[11px] uppercase tracking-widest-plus text-ink/60 mt-2">{f.v}</div>
                 </div>
               ))}
             </div>

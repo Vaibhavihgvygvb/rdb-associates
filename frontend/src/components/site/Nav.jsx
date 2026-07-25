@@ -48,7 +48,7 @@ export default function Nav() {
         </nav>
 
         <Link to="/contact" data-testid="nav-cta-contact"
-          className="hidden md:inline-flex items-center gap-2 border border-brown text-brown px-5 py-2.5 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-cream transition-colors duration-300">
+          className="hidden md:inline-flex items-center gap-2 border border-brown text-brown px-5 py-2.5 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-sage transition-colors duration-300">
           Contact
         </Link>
 

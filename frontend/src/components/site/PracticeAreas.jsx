@@ -117,7 +117,7 @@ export default function PracticeAreas() {
             )}
             <div className="mt-8 flex justify-end">
               <button onClick={() => setSelected(null)}
-                className="border border-brown text-brown px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-cream transition-colors duration-300">
+                className="border border-brown text-brown px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-sage transition-colors duration-300">
                 Close
               </button>
             </div>

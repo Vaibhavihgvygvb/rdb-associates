@@ -50,7 +50,7 @@ export default function Newsletter({ variant = "footer" }) {
             data-testid="newsletter-footer-submit"
             type="submit"
             disabled={loading}
-            className="bg-brown text-cream px-4 flex items-center justify-center hover:bg-brown-light transition-colors duration-300 disabled:opacity-60"
+            className="bg-brown text-sage px-4 flex items-center justify-center hover:bg-brown-light transition-colors duration-300 disabled:opacity-60"
             aria-label="Subscribe"
           >
             <ArrowRight size={16} />
@@ -68,10 +68,10 @@ export default function Newsletter({ variant = "footer" }) {
           <span className="text-brown text-xs uppercase tracking-widest-plus">Newsletter</span>
           <span className="h-px w-10 bg-brown" />
         </div>
-        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-brown leading-[1.05]">
-          Stay informed with <span className="italic">the chambers</span>.
+        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
+          Stay informed with <span className="italic text-brown">the chambers</span>.
         </h1>
-        <p className="mt-8 text-brown/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto">
+        <p className="mt-8 text-ink/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto">
           Subscribe to receive periodic updates on firm news, notable matters, and short-form legal
           insights across our practice areas — civil, commercial, medical and cyber law. No spam,
           unsubscribe anytime.
@@ -87,14 +87,14 @@ export default function Newsletter({ variant = "footer" }) {
               placeholder="Your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-transparent outline-none text-sm text-brown placeholder:text-brown/40"
+              className="flex-1 bg-transparent outline-none text-sm text-ink placeholder:text-ink/40"
             />
           </div>
           <button
             data-testid="newsletter-page-submit"
             type="submit"
             disabled={loading}
-            className="inline-flex items-center justify-center gap-3 bg-brown text-cream px-8 py-4 text-xs uppercase tracking-widest-plus font-medium hover:bg-sage transition-colors duration-300 disabled:opacity-60 group"
+            className="inline-flex items-center justify-center gap-3 bg-brown text-sage px-8 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-sage hover:text-cream transition-colors duration-300 disabled:opacity-60 group"
           >
             {loading ? "Subscribing..." : "Subscribe"}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />

@@ -29,7 +29,7 @@ export default function Expertise() {
             <span className="h-px w-10 bg-brown" />
             <span className="text-brown text-xs uppercase tracking-widest-plus">Areas of Expertise</span>
           </div>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-brown leading-[1.05]">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
             A method for <span className="italic text-brown">every stage</span> of a matter.
           </h2>
         </div>
@@ -42,8 +42,8 @@ export default function Expertise() {
                 idx % 3 !== 2 ? "md:border-r" : ""
               } ${idx >= items.length - 3 ? "md:border-b-0" : "border-b"}`}>
               <div className="text-brown font-serif text-3xl mb-4">{it.n}</div>
-              <h3 className="font-serif text-2xl text-brown mb-3">{it.t}</h3>
-              <p className="text-brown/70 text-sm leading-relaxed">{it.d}</p>
+              <h3 className="font-serif text-2xl text-ink mb-3">{it.t}</h3>
+              <p className="text-ink/70 text-sm leading-relaxed">{it.d}</p>
             </button>
           ))}
         </div>
@@ -56,15 +56,15 @@ export default function Expertise() {
           <div className="relative max-w-2xl w-full bg-white border border-brown/40 p-10 md:p-14 max-h-[85vh] overflow-y-auto shadow-2xl"
             onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setSelected(null)}
-              className="absolute top-4 right-4 text-brown/40 hover:text-brown transition-colors p-1">
+              className="absolute top-4 right-4 text-ink/40 hover:text-brown transition-colors p-1">
               <X size={22} strokeWidth={1.5} />
             </button>
             <div className="text-brown font-serif text-3xl mb-4">{selected.n}</div>
-            <h3 className="font-serif text-3xl md:text-4xl text-brown mb-6">{selected.t}</h3>
-            <p className="text-brown/80 text-base md:text-lg leading-relaxed">{selected.detail}</p>
+            <h3 className="font-serif text-3xl md:text-4xl text-ink mb-6">{selected.t}</h3>
+            <p className="text-ink/80 text-base md:text-lg leading-relaxed">{selected.detail}</p>
             <div className="mt-8 flex justify-end">
               <button onClick={() => setSelected(null)}
-                className="border border-brown text-brown px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-cream transition-colors duration-300">
+                className="border border-brown text-brown px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-sage transition-colors duration-300">
                 Close
               </button>
             </div>

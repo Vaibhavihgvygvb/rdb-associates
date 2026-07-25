@@ -30,10 +30,10 @@ function AboutTeaser() {
               <span className="h-px w-10 bg-brown" />
               <span className="text-brown text-xs uppercase tracking-widest-plus">About the Advocate</span>
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-brown leading-[1.05]">
-              A practice grounded in <span className="italic">discipline</span>.
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
+              A practice grounded in <span className="italic text-brown">discipline</span>.
             </h2>
-            <p className="mt-8 text-brown/70 text-base md:text-lg leading-relaxed max-w-2xl">
+            <p className="mt-8 text-ink/70 text-base md:text-lg leading-relaxed max-w-2xl">
               Ramandeep Bawa is a litigating advocate based in New Delhi and the founder of RDB
               Associates, practising principally before the High Court of Delhi across civil,
               commercial, medical and cyber law matters.
@@ -81,7 +81,7 @@ function ExploreGrid() {
 
 export default function Home() {
   return (
-    <main data-testid="home-page" className="bg-cream text-brown">
+    <main data-testid="home-page" className="bg-cream text-ink">
       <Nav />
       <Hero />
       <AboutTeaser />

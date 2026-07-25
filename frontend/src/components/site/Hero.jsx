@@ -36,7 +36,7 @@ export default function Hero() {
 
           <div className="mt-12 flex flex-wrap items-center gap-5 animate-fade-in-up" style={{ animationDelay: "450ms" }}>
             <Link to="/contact" data-testid="hero-cta-consult"
-              className="inline-flex items-center gap-3 bg-brown text-cream px-8 py-4 text-xs uppercase tracking-widest-plus font-medium hover:bg-cream hover:text-brown transition-colors duration-300 group">
+              className="inline-flex items-center gap-3 bg-brown text-sage px-8 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-cream hover:text-sage transition-colors duration-300 group">
               Contact
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
             </Link>

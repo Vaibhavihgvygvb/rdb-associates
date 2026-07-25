@@ -27,7 +27,7 @@ export default function Credentials() {
             <span className="h-px w-10 bg-brown" />
             <span className="text-brown text-xs uppercase tracking-widest-plus">Credentials</span>
           </div>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-brown leading-[1.05]">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
             Education, memberships &amp; <span className="italic text-brown">the record</span>.
           </h2>
         </div>
@@ -35,12 +35,12 @@ export default function Credentials() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="bg-white border border-brown/25 p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
             <GraduationCap size={26} strokeWidth={1.3} className="text-brown mb-6" />
-            <h3 className="font-serif text-2xl text-brown mb-6">Education</h3>
+            <h3 className="font-serif text-2xl text-ink mb-6">Education</h3>
             <ul className="space-y-5">
               {education.map((e) => (
                 <li key={e.label} className="border-l border-brown/50 pl-4">
-                  <div className="font-serif text-brown">{e.label}</div>
-                  <div className="text-xs uppercase tracking-widest text-brown/60 mt-1">{e.inst}</div>
+                  <div className="font-serif text-ink">{e.label}</div>
+                  <div className="text-xs uppercase tracking-widest text-ink/60 mt-1">{e.inst}</div>
                 </li>
               ))}
             </ul>
@@ -67,15 +67,15 @@ export default function Credentials() {
 
           <div className="bg-white border border-brown/25 p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
             <Languages size={26} strokeWidth={1.3} className="text-brown mb-6" />
-            <h3 className="font-serif text-2xl text-brown mb-6">Languages</h3>
+            <h3 className="font-serif text-2xl text-ink mb-6">Languages</h3>
             <ul className="space-y-4">
               {languages.map((l) => (
                 <li key={l} className="flex items-baseline justify-between border-b border-brown/20 pb-3">
-                  <span className="font-serif text-brown text-lg">{l}</span>
+                  <span className="font-serif text-ink text-lg">{l}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-brown/60 text-xs uppercase tracking-widest-plus mt-8">
+            <p className="text-ink/60 text-xs uppercase tracking-widest-plus mt-8">
               Confidential consultations available across languages
             </p>
           </div>
