@@ -6,11 +6,11 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #F8F6F0;
-  color: #1A2438;
+  background-color: #FFFFFF;
+  color: #15181C;
   transition: background-color 500ms ease, color 500ms ease;
 }
 
@@ -22,19 +22,20 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-::selection { background: #B08D57; color: #0E1A2C; }
+::selection { background: #0B57D0; color: #FFFFFF; }
 
 @layer base {
   :root {
-    --background: 42 33% 97%;
-    --foreground: 216 65% 12%;
-    --border: 214 32% 88%;
-    --radius: 0.25rem;
+    --background: 0 0% 100%;
+    --foreground: 210 13% 9%;
+    --border: 220 13% 91%;
+    --radius: 0.125rem;
   }
   * { @apply border-border; }
   h1, h2, h3, h4 {
-    font-family: "Playfair Display", Georgia, serif;
-    font-weight: 500;
+    font-family: "Inter Tight", "Inter", system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 }
 
@@ -51,7 +52,7 @@ body {
 
 .brown-hairline {
   height: 1px;
-  background: linear-gradient(to right, transparent, #B08D57 20%, #B08D57 80%, transparent);
+  background: linear-gradient(to right, transparent, #0B57D0 20%, #0B57D0 80%, transparent);
 }
 
 .brown-underline { position: relative; display: inline-block; }
@@ -60,7 +61,7 @@ body {
   position: absolute;
   left: 0; right: 0; bottom: -6px;
   height: 1px;
-  background: #B08D57;
+  background: #0B57D0;
   transform-origin: left;
   transform: scaleX(0);
   transition: transform 400ms ease;

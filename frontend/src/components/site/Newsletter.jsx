@@ -50,7 +50,7 @@ export default function Newsletter({ variant = "footer" }) {
             data-testid="newsletter-footer-submit"
             type="submit"
             disabled={loading}
-            className="bg-brown text-sage px-4 flex items-center justify-center hover:bg-brown-light transition-colors duration-300 disabled:opacity-60"
+            className="bg-brown text-white px-4 flex items-center justify-center hover:bg-brown-light transition-colors duration-300 disabled:opacity-60"
             aria-label="Subscribe"
           >
             <ArrowRight size={16} />
@@ -61,7 +61,7 @@ export default function Newsletter({ variant = "footer" }) {
   }
 
   return (
-    <section data-testid="newsletter-page-section" className="relative py-24 md:py-32 bg-cream paper-grain">
+    <section data-testid="newsletter-page-section" className="relative py-24 md:py-32 bg-cream">
       <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
         <div className="flex items-center justify-center gap-4 mb-6">
           <span className="h-px w-10 bg-brown" />
@@ -94,7 +94,7 @@ export default function Newsletter({ variant = "footer" }) {
             data-testid="newsletter-page-submit"
             type="submit"
             disabled={loading}
-            className="inline-flex items-center justify-center gap-3 bg-brown text-sage px-8 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-sage hover:text-cream transition-colors duration-300 disabled:opacity-60 group"
+            className="inline-flex items-center justify-center gap-3 bg-brown text-white px-8 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 group"
           >
             {loading ? "Subscribing..." : "Subscribe"}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />

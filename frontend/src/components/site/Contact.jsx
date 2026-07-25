@@ -42,7 +42,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" data-testid="contact-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream paper-grain">
+    <section id="contact" data-testid="contact-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-20">
           <div className="lg:col-span-5">
@@ -111,7 +111,7 @@ export default function Contact() {
               </p>
 
               <button type="submit" data-testid="contact-submit" disabled={loading}
-                className="mt-8 inline-flex items-center gap-3 bg-sage text-brown px-10 py-4 text-xs uppercase tracking-widest-plus border border-sage hover:bg-sage-light transition-colors duration-300 disabled:opacity-60 group">
+                className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 group">
                 {loading ? "Submitting..." : "Send Enquiry"}
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
               </button>
@@ -125,15 +125,15 @@ export default function Contact() {
           width: 100%;
           background: transparent;
           border: none;
-          border-bottom: 1px solid rgba(26, 36, 56, 0.2);
+          border-bottom: 1px solid rgba(21, 24, 28, 0.18);
           padding: 12px 0 10px;
-          font-family: "IBM Plex Sans", sans-serif;
+          font-family: "Inter", system-ui, sans-serif;
           font-size: 15px;
-          color: #1A2438;
+          color: #15181C;
           outline: none;
           transition: border-color 300ms ease;
         }
-        .input-line:focus { border-bottom-color: #B08D57; }
+        .input-line:focus { border-bottom-color: #0B57D0; }
       `}</style>
     </section>
   );

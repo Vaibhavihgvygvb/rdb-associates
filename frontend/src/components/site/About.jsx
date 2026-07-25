@@ -6,7 +6,7 @@ const PORTRAIT = "https://thumbs4.imagebam.com/0b/f9/36/ME1EKUAW_t.png";
 export default function About() {
   const ref = useReveal();
   return (
-    <section id="about" data-testid="about-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream paper-grain">
+    <section id="about" data-testid="about-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-20">
           <div className="lg:col-span-5 relative">

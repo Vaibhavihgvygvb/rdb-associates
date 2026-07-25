@@ -22,7 +22,7 @@ const explore = [
 function AboutTeaser() {
   const ref = useReveal();
   return (
-    <section ref={ref} className="reveal relative py-24 md:py-32 bg-cream paper-grain">
+    <section ref={ref} className="reveal relative py-24 md:py-32 bg-cream">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 items-center">
           <div className="lg:col-span-7">
@@ -52,7 +52,7 @@ function AboutTeaser() {
 function ExploreGrid() {
   const ref = useReveal();
   return (
-    <section ref={ref} className="reveal relative py-24 md:py-32 bg-sage text-cream">
+    <section ref={ref} className="reveal relative py-24 md:py-32 bg-cream-dark text-ink">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="max-w-3xl mb-16">
           <div className="flex items-center gap-4 mb-6">
@@ -67,10 +67,10 @@ function ExploreGrid() {
         <div data-testid="explore-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {explore.map(({ to, Icon, title, body }) => (
             <Link key={to} to={to} data-testid={`explore-card-${title.replace(/\s+/g, "-").toLowerCase()}`}
-              className="group relative border border-brown/25 bg-sage-light/50 p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,background-color] duration-500 hover:bg-sage-light">
+              className="group relative border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)]">
               <Icon size={26} strokeWidth={1.3} className="text-brown mb-5 group-hover:scale-110 transition-transform duration-500" />
-              <h3 className="font-serif text-xl text-cream mb-2">{title}</h3>
-              <p className="text-cream/70 text-sm leading-relaxed">{body}</p>
+              <h3 className="font-serif text-xl text-ink mb-2">{title}</h3>
+              <p className="text-ink-soft text-sm leading-relaxed">{body}</p>
             </Link>
           ))}
         </div>

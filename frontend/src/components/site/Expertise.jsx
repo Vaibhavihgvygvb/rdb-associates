@@ -22,7 +22,7 @@ export default function Expertise() {
   const [selected, setSelected] = useState(null);
 
   return (
-    <section id="expertise" data-testid="expertise-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream paper-grain">
+    <section id="expertise" data-testid="expertise-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="max-w-3xl mb-16">
           <div className="flex items-center gap-4 mb-6">
@@ -64,7 +64,7 @@ export default function Expertise() {
             <p className="text-ink/80 text-base md:text-lg leading-relaxed">{selected.detail}</p>
             <div className="mt-8 flex justify-end">
               <button onClick={() => setSelected(null)}
-                className="border border-brown text-brown px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-sage transition-colors duration-300">
+                className="border border-brown text-brown px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-white transition-colors duration-300">
                 Close
               </button>
             </div>

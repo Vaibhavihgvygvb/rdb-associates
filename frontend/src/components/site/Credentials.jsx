@@ -20,7 +20,7 @@ const languages = ["English", "Hindi", "Punjabi", "Japanese (Working)"];
 export default function Credentials() {
   const ref = useReveal();
   return (
-    <section id="credentials" data-testid="credentials-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream paper-grain">
+    <section id="credentials" data-testid="credentials-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="max-w-3xl mb-16">
           <div className="flex items-center gap-4 mb-6">

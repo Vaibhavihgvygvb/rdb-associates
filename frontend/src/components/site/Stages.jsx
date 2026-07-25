@@ -13,8 +13,8 @@ const stages = [
 export default function Stages() {
   const ref = useReveal();
   return (
-    <section id="stages" data-testid="stages-section" ref={ref} className="reveal relative py-24 md:py-32 bg-sage text-cream">
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brown/60 to-transparent" />
+    <section id="stages" data-testid="stages-section" ref={ref} className="reveal relative py-24 md:py-32 bg-white text-ink">
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         <div className="max-w-3xl mb-16">
           <div className="flex items-center gap-4 mb-6">
@@ -24,22 +24,22 @@ export default function Stages() {
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
             Stages of <span className="italic text-brown">a matter</span>.
           </h1>
-          <p className="mt-8 text-cream/70 text-base md:text-lg leading-relaxed">
+          <p className="mt-8 text-ink-soft text-base md:text-lg leading-relaxed">
             Every matter is different, but the chambers follow a disciplined process at each stage —
             from the first consultation through to resolution.
           </p>
         </div>
 
         <div className="relative">
-          <div className="absolute left-4 md:left-6 top-0 bottom-0 w-px bg-brown/30" />
+          <div className="absolute left-4 md:left-6 top-0 bottom-0 w-px bg-border" />
           <div className="space-y-10">
             {stages.map((s) => (
               <div key={s.n} data-testid={`stage-item-${s.n}`} className="relative pl-14 md:pl-20">
-                <span className="absolute left-0 md:left-2 top-0 w-8 h-8 rounded-full bg-sage border border-brown flex items-center justify-center text-brown font-serif text-sm">
+                <span className="absolute left-0 md:left-2 top-0 w-8 h-8 rounded-full bg-white border border-brown flex items-center justify-center text-brown font-serif text-sm">
                   {s.n}
                 </span>
-                <h3 className="font-serif text-xl md:text-2xl text-cream">{s.t}</h3>
-                <p className="text-cream/70 text-sm md:text-base mt-2 leading-relaxed max-w-2xl">{s.d}</p>
+                <h3 className="font-serif text-xl md:text-2xl text-ink">{s.t}</h3>
+                <p className="text-ink-soft text-sm md:text-base mt-2 leading-relaxed max-w-2xl">{s.d}</p>
               </div>
             ))}
           </div>

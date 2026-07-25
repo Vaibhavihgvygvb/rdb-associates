@@ -5,31 +5,32 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['"Playfair Display"', "Georgia", "serif"],
-        sans: ['"IBM Plex Sans"', "system-ui", "sans-serif"],
+        // "serif" token repurposed as the display face (used by all headings).
+        serif: ['"Inter Tight"', "Inter", "system-ui", "sans-serif"],
+        sans: ['"Inter"', "system-ui", "sans-serif"],
       },
       colors: {
-        // Dark section surfaces (nav, hero, footer, panels) — deep ink navy.
+        // Dark sections (footer, hero overlay, accent blocks) — near-black.
         sage: {
-          DEFAULT: "#152439",
-          light: "#20334F",
-          deep: "#0E1A2C",
+          DEFAULT: "#12151A",
+          light: "#20242B",
+          deep: "#0A0C0F",
         },
-        // Accent — brass / gold. Decorative only; never body text on light.
+        // Accent — corporate blue (links, CTAs, eyebrows, detail lines).
         brown: {
-          DEFAULT: "#B08D57",
-          light: "#C6A472",
-          soft: "#DBC7A4",
+          DEFAULT: "#0B57D0",
+          light: "#2E74E8",
+          soft: "#9DBEF2",
         },
-        // Light surfaces + text on dark sections — warm ivory / clean white.
+        // Light surfaces — white + light gray. Also white text on dark.
         cream: {
-          DEFAULT: "#F8F6F0",
-          dark: "#ECE8DE",
+          DEFAULT: "#FFFFFF",
+          dark: "#F4F5F7",
         },
-        // Readable text on light surfaces — near-black navy ink.
+        // Readable text on light surfaces — near-black ink + muted gray.
         ink: {
-          DEFAULT: "#1A2438",
-          soft: "#4C566B",
+          DEFAULT: "#15181C",
+          soft: "#565C66",
         },
         border: "hsl(var(--border))",
       },
@@ -46,7 +47,7 @@ module.exports = {
       },
       animation: {
         "fade-in-up":
-          "fade-in-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both",
+           "fade-in-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both",
       },
       letterSpacing: {
         "widest-plus": "0.28em",

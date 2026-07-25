@@ -4,7 +4,7 @@ import Footer from "@/components/site/Footer";
 
 export default function PracticeAreasPage() {
   return (
-    <main data-testid="practice-areas-page" className="bg-sage text-cream page-transition">
+    <main data-testid="practice-areas-page" className="bg-white text-ink page-transition">
       <Nav />
       <div className="pt-20" />
       <PracticeAreas />
