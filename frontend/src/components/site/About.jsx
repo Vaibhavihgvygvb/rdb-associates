@@ -1,7 +1,6 @@
 import { Quote } from "lucide-react";
 import useReveal from "@/lib/useReveal";
-
-const PORTRAIT = "https://thumbs4.imagebam.com/0b/f9/36/ME1EKUAW_t.png";
+import { PORTRAIT } from "@/data/chambers";
 
 export default function About() {
   const ref = useReveal();

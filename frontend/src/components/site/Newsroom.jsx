@@ -2,12 +2,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, ChevronDown, Search, X } from "lucide-react";
 import useReveal from "@/lib/useReveal";
+import NewsroomImage from "@/components/site/NewsroomImage";
 import { CATEGORIES, FORUMS, PRACTICES, categoryLabel, formatDate, sortedItems } from "@/data/newsroom";
 
 const PAGE_SIZE = 9;
 
 export default function Newsroom() {
-  const ref = useReveal();
+  // A proportional threshold cannot be met by a full-page index: at one column this
+  // section is ~9000px tall, so the default 15% asks for more pixels than a phone
+  // viewport has and the reveal never fires, leaving the page at opacity 0.
+  const ref = useReveal({ threshold: 0.01 });
   const [query, setQuery] = useState("");
   const [categories, setCategories] = useState([]);
   const [practices, setPractices] = useState([]);
@@ -34,6 +38,13 @@ export default function Newsroom() {
   useEffect(() => setVisible(PAGE_SIZE), [query, categories, practices, forums]);
 
   const activeCount = categories.length + practices.length + forums.length + (query ? 1 : 0);
+
+  // The spotlight is a promotion of the newest flagged item, not an extra one: it
+  // is lifted out of the grid so nothing appears twice, and the result count still
+  // covers it. Once the reader filters, the grid alone answers the query.
+  const spotlight = activeCount === 0 ? all.find((i) => i.featured) ?? all[0] : null;
+  const gridItems = spotlight ? results.filter((i) => i.slug !== spotlight.slug) : results;
+
   const clearAll = () => {
     setQuery("");
     setCategories([]);
@@ -138,20 +149,22 @@ export default function Newsroom() {
           </div>
         ) : (
           <>
+            {spotlight && <Spotlight item={spotlight} />}
+
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {results.slice(0, visible).map((item, i) => (
+              {gridItems.slice(0, visible).map((item, i) => (
                 <NewsCard key={item.slug} item={item} index={i} />
               ))}
             </div>
 
-            {visible < results.length && (
+            {visible < gridItems.length && (
               <div className="flex justify-center mt-14">
                 <button
                   data-testid="newsroom-load-more"
                   onClick={() => setVisible((v) => v + PAGE_SIZE)}
                   className="border border-ink px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink hover:bg-ink hover:text-white transition-colors duration-200"
                 >
-                  Load more — {results.length - visible} remaining
+                  Load more — {gridItems.length - visible} remaining
                 </button>
               </div>
             )}
@@ -192,6 +205,42 @@ export default function Newsroom() {
   );
 }
 
+function Spotlight({ item }) {
+  return (
+    <Link
+      to={`/newsroom/${item.slug}`}
+      data-testid="newsroom-spotlight"
+      className="group relative block border border-border bg-white mb-6 hover:border-brown hover:shadow-[0_32px_64px_-32px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] duration-300"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        <NewsroomImage
+          image={item.image}
+          priority
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="aspect-[16/10] lg:aspect-auto lg:min-h-[440px]"
+        />
+        <div className="p-8 md:p-12 flex flex-col justify-center">
+          <div className="flex items-center gap-4">
+            <span className="text-brown text-[10px] uppercase tracking-widest-plus font-semibold">Spotlight</span>
+            <span className="h-px w-8 bg-border" />
+            <span className="text-ink-soft text-[10px] uppercase tracking-widest-plus">{formatDate(item.date)}</span>
+          </div>
+          <h2 className="font-serif text-2xl md:text-3xl lg:text-[34px] text-ink mt-6 leading-[1.15] group-hover:text-brown transition-colors duration-200">
+            {item.title}
+          </h2>
+          <p className="text-ink-soft text-[15px] md:text-base mt-5 leading-relaxed">{item.summary}</p>
+          <div className="mt-8 pt-6 border-t border-border flex items-center justify-between gap-4">
+            <span className="text-[10px] uppercase tracking-widest-plus text-ink-soft">
+              {categoryLabel(item.category)} · {item.forum}
+            </span>
+            <ArrowUpRight size={17} className="text-brown group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 function NewsCard({ item, index }) {
   return (
     <Link
@@ -199,13 +248,18 @@ function NewsCard({ item, index }) {
       data-testid={`newsroom-card-${index}`}
       className="group relative flex flex-col border border-border bg-white hover:border-brown hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)] transition-[border-color,box-shadow] duration-300"
     >
-      <div className="h-1 w-full bg-brown scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
+      <NewsroomImage
+        image={item.image}
+        sizes="(min-width: 1280px) 30vw, (min-width: 768px) 46vw, 92vw"
+        className="aspect-[16/10]"
+      />
+      <span className="absolute top-4 left-4 bg-brown text-white text-[10px] uppercase tracking-widest-plus font-semibold px-3 py-1.5">
+        {categoryLabel(item.category)}
+      </span>
+
       <div className="p-8 flex flex-col flex-1">
-        <div className="flex items-center justify-between text-[10px] uppercase tracking-widest-plus">
-          <span className="text-brown font-semibold">{categoryLabel(item.category)}</span>
-          <span className="text-ink-soft">{formatDate(item.date)}</span>
-        </div>
-        <h3 className="font-serif text-xl md:text-[22px] text-ink mt-6 leading-snug group-hover:text-brown transition-colors duration-200">
+        <div className="text-[10px] uppercase tracking-widest-plus text-ink-soft">{formatDate(item.date)}</div>
+        <h3 className="font-serif text-xl md:text-[22px] text-ink mt-4 leading-snug group-hover:text-brown transition-colors duration-200">
           {item.title}
         </h3>
         <p className="text-ink-soft text-sm mt-4 leading-relaxed flex-1">{item.summary}</p>

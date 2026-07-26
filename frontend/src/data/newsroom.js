@@ -7,6 +7,14 @@
 // and the nature of the question decided — the same standard already used on /work.
 //
 // Replace the illustrative entries below with chambers records as they accrue.
+//
+// `image` holds an Unsplash photo id and its alt text. Every image is graded into
+// the site palette by <NewsroomImage>, so photographs from different sources still
+// read as one set — see components/site/NewsroomImage.jsx. The alt text describes
+// the photograph only: these are library images setting a tone, not records of a
+// hearing, and nothing in the alt text should imply otherwise. To use a chambers
+// photograph instead, set `image: { src: "/path.jpg", alt: "..." }` — `src` wins
+// over `id` and the same grading is applied.
 
 export const CATEGORIES = [
   { id: "matter-note", label: "Matter Note", blurb: "Outcomes and orders, described generally and without identifying any client." },
@@ -46,6 +54,7 @@ const JUNIOR = { name: "Junior Counsel", role: "Drafting & Research" };
 export const ITEMS = [
   {
     slug: "delhi-high-court-interim-injunction-asset-alienation",
+    image: { id: "photo-1436450412740-6b988f486c6b", alt: "The columned portico of a neoclassical building" },
     category: "matter-note",
     title: "Chambers secures interim injunction restraining alienation of disputed assets",
     date: "2026-07-09",
@@ -68,6 +77,7 @@ export const ITEMS = [
   },
   {
     slug: "district-court-partition-decree-upheld-appeal",
+    image: { id: "photo-1560518883-ce09059eeffa", alt: "A model house beside a set of keys" },
     category: "matter-note",
     title: "Partition decree upheld in first appeal on findings of title and possession",
     date: "2026-06-24",
@@ -86,6 +96,7 @@ export const ITEMS = [
   },
   {
     slug: "consumer-commission-medical-negligence-negotiated-resolution",
+    image: { id: "photo-1450101499163-c8848c66ca85", alt: "A hand signing a document" },
     category: "matter-note",
     title: "Professional negligence complaint against a healthcare institution resolved before final adjudication",
     date: "2026-06-02",
@@ -108,6 +119,7 @@ export const ITEMS = [
   },
   {
     slug: "drt-sarfaesi-secured-debt-recovery-enforcement",
+    image: { id: "photo-1554224155-6726b3ff858f", alt: "Printed forms, a calculator and a pen on a desk" },
     category: "matter-note",
     title: "Chambers acts in secured-debt recovery proceedings coordinated under the SARFAESI framework",
     date: "2026-05-18",
@@ -126,6 +138,7 @@ export const ITEMS = [
   },
   {
     slug: "cyber-fraud-complaint-it-act-proceedings-electronic-evidence",
+    image: { id: "photo-1454165804606-c3d57bc86b40", alt: "Hands working between a laptop and handwritten notes" },
     category: "matter-note",
     title: "Electronic evidence objections answered in cyber-fraud proceedings",
     date: "2026-04-27",
@@ -144,6 +157,7 @@ export const ITEMS = [
   },
   {
     slug: "arbitration-reference-commercial-dispute-mediated-settlement",
+    image: { id: "photo-1517048676732-d65bc937f952", alt: "Colleagues making notes around a meeting table" },
     category: "matter-note",
     title: "Commercial dispute referred to arbitration concludes in a recorded settlement",
     date: "2026-03-30",
@@ -163,6 +177,7 @@ export const ITEMS = [
 
   {
     slug: "chambers-adds-associate-counsel-commercial-disputes",
+    image: { id: "photo-1521737604893-d14cc237f11d", alt: "A group in discussion around an office table" },
     category: "chambers-news",
     title: "Chambers adds an associate on the commercial disputes side",
     date: "2026-07-15",
@@ -180,6 +195,7 @@ export const ITEMS = [
   },
   {
     slug: "delhi-high-court-chamber-block-office",
+    image: { id: "photo-1497366754035-f200968a6e72", alt: "The quiet interior of a modern office" },
     category: "chambers-news",
     title: "Chambers operating from the Lawyers Chamber Block, Delhi High Court",
     date: "2026-02-11",
@@ -198,6 +214,7 @@ export const ITEMS = [
 
   {
     slug: "empanelment-legal-services-authority-panel-counsel",
+    image: { id: "photo-1589994965851-a8f479c573a9", alt: "A figure of Justice holding her scales" },
     category: "recognition",
     title: "Empanelment as panel counsel with a legal services authority",
     date: "2026-05-06",
@@ -215,6 +232,7 @@ export const ITEMS = [
   },
   {
     slug: "bar-association-membership-delhi-high-court",
+    image: { id: "photo-1505664194779-8beaceb93744", alt: "Classical busts before the shelves of a library" },
     category: "recognition",
     title: "Membership of the Delhi High Court Bar Association",
     date: "2025-12-15",
@@ -233,6 +251,7 @@ export const ITEMS = [
 
   {
     slug: "section-63-bharatiya-sakshya-adhiniyam-electronic-records-commentary",
+    image: { id: "photo-1479142506502-19b3a3b7ff33", alt: "Antique leather-bound volumes on a shelf" },
     category: "publication",
     title: "Commentary: certification of electronic records under the Bharatiya Sakshya Adhiniyam",
     date: "2026-06-18",
@@ -255,6 +274,7 @@ export const ITEMS = [
   },
   {
     slug: "informed-consent-doctrine-note-healthcare-institutions",
+    image: { id: "photo-1423592707957-3b212afa6733", alt: "Stacked books beside an open notebook and pen" },
     category: "publication",
     title: "Note: informed consent beyond the consent form",
     date: "2026-04-08",
@@ -273,6 +293,7 @@ export const ITEMS = [
   },
   {
     slug: "settlement-architecture-mediation-commercial-matters",
+    image: { id: "photo-1481627834876-b7833e8f5570", alt: "Long shelves of bound volumes in a library" },
     category: "publication",
     title: "Paper: building a settlement architecture in commercial matters",
     date: "2026-01-22",
@@ -292,6 +313,7 @@ export const ITEMS = [
 
   {
     slug: "guest-lecture-trial-advocacy-law-students",
+    image: { id: "photo-1524178232363-1fb2b075b655", alt: "An audience seated for a lecture" },
     category: "speaking",
     title: "Guest lecture on trial advocacy and cross-examination technique",
     date: "2026-05-29",
@@ -309,6 +331,7 @@ export const ITEMS = [
   },
   {
     slug: "moot-court-competition-judging-panel",
+    image: { id: "photo-1541339907198-e08756dedf3f", alt: "Graduates throwing their caps at a convocation" },
     category: "speaking",
     title: "Judging panel, inter-collegiate moot court competition",
     date: "2026-03-14",
@@ -326,6 +349,7 @@ export const ITEMS = [
   },
   {
     slug: "cle-session-medico-legal-risk-healthcare-practitioners",
+    image: { id: "photo-1589829545856-d10d557cf95f", alt: "A bronze figure of Justice holding her scales" },
     category: "speaking",
     title: "Continuing legal education session on medico-legal risk",
     date: "2025-11-20",
@@ -344,6 +368,7 @@ export const ITEMS = [
 
   {
     slug: "legal-aid-clinic-district-court-complex",
+    image: { id: "photo-1454165804606-c3d57bc86b40", alt: "Notes and a laptop during an advice session" },
     category: "pro-bono",
     title: "Legal aid clinic conducted at a district court complex",
     date: "2026-07-02",
@@ -361,6 +386,7 @@ export const ITEMS = [
   },
   {
     slug: "pro-bono-representation-assigned-legal-aid-matters",
+    image: { id: "photo-1521737604893-d14cc237f11d", alt: "Two people in conversation across a table" },
     category: "pro-bono",
     title: "Pro bono representation in assigned legal aid matters",
     date: "2026-02-26",

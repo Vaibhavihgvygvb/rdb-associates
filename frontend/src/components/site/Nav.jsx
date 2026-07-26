@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Search, ArrowRight, ChevronDown } from "lucide-react";
+import SearchPanel from "@/components/site/SearchPanel";
 
 const practiceAreas = [
   ["Civil Litigation", "/practice-areas"],
@@ -40,12 +41,24 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [mega, setMega] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const closeTimer = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   const openMega = () => {
@@ -57,6 +70,7 @@ export default function Nav() {
   };
 
   return (
+    <>
     <header
       data-testid="site-nav"
       onMouseLeave={closeMega}
@@ -98,7 +112,12 @@ export default function Nav() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-5 shrink-0">
-          <button aria-label="Search" className="text-ink hover:text-brown transition-colors">
+          <button
+            onClick={() => setSearchOpen(true)}
+            data-testid="nav-search"
+            aria-label="Search"
+            className="text-ink hover:text-brown transition-colors"
+          >
             <Search size={19} strokeWidth={1.6} />
           </button>
           <Link
@@ -111,56 +130,76 @@ export default function Nav() {
           </Link>
         </div>
 
-        <button data-testid="nav-mobile-toggle" className="lg:hidden text-ink p-2" onClick={() => setOpen(!open)} aria-label="Toggle menu">
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="lg:hidden flex items-center gap-1">
+          <button
+            onClick={() => {
+              setOpen(false);
+              setSearchOpen(true);
+            }}
+            data-testid="nav-search-mobile"
+            aria-label="Search"
+            className="text-ink w-11 h-11 flex items-center justify-center"
+          >
+            <Search size={21} strokeWidth={1.6} />
+          </button>
+          {/* w-11/h-11 keeps both controls at the 44px minimum tap target. */}
+          <button
+            data-testid="nav-mobile-toggle"
+            className="text-ink w-11 h-11 flex items-center justify-center"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {/* Capabilities mega-menu (desktop) */}
-      {mega && (
-        <div
-          data-testid="nav-mega"
-          onMouseEnter={openMega}
-          className="hidden lg:block absolute inset-x-0 top-[72px] bg-white border-b border-border shadow-[0_24px_40px_-16px_rgba(0,0,0,0.14)] animate-fade-in-up"
-        >
-          <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-10 grid grid-cols-12 gap-10">
-            <div className="col-span-4">
-              <MegaHeading to="/practice-areas" label="Practice Areas" />
-              <ul className="mt-5 space-y-2.5">
-                {practiceAreas.map(([t, to]) => (
-                  <MegaItem key={t} to={to} label={t} />
-                ))}
-              </ul>
-            </div>
-            <div className="col-span-3">
-              <MegaHeading to="/expertise" label="Expertise" />
-              <ul className="mt-5 space-y-2.5">
-                {expertise.map(([t, to]) => (
-                  <MegaItem key={t} to={to} label={t} />
-                ))}
-              </ul>
-            </div>
-            <div className="col-span-2">
-              <MegaHeading to="/about" label="The Chambers" />
-              <ul className="mt-5 space-y-2.5">
-                {firmLinks.map(([t, to]) => (
-                  <MegaItem key={t} to={to} label={t} />
-                ))}
-              </ul>
-            </div>
-            <Link to="/contact" className="col-span-3 group relative bg-ink text-white p-7 flex flex-col justify-between overflow-hidden">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-white/60">Consultation</div>
-              <div>
-                <div className="font-serif text-2xl leading-snug mt-6">Discuss your matter with the chambers.</div>
-                <div className="mt-4 inline-flex items-center gap-2 text-brown-soft text-sm font-medium">
-                  Request a consultation
-                  <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform duration-200" />
-                </div>
-              </div>
-            </Link>
+      <div
+        data-testid="nav-mega"
+        onMouseEnter={openMega}
+        aria-hidden={!mega}
+        className={`hidden lg:block absolute inset-x-0 top-[72px] bg-white border-b border-border shadow-[0_24px_40px_-16px_rgba(0,0,0,0.14)] transition-[opacity,transform] duration-200 ease-out ${
+          mega ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"
+        }`}
+      >
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-10 grid grid-cols-12 gap-10">
+          <div className="col-span-4">
+            <MegaHeading to="/practice-areas" label="Practice Areas" />
+            <ul className="mt-5 space-y-2.5">
+              {practiceAreas.map(([t, to]) => (
+                <MegaItem key={t} to={to} label={t} />
+              ))}
+            </ul>
           </div>
+          <div className="col-span-3">
+            <MegaHeading to="/expertise" label="Expertise" />
+            <ul className="mt-5 space-y-2.5">
+              {expertise.map(([t, to]) => (
+                <MegaItem key={t} to={to} label={t} />
+              ))}
+            </ul>
+          </div>
+          <div className="col-span-2">
+            <MegaHeading to="/about" label="The Chambers" />
+            <ul className="mt-5 space-y-2.5">
+              {firmLinks.map(([t, to]) => (
+                <MegaItem key={t} to={to} label={t} />
+              ))}
+            </ul>
+          </div>
+          <Link to="/contact" tabIndex={mega ? 0 : -1} className="col-span-3 group relative bg-ink text-white p-7 flex flex-col justify-between overflow-hidden">
+            <div className="text-[11px] uppercase tracking-[0.18em] text-white/60">Consultation</div>
+            <div>
+              <div className="font-serif text-2xl leading-snug mt-6">Discuss your matter with the chambers.</div>
+              <div className="mt-4 inline-flex items-center gap-2 text-brown-soft text-sm font-medium">
+                Request a consultation
+                <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform duration-200" />
+              </div>
+            </div>
+          </Link>
         </div>
-      )}
+      </div>
 
       {/* Mobile panel */}
       {open && (
@@ -181,6 +220,11 @@ export default function Nav() {
         </div>
       )}
     </header>
+
+    {/* Sibling of the header, not a child: the panel needs its own stacking
+        context above the fixed nav rather than inheriting the nav's. */}
+    <SearchPanel open={searchOpen} onClose={() => setSearchOpen(false)} />
+    </>
   );
 }
 

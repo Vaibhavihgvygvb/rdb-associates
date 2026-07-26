@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight, Link2, Linkedin, Mail, Printer, Check } from "lucide-react";
 import useReveal from "@/lib/useReveal";
+import NewsroomImage from "@/components/site/NewsroomImage";
 import { categoryLabel, formatDate, relatedItems } from "@/data/newsroom";
 
 export default function NewsroomItem({ item }) {
-  const ref = useReveal();
+  // Same reason as the index: a long article on a narrow screen can outgrow the
+  // default proportional threshold and never reveal. See Newsroom.jsx.
+  const ref = useReveal({ threshold: 0.01 });
   const related = relatedItems(item);
 
   return (
@@ -20,7 +23,18 @@ export default function NewsroomItem({ item }) {
         </Link>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pb-20">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+        <NewsroomImage
+          image={item.image}
+          priority
+          grade="soft"
+          scrim={false}
+          sizes="(min-width: 1400px) 1320px, 92vw"
+          className="w-full aspect-[16/9] md:aspect-[21/9]"
+        />
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pt-12 pb-20">
         {/* Body */}
         <div className="lg:col-span-8">
           <div className="flex flex-wrap items-center gap-4 text-[10px] uppercase tracking-widest-plus">
@@ -118,13 +132,20 @@ export default function NewsroomItem({ item }) {
                 <Link
                   key={r.slug}
                   to={`/newsroom/${r.slug}`}
-                  className="group border border-border bg-white p-7 hover:border-brown transition-colors duration-300"
+                  className="group flex flex-col border border-border bg-white hover:border-brown transition-colors duration-300"
                 >
-                  <div className="flex items-center justify-between text-[10px] uppercase tracking-widest-plus">
-                    <span className="text-brown font-semibold">{categoryLabel(r.category)}</span>
-                    <span className="text-ink-soft">{formatDate(r.date)}</span>
+                  <NewsroomImage
+                    image={r.image}
+                    sizes="(min-width: 768px) 30vw, 92vw"
+                    className="aspect-[16/9]"
+                  />
+                  <div className="p-7">
+                    <div className="flex items-center justify-between text-[10px] uppercase tracking-widest-plus">
+                      <span className="text-brown font-semibold">{categoryLabel(r.category)}</span>
+                      <span className="text-ink-soft">{formatDate(r.date)}</span>
+                    </div>
+                    <h3 className="font-serif text-lg text-ink mt-5 leading-snug group-hover:text-brown transition-colors">{r.title}</h3>
                   </div>
-                  <h3 className="font-serif text-lg text-ink mt-5 leading-snug group-hover:text-brown transition-colors">{r.title}</h3>
                 </Link>
               ))}
             </div>
