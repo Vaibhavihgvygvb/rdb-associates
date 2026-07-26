@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter, HTTPException, Form, UploadFile, File
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
-from typing import List, Optional, Literal
+from typing import Optional, Literal
 from pathlib import Path
 from datetime import datetime, timezone
 import logging
@@ -169,18 +169,6 @@ async def create_consultation(payload: ConsultationCreate):
         raise HTTPException(status_code=500, detail="Unable to save consultation.")
 
 
-@api_router.get("/consultations", response_model=List[Consultation])
-async def list_consultations(limit: int = 100):
-    if limit < 1 or limit > 500:
-        raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
-    async with pool.acquire() as conn:
-        rows = await conn.fetch(
-            "SELECT id, name, email, phone, practice_area, subject, message, created_at, status FROM consultations ORDER BY created_at DESC LIMIT $1",
-            limit,
-        )
-    return [dict(r) for r in rows]
-
-
 @api_router.post("/newsletter", response_model=NewsletterSubscriber, status_code=201)
 async def subscribe_newsletter(payload: NewsletterCreate):
     record = NewsletterSubscriber(**payload.model_dump())
@@ -202,18 +190,6 @@ async def subscribe_newsletter(payload: NewsletterCreate):
     except Exception:
         logger.exception("Failed to save newsletter subscriber.")
         raise HTTPException(status_code=500, detail="Unable to subscribe. Please try again.")
-
-
-@api_router.get("/newsletter", response_model=List[NewsletterSubscriber])
-async def list_newsletter(limit: int = 100):
-    if limit < 1 or limit > 500:
-        raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
-    async with pool.acquire() as conn:
-        rows = await conn.fetch(
-            "SELECT id, email, created_at FROM newsletter_subscribers ORDER BY created_at DESC LIMIT $1",
-            limit,
-        )
-    return [dict(r) for r in rows]
 
 
 @api_router.post("/careers", response_model=CareerApplication, status_code=201)
@@ -261,20 +237,6 @@ async def create_career_application(
     except Exception:
         logger.exception("Failed to save career application.")
         raise HTTPException(status_code=500, detail="Unable to submit application.")
-
-
-@api_router.get("/careers", response_model=List[CareerApplication])
-async def list_career_applications(limit: int = 100):
-    if limit < 1 or limit > 500:
-        raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
-    async with pool.acquire() as conn:
-        rows = await conn.fetch(
-            """SELECT id, name, email, phone, applicant_type, position, message,
-                      resume_filename, resume_path, created_at, status
-               FROM career_applications ORDER BY created_at DESC LIMIT $1""",
-            limit,
-        )
-    return [dict(r) for r in rows]
 
 
 @api_router.get("/profile")
