@@ -1,6 +1,7 @@
-import { Scale, Briefcase, Gavel, Handshake, Stethoscope, ShieldCheck, Building2, FileText, X } from "lucide-react";
-import useReveal from "@/lib/useReveal";
-import { useState } from "react";
+import { Scale, Briefcase, Gavel, Handshake, Stethoscope, ShieldCheck, Building2, FileText } from "lucide-react";
+import { useRef, useState } from "react";
+import Reveal from "@/components/motion/Reveal";
+import Modal from "@/components/site/Modal";
 
 const areas = [
   {
@@ -46,84 +47,82 @@ const areas = [
 ];
 
 export default function PracticeAreas() {
-  const ref = useReveal();
   const [selected, setSelected] = useState(null);
 
+  // Kept for the length of the overlay's exit animation, after `selected`
+  // has already been cleared.
+  const lastShown = useRef(null);
+  if (selected) lastShown.current = selected;
+  const shown = selected ?? lastShown.current;
+
   return (
-    <section id="practice" data-testid="practice-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream-dark text-ink overflow-hidden">
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+    <Reveal asChild>
+      <section id="practice" data-testid="practice-section" className="relative py-24 md:py-32 bg-cream-dark text-ink overflow-hidden">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+        <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16">
-          <div className="lg:col-span-5">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">Practice Areas</span>
-            </div>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
-              Counsel across the <span className="italic text-brown">full arc</span> of dispute and advisory work.
-            </h2>
-          </div>
-          <div className="lg:col-span-6 lg:col-start-7 flex items-end">
-            <p className="text-ink-soft text-base md:text-lg leading-relaxed">
-              From high-stakes trial advocacy to considered advisory work, the chambers combine deep specialisation with the versatility that modern disputes demand. Every mandate is led personally by Ramandeep Bawa.
-            </p>
-          </div>
-        </div>
-
-        <div data-testid="practice-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {areas.map((a) => {
-            const Icon = a.icon;
-            return (
-              <button key={a.title} onClick={() => setSelected(a)}
-                data-testid={`practice-card-${a.title.replace(/\s+/g, "-").toLowerCase()}`}
-                className="group relative border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)] text-left cursor-pointer">
-                <Icon size={28} strokeWidth={1.3} className="text-brown mb-6 group-hover:scale-110 transition-transform duration-500" />
-                <h3 className="font-serif text-2xl text-ink mb-3">{a.title}</h3>
-                <p className="text-ink-soft text-sm leading-relaxed">{a.body}</p>
-                <div className="absolute bottom-0 left-8 right-8 h-px bg-brown/0 group-hover:bg-brown/60 transition-colors duration-500" />
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {selected && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
-          onClick={() => setSelected(null)}>
-          <div className="absolute inset-0 bg-ink/60 backdrop-blur-sm" />
-          <div className="relative max-w-2xl w-full bg-white border border-border p-10 md:p-14 max-h-[85vh] overflow-y-auto shadow-2xl"
-            onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setSelected(null)}
-              className="absolute top-4 right-4 text-ink-soft hover:text-brown transition-colors p-1">
-              <X size={22} strokeWidth={1.5} />
-            </button>
-            <selected.icon size={32} strokeWidth={1.3} className="text-brown mb-6" />
-            <h3 className="font-serif text-3xl md:text-4xl text-ink mb-6">{selected.title}</h3>
-            <p className="text-ink-soft text-base md:text-lg leading-relaxed">{selected.detail}</p>
-            {selected.acts?.length > 0 && (
-              <div className="mt-8 border-t border-border pt-6">
-                <h4 className="text-brown text-xs uppercase tracking-widest-plus mb-4">Acts &amp; Statutes</h4>
-                <ul className="space-y-2">
-                  {selected.acts.map((act) => (
-                    <li key={act} className="flex items-start gap-3 text-ink-soft text-sm leading-relaxed">
-                      <span className="mt-2 h-1 w-1 rounded-full bg-brown flex-shrink-0" />
-                      <span>{act}</span>
-                    </li>
-                  ))}
-                </ul>
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16">
+            <div className="lg:col-span-5">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="h-px w-10 bg-brown" />
+                <span className="text-brown text-xs uppercase tracking-widest-plus">Practice Areas</span>
               </div>
-            )}
-            <div className="mt-8 flex justify-end">
-              <button onClick={() => setSelected(null)}
-                className="border border-brown text-brown px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-white transition-colors duration-300">
-                Close
-              </button>
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
+                Counsel across the <span className="italic text-brown">full arc</span> of dispute and advisory work.
+              </h1>
+            </div>
+            <div className="lg:col-span-6 lg:col-start-7 flex items-end">
+              <p className="text-ink-soft text-base md:text-lg leading-relaxed">
+                From high-stakes trial advocacy to considered advisory work, the chambers combine deep specialisation with the versatility that modern disputes demand. Every mandate is led personally by Ramandeep Bawa.
+              </p>
             </div>
           </div>
+
+          <div data-testid="practice-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {areas.map((a) => {
+              const Icon = a.icon;
+              return (
+                <button key={a.title} type="button" onClick={() => setSelected(a)}
+                  data-testid={`practice-card-${a.title.replace(/\s+/g, "-").toLowerCase()}`}
+                  aria-haspopup="dialog"
+                  className="group relative border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)] text-left cursor-pointer">
+                  <Icon size={28} strokeWidth={1.3} className="text-brown mb-6 group-hover:scale-110 transition-transform duration-500" />
+                  <h2 className="font-serif text-2xl text-ink mb-3">{a.title}</h2>
+                  <p className="text-ink-soft text-sm leading-relaxed">{a.body}</p>
+                  <div className="absolute bottom-0 left-8 right-8 h-px bg-brown/0 group-hover:bg-brown/60 transition-colors duration-500" />
+                </button>
+              );
+            })}
+          </div>
         </div>
-      )}
-    </section>
+
+        <Modal open={Boolean(selected)} onClose={() => setSelected(null)}>
+          {({ titleId }) =>
+            shown && (
+              <>
+                <shown.icon size={32} strokeWidth={1.3} className="text-brown mb-6" aria-hidden />
+                <h2 id={titleId} className="font-serif text-3xl md:text-4xl text-ink mb-6">{shown.title}</h2>
+                <p className="text-ink-soft text-base md:text-lg leading-relaxed">{shown.detail}</p>
+                {shown.acts?.length > 0 && (
+                  <div className="mt-8 border-t border-border pt-6">
+                    <h3 className="text-brown text-xs uppercase tracking-widest-plus mb-4">Acts &amp; Statutes</h3>
+                    <ul className="space-y-2">
+                      {shown.acts.map((act) => (
+                        <li key={act} className="flex items-start gap-3 text-ink-soft text-sm leading-relaxed">
+                          <span className="mt-2 h-1 w-1 rounded-full bg-brown flex-shrink-0" aria-hidden />
+                          <span>{act}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </>
+            )
+          }
+        </Modal>
+
+      </section>
+    </Reveal>
   );
 }

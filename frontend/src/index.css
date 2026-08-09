@@ -2,27 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-html { scroll-behavior: smooth; }
+/* Lenis owns smooth scrolling (see components/motion/SmoothScroll.jsx).
+   Native `scroll-behavior: smooth` fights it for the scroll position, so it is
+   enabled only when Lenis stands down for prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: smooth; }
+}
 
 body {
   margin: 0;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #FFFFFF;
-  color: #1F1F1F;
+  background-color: theme("colors.cream.DEFAULT");
+  color: theme("colors.ink.DEFAULT");
   transition: background-color 500ms ease, color 500ms ease;
 }
 
+/* Opacity only, deliberately.
+   The previous keyframes animated `transform: translateY(12px)` on <main>. A
+   non-none transform makes an element a containing block for its `position:
+   fixed` descendants — and <Nav> is fixed and lives inside <main>. So for the
+   first 500ms of every route change the header was being positioned against
+   <main> instead of the viewport, and rode the translate down with the page.
+   Fading alone avoids that, and sections now supply their own movement through
+   Reveal, so translating the whole page on top of it read as a double motion. */
 .page-transition {
-  animation: page-fade-in 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: page-fade-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes page-fade-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-transition { animation: none; }
 }
 
-::selection { background: #007A5A; color: #FFFFFF; }
+::selection {
+  background: theme("colors.brown.DEFAULT");
+  color: theme("colors.cream.DEFAULT");
+}
 
 @layer base {
   :root {
@@ -30,6 +49,20 @@ body {
     --foreground: 0 0% 12%;
     --border: 0 0% 85%;
     --radius: 0.125rem;
+
+    /* Emerald that is correct against the surface it sits on. The default
+       #007A5A is tuned for white and drops to 3.5–3.7:1 on the dark surfaces,
+       so anything drawn in it there — link hovers, focus rings — fails.
+       Custom properties inherit, so a link anywhere inside a dark container
+       picks the lifted value up automatically. Doing this with selectors
+       instead would mean out-specifying the `a:not()…` chain below, which
+       already beats Tailwind's `hover:` utilities. */
+    --accent: theme("colors.brown.DEFAULT");
+  }
+  .bg-sage,
+  .bg-sage-deep,
+  .bg-ink {
+    --accent: theme("colors.brown.on-dark");
   }
   * { @apply border-border; }
   h1, h2, h3, h4 {
@@ -40,6 +73,49 @@ body {
   h2 { font-weight: 400; }
   h3 { font-weight: 500; letter-spacing: -0.01em; }
   h4 { font-weight: 500; }
+
+  /* Every interactive element gets the same keyboard focus indicator. Several
+     controls set `outline: none` on themselves for the mouse case and left
+     nothing behind for the keyboard case — the search dialog's input had no
+     focus indicator at all. `:focus-visible` only fires for keyboard/AT focus,
+     so this costs the mouse path nothing. The emerald reaches 3.71:1 against
+     the darkest surface on the site, clearing the 3:1 that WCAG 1.4.11 asks of
+     a focus indicator. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* The underlined form control used by both the consultation and careers
+     forms. This was previously a <style> block rendered inside Contact.jsx and
+     a near-identical copy inside Careers.jsx (as `.input-line-careers`), each
+     restating the palette as raw hex. One rule, reading from the tokens.
+
+     `outline: none` applies to the mouse case only — the `:focus-visible` rule
+     in the base layer still draws a ring for keyboard focus, and the emerald
+     underline below thickens on top of it. */
+  .input-line {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid theme("colors.border");
+    padding: 12px 0 10px;
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 15px;
+    color: theme("colors.ink.DEFAULT");
+    outline: none;
+    transition: border-color 300ms ease;
+  }
+  .input-line:focus {
+    border-bottom-color: theme("colors.brown.DEFAULT");
+    border-bottom-width: 2px;
+    padding-bottom: 9px; /* holds the baseline as the rule thickens */
+  }
+  .input-line[aria-invalid="true"] {
+    border-bottom-color: theme("colors.red.600");
+  }
 }
 
 .paper-grain { position: relative; }
@@ -55,7 +131,13 @@ body {
 
 .brown-hairline {
   height: 1px;
-  background: linear-gradient(to right, transparent, #007A5A 20%, #007A5A 80%, transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    theme("colors.brown.DEFAULT") 20%,
+    theme("colors.brown.DEFAULT") 80%,
+    transparent
+  );
 }
 
 .brown-underline { position: relative; display: inline-block; }
@@ -64,7 +146,7 @@ body {
   position: absolute;
   left: 0; right: 0; bottom: -6px;
   height: 1px;
-  background: #007A5A;
+  background: theme("colors.brown.DEFAULT");
   transform-origin: left;
   transform: scaleX(0);
   transition: transform 400ms ease;
@@ -77,28 +159,27 @@ body {
   letter-spacing: 0.4em;
 }
 
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.in-view { opacity: 1; transform: translateY(0); }
+/* Section reveals now live in components/motion/Reveal.jsx, which handles
+   reduced motion itself. The old .reveal / .in-view CSS pair was retired
+   alongside lib/useReveal.js so the site has a single motion system. */
 
 /* ============================================================
    Editorial hover typography effect (global — no markup changes)
-   Text links: emerald colour + slight letter-spacing expand + soft
-   fade on hover. No underline. Skips buttons ([class*="bg-"]),
-   tab-style nav items ([class*="border-b-2"]) and the logo.
-   Headings are intentionally left unaffected.
+   Text links shift to emerald on hover. No underline. Skips buttons
+   ([class*="bg-"]), tab-style nav items ([class*="border-b-2"]) and
+   the logo. Headings are intentionally left unaffected.
+
+   This used to also expand `letter-spacing` by 0.05em. Tracking is a
+   layout property, not a paint one: every hover reflowed the line and
+   nudged whatever sat beside it — visible in the footer's link column
+   and the mega-menu lists, where the whole row shifted under the
+   cursor. Colour alone gets the same editorial read for free.
    ============================================================ */
 a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data-testid="nav-logo"]) {
   transition: color 320ms cubic-bezier(0.16, 1, 0.3, 1),
-              letter-spacing 320ms cubic-bezier(0.16, 1, 0.3, 1),
               opacity 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data-testid="nav-logo"]):hover {
-  color: #007A5A;
-  letter-spacing: 0.05em;
+  color: var(--accent);
   opacity: 0.8;
 }

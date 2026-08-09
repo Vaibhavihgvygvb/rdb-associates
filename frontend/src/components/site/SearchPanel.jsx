@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, CornerDownLeft } from "lucide-react";
+import useFocusTrap from "@/lib/useFocusTrap";
+import useScrollLock from "@/lib/useScrollLock";
 import { SUGGESTIONS, search } from "@/data/searchIndex";
 
 export default function SearchPanel({ open, onClose }) {
@@ -8,6 +10,7 @@ export default function SearchPanel({ open, onClose }) {
   const [active, setActive] = useState(0);
   const inputRef = useRef(null);
   const listRef = useRef(null);
+  const dialogRef = useRef(null);
   const navigate = useNavigate();
 
   const trimmed = query.trim();
@@ -29,16 +32,14 @@ export default function SearchPanel({ open, onClose }) {
     return () => cancelAnimationFrame(id);
   }, [open]);
 
-  // Kept apart from the key handler below: that effect re-runs as the selection
-  // moves, and restoring a value captured on a re-run would leave scroll locked.
-  useEffect(() => {
-    if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [open]);
+  useScrollLock(open);
+
+  // `aria-modal` below is a claim that the rest of the page is inert; this is
+  // what makes it true. `initialFocus: false` because the effect above already
+  // puts focus in the search field, which is a better landing point here than
+  // the dialog container. Escape is handled by the key handler below, which
+  // also owns the arrow keys, so it is not delegated to the trap.
+  useFocusTrap(open, dialogRef, { initialFocus: false });
 
   useEffect(() => {
     if (!open) return;
@@ -77,7 +78,7 @@ export default function SearchPanel({ open, onClose }) {
   if (!open) return null;
 
   return (
-    <div data-testid="search-panel" className="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label="Search the site">
+    <div data-testid="search-panel" className="fixed inset-0 z-[60]">
       {/* No entrance animation on the backdrop: fade-in-up starts it 24px lower,
           which would leave a strip of the page uncovered along the top edge. */}
       <div
@@ -86,7 +87,13 @@ export default function SearchPanel({ open, onClose }) {
         aria-hidden
       />
 
-      <div className="relative mx-auto mt-[8vh] w-[92vw] max-w-2xl bg-white border border-border shadow-[0_40px_80px_-24px_rgba(0,0,0,0.5)] animate-fade-in-up">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search the site"
+        className="relative mx-auto mt-[8dvh] w-[92vw] max-w-2xl bg-white border border-border shadow-[0_40px_80px_-24px_rgba(0,0,0,0.5)] animate-fade-in-up"
+      >
         <div className="flex items-center gap-3 border-b border-border px-5">
           <Search size={19} strokeWidth={1.6} className="text-ink-soft shrink-0" />
           <input
@@ -96,7 +103,7 @@ export default function SearchPanel({ open, onClose }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search practice areas, newsroom, pages…"
             aria-label="Search query"
-            className="flex-1 bg-transparent py-5 text-[16px] text-ink placeholder:text-ink-soft focus:outline-none"
+            className="flex-1 bg-transparent py-5 text-[16px] text-ink placeholder:text-ink-soft"
           />
           <button
             onClick={onClose}
@@ -122,7 +129,9 @@ export default function SearchPanel({ open, onClose }) {
             </p>
           </div>
         ) : (
-          <ul ref={listRef} className="max-h-[52vh] overflow-y-auto py-2">
+          // data-lenis-prevent keeps wheel events inside this list instead of
+          // letting Lenis pass them through to the page behind.
+          <ul ref={listRef} data-lenis-prevent className="max-h-[52dvh] overflow-y-auto py-2">
             {results.map((r, i) => (
               <li key={`${r.to}-${r.title}`}>
                 <button

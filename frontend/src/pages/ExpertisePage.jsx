@@ -1,14 +1,13 @@
-import Nav from "@/components/site/Nav";
+import PageShell from "@/components/site/PageShell";
 import Expertise from "@/components/site/Expertise";
-import Footer from "@/components/site/Footer";
 
 export default function ExpertisePage() {
   return (
-    <main data-testid="expertise-page" className="bg-cream text-ink page-transition">
-      <Nav />
-      <div className="pt-20" />
+    <PageShell testId="expertise-page"
+      title="Expertise"
+      description="Courtroom advocacy, trial strategy, legal drafting, litigation management, research and dispute resolution."
+    >
       <Expertise />
-      <Footer />
-    </main>
+    </PageShell>
   );
 }

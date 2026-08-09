@@ -23,6 +23,7 @@ const PAGES = [
   { title: "Insights", to: "/insights", blurb: "Commentary and analysis from the chambers.", keywords: "articles writing commentary analysis blog" },
   { title: "Newsletter", to: "/newsletter", blurb: "Subscribe for updates from the chambers.", keywords: "subscribe mailing list email updates" },
   { title: "Contact", to: "/contact", blurb: "Request a consultation with the chambers.", keywords: "consultation enquiry appointment address chamber phone email reach delhi high court" },
+  { title: "Privacy Notice", to: "/privacy", blurb: "What this website collects, where it is held and how long it is kept.", keywords: "privacy data protection dpdp cookies retention resume deletion rights gdpr personal data" },
 ];
 
 // Mirrors the Expertise section's list.

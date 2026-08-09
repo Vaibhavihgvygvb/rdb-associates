@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Search, ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
 import SearchPanel from "@/components/site/SearchPanel";
+import ScrollProgress from "@/components/motion/ScrollProgress";
+import { POSTS as insightPieces, TOPICS as insightTopics } from "@/data/insights";
 
 const practiceAreas = [
   ["Civil Litigation", "/practice-areas"],
@@ -30,21 +32,6 @@ const firmLinks = [
   ["Stages of a Matter", "/stages"],
 ];
 
-// Mirrors the three pieces listed in components/site/Insights.jsx.
-const insightPieces = [
-  { tag: "ADR", title: "When Mediation Wins: Building a Settlement Architecture" },
-  { tag: "Cyber Law", title: "Digital Evidence in Indian Courts: What Practitioners Miss" },
-  { tag: "Medical Law", title: "Informed Consent Beyond the Paperwork" },
-];
-
-const insightTopics = [
-  "Alternative Dispute Resolution",
-  "Cyber Law",
-  "Medical Law & Ethics",
-  "Commercial Litigation",
-  "Trial Advocacy",
-];
-
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -52,12 +39,34 @@ export default function Nav() {
   // "capabilities" | "insights" | null — only one panel is ever open.
   const [panel, setPanel] = useState(null);
   const closeTimer = useRef(null);
+  // Keyed by panel id, so Escape can hand focus back to whichever trigger
+  // opened the panel.
+  const triggerRefs = useRef({});
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    // Passive: this only reads scrollY, so the browser need not wait on it to
+    // decide whether the scroll was cancelled.
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Escape closes an open panel, matching the search dialog and the newsroom
+  // facets. Without it a keyboard user who opened Capabilities had no way to
+  // dismiss it.
+  useEffect(() => {
+    if (!panel) return;
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      setPanel(null);
+      triggerRefs.current[panel]?.focus();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [panel]);
+
+  // A pending close must not fire into an unmounted component.
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -75,7 +84,16 @@ export default function Nav() {
     setPanel(id);
   };
   const closePanel = () => {
+    clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setPanel(null), 120);
+  };
+  // Hover opens these, but hover is not an interaction a keyboard or a touch
+  // screen can perform — Capabilities was a <button> with no onClick at all,
+  // so pressing Enter on it did nothing and its entire submenu was
+  // unreachable without a mouse.
+  const togglePanel = (id) => {
+    clearTimeout(closeTimer.current);
+    setPanel((current) => (current === id ? null : id));
   };
 
   return (
@@ -87,9 +105,25 @@ export default function Nav() {
         scrolled || panel ? "border-b border-border shadow-[0_1px_0_rgba(0,0,0,0.02)]" : "border-b border-border/60"
       }`}
     >
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-[72px] flex items-center justify-between">
-        <Link to="/" data-testid="nav-logo" className="flex items-center gap-3 group shrink-0">
-          <div className="w-9 h-9 bg-ink text-white flex items-center justify-center font-serif text-base tracking-tight">R</div>
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-nav flex items-center justify-between">
+        {/* aria-label rather than alt text on the mark: the wordmark beside it
+            is `hidden sm:flex`, so on a phone the image is all that is left and
+            the link would otherwise have no accessible name at all. With the
+            name on the link, the mark itself is decorative. */}
+        <Link
+          to="/"
+          data-testid="nav-logo"
+          aria-label="RDB Associates — home"
+          className="flex items-center gap-3 group shrink-0"
+        >
+          <img
+            src="/rdb-monogram.png"
+            alt=""
+            aria-hidden="true"
+            width={167}
+            height={120}
+            className="h-9 w-auto"
+          />
           <div className="hidden sm:flex flex-col leading-none">
             <span className="font-serif text-ink text-[17px] font-semibold tracking-tight">RDB Associates</span>
             <span className="text-[10px] uppercase tracking-[0.18em] text-ink-soft mt-1">Chambers of Ramandeep Bawa</span>
@@ -98,8 +132,14 @@ export default function Nav() {
 
         <nav className="hidden lg:flex items-center gap-8 h-full">
           <button
+            type="button"
             data-testid="nav-capabilities"
+            ref={(el) => { triggerRefs.current.capabilities = el; }}
             onMouseEnter={() => openPanel("capabilities")}
+            onClick={() => togglePanel("capabilities")}
+            aria-expanded={panel === "capabilities"}
+            aria-haspopup="true"
+            aria-controls="nav-panel-capabilities"
             className={`flex items-center gap-1.5 text-[15px] font-medium h-full border-b-2 transition-colors duration-200 ${
               panel === "capabilities" ? "text-brown border-brown" : "text-ink border-transparent hover:text-brown"
             }`}
@@ -130,8 +170,11 @@ export default function Nav() {
           <Link
             to="/insights"
             data-testid="nav-link-insights"
+            ref={(el) => { triggerRefs.current.insights = el; }}
             onMouseEnter={() => openPanel("insights")}
             aria-expanded={panel === "insights"}
+            aria-haspopup="true"
+            aria-controls="nav-panel-insights"
             className={`flex items-center gap-1.5 text-[15px] font-medium h-full border-b-2 transition-colors duration-200 ${
               panel === "insights" ? "text-brown border-brown" : "text-ink border-transparent hover:text-brown"
             }`}
@@ -195,10 +238,11 @@ export default function Nav() {
 
       {/* Capabilities mega-menu (desktop) */}
       <div
+        id="nav-panel-capabilities"
         data-testid="nav-mega"
         onMouseEnter={() => openPanel("capabilities")}
         aria-hidden={panel !== "capabilities"}
-        className={`hidden lg:block absolute inset-x-0 top-[72px] bg-white border-b border-border shadow-[0_24px_40px_-16px_rgba(0,0,0,0.14)] transition-[opacity,transform] duration-200 ease-out ${
+        className={`hidden lg:block absolute inset-x-0 top-nav bg-white border-b border-border shadow-[0_24px_40px_-16px_rgba(0,0,0,0.14)] transition-[opacity,transform] duration-200 ease-out ${
           panel === "capabilities"
             ? "visible opacity-100 translate-y-0 pointer-events-auto"
             : "invisible opacity-0 -translate-y-1 pointer-events-none"
@@ -244,10 +288,11 @@ export default function Nav() {
 
       {/* Insights panel (desktop) */}
       <div
+        id="nav-panel-insights"
         data-testid="nav-insights-panel"
         onMouseEnter={() => openPanel("insights")}
         aria-hidden={panel !== "insights"}
-        className={`hidden lg:block absolute inset-x-0 top-[72px] bg-white border-b border-border shadow-[0_24px_40px_-16px_rgba(0,0,0,0.14)] transition-[opacity,transform] duration-200 ease-out ${
+        className={`hidden lg:block absolute inset-x-0 top-nav bg-white border-b border-border shadow-[0_24px_40px_-16px_rgba(0,0,0,0.14)] transition-[opacity,transform] duration-200 ease-out ${
           panel === "insights"
             ? "visible opacity-100 translate-y-0 pointer-events-auto"
             : "invisible opacity-0 -translate-y-1 pointer-events-none"
@@ -296,7 +341,7 @@ export default function Nav() {
 
       {/* Mobile panel */}
       {open && (
-        <div data-testid="nav-mobile-panel" className="lg:hidden bg-white border-t border-border px-6 py-6 max-h-[80vh] overflow-y-auto">
+        <div data-testid="nav-mobile-panel" data-lenis-prevent className="lg:hidden bg-white border-t border-border px-6 py-6 max-h-[80vh] overflow-y-auto">
           <div className="flex flex-col gap-1">
             <MobileGroup label="Practice Areas" items={practiceAreas} onNav={() => setOpen(false)} />
             <MobileGroup label="Expertise" items={expertise} onNav={() => setOpen(false)} />
@@ -319,6 +364,10 @@ export default function Nav() {
           </div>
         </div>
       )}
+
+      {/* Reading progress, pinned to the header's bottom edge. Sits on top of
+          the existing 1px border rather than adding height to the 72px bar. */}
+      <ScrollProgress className="absolute inset-x-0 -bottom-px" />
     </header>
 
     {/* Sibling of the header, not a child: the panel needs its own stacking

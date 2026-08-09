@@ -1,14 +1,13 @@
-import Nav from "@/components/site/Nav";
+import PageShell from "@/components/site/PageShell";
 import Newsroom from "@/components/site/Newsroom";
-import Footer from "@/components/site/Footer";
 
 export default function NewsroomPage() {
   return (
-    <main data-testid="newsroom-page" className="bg-white text-ink page-transition">
-      <Nav />
-      <div className="pt-[72px]" />
+    <PageShell testId="newsroom-page" className="bg-white"
+      title="Newsroom"
+      description="Matter notes, chambers announcements, publications and speaking engagements."
+    >
       <Newsroom />
-      <Footer />
-    </main>
+    </PageShell>
   );
 }

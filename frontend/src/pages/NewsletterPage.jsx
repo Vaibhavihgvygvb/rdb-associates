@@ -1,14 +1,13 @@
-import Nav from "@/components/site/Nav";
+import PageShell from "@/components/site/PageShell";
 import Newsletter from "@/components/site/Newsletter";
-import Footer from "@/components/site/Footer";
 
 export default function NewsletterPage() {
   return (
-    <main data-testid="newsletter-page" className="bg-cream text-ink page-transition">
-      <Nav />
-      <div className="pt-20" />
+    <PageShell testId="newsletter-page"
+      title="Newsletter"
+      description="Subscribe for firm news, notable matters and short-form legal insights across civil, commercial, medical and cyber law."
+    >
       <Newsletter variant="page" />
-      <Footer />
-    </main>
+    </PageShell>
   );
 }

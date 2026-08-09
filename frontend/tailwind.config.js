@@ -21,6 +21,13 @@ module.exports = {
           DEFAULT: "#007A5A",
           light: "#005C43",
           soft: "#EAF5F1",
+          // The default emerald is tuned for white: it reaches 5.34:1 there but
+          // only 3.71:1 on sage-deep and 3.51:1 on sage, so it fails AA as text
+          // on every dark surface. `on-dark` is the same hue lifted to 5.81:1
+          // against sage-deep. Use it for emerald *text* on dark; the DEFAULT
+          // stays correct for emerald text on light and for rules and fills,
+          // which carry no contrast requirement.
+          "on-dark": "#0E9E75",
         },
         // Light surfaces — white + light gray. Also white text on dark.
         cream: {
@@ -52,7 +59,15 @@ module.exports = {
       letterSpacing: {
         "widest-plus": "0.28em",
       },
+      spacing: {
+        // Height of the fixed header. Every page offset, the sticky newsroom
+        // filter bar and the hero's viewport calc read from this rather than
+        // restating 72px — eleven pages used to reserve `pt-20` (80px) against
+        // a 72px bar. Keep in step with NAV_HEIGHT in src/lib/layout.js, which
+        // is the same number for the code that needs it as a JS value.
+        nav: "72px",
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
 };

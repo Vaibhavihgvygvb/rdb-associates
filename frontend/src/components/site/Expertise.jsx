@@ -1,6 +1,6 @@
-import useReveal from "@/lib/useReveal";
-import { X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import Reveal from "@/components/motion/Reveal";
+import Modal from "@/components/site/Modal";
 
 const items = [
   { n: "01", t: "Courtroom Advocacy", d: "Oral argument, cross-examination and appellate presentation crafted from first principles.",
@@ -18,59 +18,57 @@ const items = [
 ];
 
 export default function Expertise() {
-  const ref = useReveal();
   const [selected, setSelected] = useState(null);
 
+  // The overlay animates out after `selected` is cleared, so it still needs
+  // the last selection to render against for the length of the exit.
+  const lastShown = useRef(null);
+  if (selected) lastShown.current = selected;
+  const shown = selected ?? lastShown.current;
+
   return (
-    <section id="expertise" data-testid="expertise-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="max-w-3xl mb-16">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="h-px w-10 bg-brown" />
-            <span className="text-brown text-xs uppercase tracking-widest-plus">Areas of Expertise</span>
-          </div>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
-            A method for <span className="italic text-brown">every stage</span> of a matter.
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((it, idx) => (
-            <button key={it.n} onClick={() => setSelected(it)}
-              data-testid={`expertise-item-${it.n}`}
-              className={`p-10 border-brown/25 hover:bg-white transition-colors duration-500 border-t text-left cursor-pointer ${
-                idx % 3 !== 2 ? "md:border-r" : ""
-              } ${idx >= items.length - 3 ? "md:border-b-0" : "border-b"}`}>
-              <div className="text-brown font-serif text-3xl mb-4">{it.n}</div>
-              <h3 className="font-serif text-2xl text-ink mb-3">{it.t}</h3>
-              <p className="text-ink/70 text-sm leading-relaxed">{it.d}</p>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {selected && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
-          onClick={() => setSelected(null)}>
-          <div className="absolute inset-0 bg-sage/80 backdrop-blur-sm" />
-          <div className="relative max-w-2xl w-full bg-white border border-brown/40 p-10 md:p-14 max-h-[85vh] overflow-y-auto shadow-2xl"
-            onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setSelected(null)}
-              className="absolute top-4 right-4 text-ink/40 hover:text-brown transition-colors p-1">
-              <X size={22} strokeWidth={1.5} />
-            </button>
-            <div className="text-brown font-serif text-3xl mb-4">{selected.n}</div>
-            <h3 className="font-serif text-3xl md:text-4xl text-ink mb-6">{selected.t}</h3>
-            <p className="text-ink/80 text-base md:text-lg leading-relaxed">{selected.detail}</p>
-            <div className="mt-8 flex justify-end">
-              <button onClick={() => setSelected(null)}
-                className="border border-brown text-brown px-6 py-3 text-xs tracking-widest-plus uppercase hover:bg-brown hover:text-white transition-colors duration-300">
-                Close
-              </button>
+    <Reveal asChild>
+      <section id="expertise" data-testid="expertise-section" className="relative py-24 md:py-32 bg-cream">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mb-16">
+            <div className="flex items-center gap-4 mb-6">
+              <span className="h-px w-10 bg-brown" />
+              <span className="text-brown text-xs uppercase tracking-widest-plus">Areas of Expertise</span>
             </div>
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
+              A method for <span className="italic text-brown">every stage</span> of a matter.
+            </h1>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {items.map((it, idx) => (
+              <button key={it.n} type="button" onClick={() => setSelected(it)}
+                data-testid={`expertise-item-${it.n}`}
+                aria-haspopup="dialog"
+                className={`p-10 border-brown/25 hover:bg-white transition-colors duration-500 border-t text-left cursor-pointer ${
+                  idx % 3 !== 2 ? "md:border-r" : ""
+                } ${idx >= items.length - 3 ? "md:border-b-0" : "border-b"}`}>
+                <div className="text-brown font-serif text-3xl mb-4">{it.n}</div>
+                <h2 className="font-serif text-2xl text-ink mb-3">{it.t}</h2>
+                <p className="text-ink/70 text-sm leading-relaxed">{it.d}</p>
+              </button>
+            ))}
           </div>
         </div>
-      )}
-    </section>
+
+        <Modal open={Boolean(selected)} onClose={() => setSelected(null)}>
+          {({ titleId }) =>
+            shown && (
+              <>
+                <div className="text-brown font-serif text-3xl mb-4">{shown.n}</div>
+                <h2 id={titleId} className="font-serif text-3xl md:text-4xl text-ink mb-6">{shown.t}</h2>
+                <p className="text-ink/80 text-base md:text-lg leading-relaxed">{shown.detail}</p>
+              </>
+            )
+          }
+        </Modal>
+
+      </section>
+    </Reveal>
   );
 }

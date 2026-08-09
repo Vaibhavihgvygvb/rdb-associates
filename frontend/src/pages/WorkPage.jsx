@@ -1,14 +1,13 @@
-import Nav from "@/components/site/Nav";
+import PageShell from "@/components/site/PageShell";
 import OurWork from "@/components/site/OurWork";
-import Footer from "@/components/site/Footer";
 
 export default function WorkPage() {
   return (
-    <main data-testid="work-page" className="bg-cream text-ink page-transition">
-      <Nav />
-      <div className="pt-20" />
+    <PageShell testId="work-page"
+      title="Our Work"
+      description="Representative matters, major cases and client categories, described generally in accordance with the Bar Council of India Rules."
+    >
       <OurWork />
-      <Footer />
-    </main>
+    </PageShell>
   );
 }

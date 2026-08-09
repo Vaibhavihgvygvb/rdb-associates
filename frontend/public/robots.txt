@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# The Sitemap line is added at build time by scripts/generate-sitemap.js, which
+# needs an absolute URL and therefore only runs when REACT_APP_SITE_URL is set.
+# See that file for the one-line setup.

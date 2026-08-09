@@ -1,16 +1,15 @@
-import Nav from "@/components/site/Nav";
+import PageShell from "@/components/site/PageShell";
 import About from "@/components/site/About";
 import Team from "@/components/site/Team";
-import Footer from "@/components/site/Footer";
 
 export default function AboutPage() {
   return (
-    <main data-testid="about-page" className="bg-cream text-ink page-transition">
-      <Nav />
-      <div className="pt-20" />
+    <PageShell testId="about-page"
+      title="About the Advocate"
+      description="Ramandeep Bawa, founder of RDB Associates — training, approach and qualifications, and the team behind the chambers."
+    >
       <About />
       <Team />
-      <Footer />
-    </main>
+    </PageShell>
   );
 }

@@ -1,5 +1,5 @@
 import { Landmark, Users, Briefcase } from "lucide-react";
-import useReveal from "@/lib/useReveal";
+import Reveal from "@/components/motion/Reveal";
 
 const previousWorks = [
   "Recovery and enforcement suits before District Courts and the High Court of Delhi",
@@ -26,70 +26,71 @@ const clientCategories = [
 ];
 
 export default function OurWork() {
-  const ref = useReveal();
   return (
-    <section id="work" data-testid="work-section" ref={ref} className="reveal relative py-24 md:py-32 bg-cream">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="max-w-3xl mb-16">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="h-px w-10 bg-brown" />
-            <span className="text-brown text-xs uppercase tracking-widest-plus">Our Work</span>
+    <Reveal asChild>
+      <section id="work" data-testid="work-section" className="relative py-24 md:py-32 bg-cream">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mb-16">
+            <div className="flex items-center gap-4 mb-6">
+              <span className="h-px w-10 bg-brown" />
+              <span className="text-brown text-xs uppercase tracking-widest-plus">Our Work</span>
+            </div>
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
+              Previous work, <span className="italic text-brown">major cases</span> &amp; clients.
+            </h1>
+            <p className="mt-8 text-ink/70 text-base md:text-lg leading-relaxed">
+              In accordance with the Bar Council of India Rules, matter details below are described
+              generally and do not identify clients. They are illustrative of the nature and scale of
+              work regularly undertaken by the chambers.
+            </p>
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
-            Previous work, <span className="italic text-brown">major cases</span> &amp; clients.
-          </h1>
-          <p className="mt-8 text-ink/70 text-base md:text-lg leading-relaxed">
-            In accordance with the Bar Council of India Rules, matter details below are described
-            generally and do not identify clients. They are illustrative of the nature and scale of
-            work regularly undertaken by the chambers.
-          </p>
-        </div>
 
-        <div className="mb-20">
-          <div className="flex items-center gap-3 mb-8">
-            <Briefcase size={22} strokeWidth={1.3} className="text-brown" />
-            <h2 className="font-serif text-2xl md:text-3xl text-ink">Previous Works</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {previousWorks.map((w) => (
-              <div key={w} className="flex items-start gap-3 border-t border-brown/20 pt-4">
-                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brown flex-shrink-0" />
-                <span className="text-ink/80 text-sm md:text-base leading-relaxed">{w}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-20">
-          <div className="flex items-center gap-3 mb-8">
-            <Landmark size={22} strokeWidth={1.3} className="text-brown" />
-            <h2 className="font-serif text-2xl md:text-3xl text-ink">Major Cases</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {majorCases.map((c) => (
-              <div key={c.forum + c.type} className="bg-white border border-brown/25 p-8">
-                <div className="flex items-center justify-between text-[10px] uppercase tracking-widest-plus text-ink/70 mb-4">
-                  <span>{c.forum}</span>
-                  <span>{c.type}</span>
+          <div className="mb-20">
+            <div className="flex items-center gap-3 mb-8">
+              <Briefcase size={22} strokeWidth={1.3} className="text-brown" />
+              <h2 className="font-serif text-2xl md:text-3xl text-ink">Previous Works</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {previousWorks.map((w) => (
+                <div key={w} className="flex items-start gap-3 border-t border-brown/20 pt-4">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brown flex-shrink-0" />
+                  <span className="text-ink/80 text-sm md:text-base leading-relaxed">{w}</span>
                 </div>
-                <p className="text-ink/80 text-sm leading-relaxed">{c.note}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div>
-          <div className="flex items-center gap-3 mb-8">
-            <Users size={22} strokeWidth={1.3} className="text-brown" />
-            <h2 className="font-serif text-2xl md:text-3xl text-ink">Clients</h2>
+          <div className="mb-20">
+            <div className="flex items-center gap-3 mb-8">
+              <Landmark size={22} strokeWidth={1.3} className="text-brown" />
+              <h2 className="font-serif text-2xl md:text-3xl text-ink">Major Cases</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {majorCases.map((c) => (
+                <div key={c.forum + c.type} className="bg-white border border-brown/25 p-8">
+                  <div className="flex items-center justify-between text-[10px] uppercase tracking-widest-plus text-ink/70 mb-4">
+                    <span>{c.forum}</span>
+                    <span>{c.type}</span>
+                  </div>
+                  <p className="text-ink/80 text-sm leading-relaxed">{c.note}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-3">
-            {clientCategories.map((c) => (
-              <span key={c} className="border border-brown/30 text-ink/80 text-sm px-5 py-2.5">{c}</span>
-            ))}
+
+          <div>
+            <div className="flex items-center gap-3 mb-8">
+              <Users size={22} strokeWidth={1.3} className="text-brown" />
+              <h2 className="font-serif text-2xl md:text-3xl text-ink">Clients</h2>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {clientCategories.map((c) => (
+                <span key={c} className="border border-brown/30 text-ink/80 text-sm px-5 py-2.5">{c}</span>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </Reveal>
   );
 }

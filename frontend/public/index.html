@@ -3,15 +3,103 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#FFFFFF" />
-    <meta name="description" content="RDB Associates — Chambers of Ramandeep Bawa, Advocate, High Court of Delhi." />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
+
+    <!-- Defaults only. Every route overwrites the title, description, canonical
+         and social tags on mount — see src/lib/useDocumentMeta.js. These are
+         what a non-rendering scraper sees, and the fallback before React runs. -->
+    <title>RDB Associates | Ramandeep Bawa — Advocate, High Court of Delhi</title>
+    <meta
+      name="description"
+      content="The Chambers of Ramandeep Bawa — Advocate, High Court of Delhi. Civil, commercial, medical and cyber law litigation and advisory."
+    />
+    <meta property="og:site_name" content="RDB Associates" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="RDB Associates | Ramandeep Bawa — Advocate, High Court of Delhi" />
+    <meta
+      property="og:description"
+      content="A boutique litigation practice in New Delhi representing individuals and enterprises before the High Court of Delhi, District Courts and tribunals across India."
+    />
+    <meta property="og:image" content="/ramandeep-bawa.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- The firm's monogram on the brand's near-black, so it stays legible in
+         both light and dark browser chrome. -->
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Non-blocking font load. The stylesheet was previously fetched as a
+         render-blocking <link>, holding first paint for a round trip to
+         fonts.googleapis.com. `display=swap` was already in the URL, so text
+         was always going to paint in the fallback face and swap — this just
+         stops the document waiting to find that out. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600&display=swap"
+      media="print"
+      onload="this.media='all'; this.onload=null;"
     />
-    <title>RDB Associates | Ramandeep Bawa — Advocate, High Court of Delhi</title>
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600&display=swap"
+      />
+    </noscript>
+
+    <!-- Structured data. Everything below is stated elsewhere on the site
+         (contact block, credentials page). Keep the address, email and
+         telephone in step with src/data/chambers.js, which is where the
+         React side reads them from. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LegalService",
+        "name": "RDB Associates",
+        "alternateName": "Chambers of Ramandeep Bawa",
+        "description": "A boutique legal practice in New Delhi focused on courtroom advocacy, commercial disputes and specialised advisory work before the High Court of Delhi and tribunals across India.",
+        "image": "/ramandeep-bawa.jpg",
+        "email": "chambersofrb@gmail.com",
+        "telephone": "+919711429298",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "A-86, Lower Ground Floor, Defence Colony",
+          "addressLocality": "New Delhi",
+          "postalCode": "110024",
+          "addressCountry": "IN"
+        },
+        "areaServed": { "@type": "Country", "name": "India" },
+        "availableLanguage": ["English", "Hindi", "Punjabi", "Japanese"],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "10:00",
+            "closes": "19:00"
+          }
+        ],
+        "founder": {
+          "@type": "Person",
+          "name": "Ramandeep Bawa",
+          "jobTitle": "Advocate, High Court of Delhi",
+          "alumniOf": "National Law School of India University",
+          "sameAs": "https://www.linkedin.com/in/ramandeep-bawa-6081b6155/"
+        },
+        "knowsAbout": [
+          "Civil Litigation",
+          "Commercial Litigation",
+          "Trial Advocacy",
+          "Alternative Dispute Resolution",
+          "Medical Law & Ethics",
+          "Cyber Law",
+          "Tribunals & Regulatory",
+          "Advisory & Drafting"
+        ]
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

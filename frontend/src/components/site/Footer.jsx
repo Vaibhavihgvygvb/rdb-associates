@@ -1,6 +1,7 @@
 import { Linkedin, Mail, Phone, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import Newsletter from "@/components/site/Newsletter";
+import { CHAMBERS_ADDRESS, EMAIL, PHONE_DISPLAY, PHONE_E164 } from "@/data/chambers";
 
 export default function Footer() {
   return (
@@ -8,23 +9,28 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 border border-brown flex items-center justify-center text-brown font-serif text-xl">R</div>
-              <div>
-                <div className="font-serif text-2xl">RDB Associates</div>
-                <div className="text-[10px] uppercase tracking-widest-plus text-brown mt-1">Chambers of Ramandeep Bawa</div>
-              </div>
+            {/* The full lockup carries the firm name itself, so it stands in
+                for the wordmark here rather than sitting beside a repeat of it. */}
+            <div>
+              <img
+                src="/rdb-logo.png"
+                alt="RDB Associates"
+                width={167}
+                height={147}
+                className="h-20 w-auto"
+              />
+              <div className="text-[10px] uppercase tracking-widest-plus text-brown-on-dark mt-4">Chambers of Ramandeep Bawa</div>
             </div>
             <p className="mt-8 text-cream/70 text-sm leading-relaxed max-w-md">
               A boutique legal practice in New Delhi focused on courtroom advocacy, commercial disputes and specialised advisory work before the High Court of Delhi and tribunals across India.
             </p>
-            <p className="mt-8 font-serif italic text-brown/90 text-lg leading-snug max-w-md">
+            <p className="mt-8 font-serif italic text-brown-on-dark text-lg leading-snug max-w-md">
               &ldquo;I never lose. I either win or learn.&rdquo;
             </p>
           </div>
 
           <div className="md:col-span-3">
-            <div className="text-[10px] uppercase tracking-widest-plus text-brown mb-6">Navigate</div>
+            <div className="text-[10px] uppercase tracking-widest-plus text-brown-on-dark mb-6">Navigate</div>
             <ul className="space-y-3 text-sm">
               {[
                 ["About", "/about"], ["Practice Areas", "/practice-areas"], ["Expertise", "/expertise"],
@@ -33,30 +39,30 @@ export default function Footer() {
                 ["Insights", "/insights"], ["Newsletter", "/newsletter"], ["Contact", "/contact"],
               ].map(([l, h]) => (
                 <li key={l}>
-                  <Link to={h} className="text-cream/75 hover:text-brown transition-colors duration-300">{l}</Link>
+                  <Link to={h} className="text-cream/75 hover:text-brown-on-dark transition-colors duration-300">{l}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="md:col-span-5">
-            <div className="text-[10px] uppercase tracking-widest-plus text-brown mb-6">The Chambers</div>
+            <div className="text-[10px] uppercase tracking-widest-plus text-brown-on-dark mb-6">The Chambers</div>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3 text-cream/80">
-                <MapPin size={16} strokeWidth={1.4} className="text-brown mt-0.5 flex-shrink-0" />
-                <span>RDB Associates, 4th Floor, Chamber No. 412, Lawyers Chamber Block, Delhi High Court, Sher Shah Road, New Delhi – 110003, India</span>
+                <MapPin size={16} strokeWidth={1.4} className="text-brown-on-dark mt-0.5 flex-shrink-0" />
+                <span>{CHAMBERS_ADDRESS}</span>
               </li>
               <li className="flex items-start gap-3 text-cream/80">
-                <Phone size={16} strokeWidth={1.4} className="text-brown mt-0.5" />
-                <span>+91 — Available on enquiry</span>
+                <Phone size={16} strokeWidth={1.4} className="text-brown-on-dark mt-0.5" />
+                <a href={`tel:${PHONE_E164}`} className="hover:text-brown-on-dark transition-colors">{PHONE_DISPLAY}</a>
               </li>
               <li className="flex items-start gap-3 text-cream/80">
-                <Mail size={16} strokeWidth={1.4} className="text-brown mt-0.5" />
-                <a href="mailto:contact@rdbassociates.in" className="hover:text-brown transition-colors">contact@rdbassociates.in</a>
+                <Mail size={16} strokeWidth={1.4} className="text-brown-on-dark mt-0.5" />
+                <a href={`mailto:${EMAIL}`} className="hover:text-brown-on-dark transition-colors">{EMAIL}</a>
               </li>
               <li className="flex items-start gap-3 text-cream/80">
-                <Linkedin size={16} strokeWidth={1.4} className="text-brown mt-0.5" />
-                <a href="https://www.linkedin.com/in/ramandeep-bawa-6081b6155/" target="_blank" rel="noreferrer" className="hover:text-brown transition-colors">
+                <Linkedin size={16} strokeWidth={1.4} className="text-brown-on-dark mt-0.5" />
+                <a href="https://www.linkedin.com/in/ramandeep-bawa-6081b6155/" target="_blank" rel="noreferrer" className="hover:text-brown-on-dark transition-colors">
                   linkedin.com/in/ramandeep-bawa
                 </a>
               </li>
@@ -72,13 +78,17 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs text-cream/60">
           <div>© {new Date().getFullYear()} RDB Associates. All rights reserved.</div>
-          <div className="uppercase tracking-widest-plus text-[10px]">
-            Bar Council of India · Rule 36 · No solicitation of work
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 uppercase tracking-widest-plus text-[10px]">
+            <Link to="/privacy" className="text-cream/75 hover:text-brown-on-dark transition-colors duration-300">
+              Privacy Notice
+            </Link>
+            <span aria-hidden className="text-cream/30">·</span>
+            <span>Bar Council of India · Rule 36 · No solicitation of work</span>
           </div>
         </div>
 
-        <p className="mt-8 text-[11px] text-cream/45 leading-relaxed max-w-4xl">
-          <span className="text-brown/80 uppercase tracking-widest-plus">Disclaimer · </span>
+        <p className="mt-8 text-[11px] text-cream/60 leading-relaxed max-w-4xl">
+          <span className="text-brown-on-dark uppercase tracking-widest-plus">Disclaimer · </span>
           This website is for informational purposes only. The content provided does not constitute legal advice and viewing it does not create an attorney–client relationship. In accordance with the Bar Council of India Rules, we do not solicit work through this website.
         </p>
       </div>

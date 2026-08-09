@@ -1,14 +1,13 @@
-import Nav from "@/components/site/Nav";
+import PageShell from "@/components/site/PageShell";
 import Timeline from "@/components/site/Timeline";
-import Footer from "@/components/site/Footer";
 
 export default function JourneyPage() {
   return (
-    <main data-testid="journey-page" className="bg-white text-ink page-transition">
-      <Nav />
-      <div className="pt-20" />
+    <PageShell testId="journey-page" className="bg-white"
+      title="Journey"
+      description="A career at the Bar from 2011 — mentorship, specialisation and the founding of RDB Associates."
+    >
       <Timeline />
-      <Footer />
-    </main>
+    </PageShell>
   );
 }

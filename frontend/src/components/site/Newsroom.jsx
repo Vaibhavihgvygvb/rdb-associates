@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, ChevronDown, Search, X } from "lucide-react";
-import useReveal from "@/lib/useReveal";
 import NewsroomImage from "@/components/site/NewsroomImage";
 import { CATEGORIES, FORUMS, PRACTICES, categoryLabel, formatDate, sortedItems } from "@/data/newsroom";
+import Reveal from "@/components/motion/Reveal";
+import { EMAIL } from "@/data/chambers";
 
 const PAGE_SIZE = 9;
 
@@ -11,7 +12,6 @@ export default function Newsroom() {
   // A proportional threshold cannot be met by a full-page index: at one column this
   // section is ~9000px tall, so the default 15% asks for more pixels than a phone
   // viewport has and the reveal never fires, leaving the page at opacity 0.
-  const ref = useReveal({ threshold: 0.01 });
   const [query, setQuery] = useState("");
   const [categories, setCategories] = useState([]);
   const [practices, setPractices] = useState([]);
@@ -53,155 +53,158 @@ export default function Newsroom() {
   };
 
   return (
-    <section id="newsroom" data-testid="newsroom-section" ref={ref} className="reveal bg-white text-ink">
-      <header className="border-b border-border">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="h-px w-10 bg-brown" />
-            <span className="text-brown text-xs uppercase tracking-widest-plus">Newsroom</span>
-          </div>
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05] max-w-4xl">
-            What the chambers is <span className="text-brown">doing</span>, and what it has to say.
-          </h1>
-          <p className="mt-8 text-ink-soft text-base md:text-lg leading-relaxed max-w-3xl">
-            Matter notes, chambers announcements, publications and speaking engagements. In accordance
-            with the Bar Council of India Rules, matters are described generally: no client is
-            identified, no claim value is stated, and nothing on this page is an advertisement or an
-            offer to act.
-          </p>
-        </div>
-      </header>
-
-      {/* Filter bar */}
-      <div className="sticky top-[72px] z-30 bg-white border-b border-border">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-5">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-            <label className="relative flex-1 min-w-0">
-              <Search size={17} strokeWidth={1.6} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft pointer-events-none" />
-              <input
-                data-testid="newsroom-search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search the newsroom"
-                className="w-full border border-border bg-white pl-11 pr-4 py-3 text-[15px] text-ink placeholder:text-ink-soft focus:outline-none focus:border-brown transition-colors"
-              />
-            </label>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <Facet
-                label="Category"
-                testid="facet-category"
-                options={CATEGORIES.map((c) => [c.id, c.label])}
-                selected={categories}
-                onToggle={(v) => setCategories(toggle(categories, v))}
-              />
-              <Facet
-                label="Practice area"
-                testid="facet-practice"
-                options={PRACTICES.map((p) => [p, p])}
-                selected={practices}
-                onToggle={(v) => setPractices(toggle(practices, v))}
-              />
-              <Facet
-                label="Forum"
-                testid="facet-forum"
-                options={FORUMS.map((f) => [f, f])}
-                selected={forums}
-                onToggle={(v) => setForums(toggle(forums, v))}
-              />
+    <Reveal asChild inViewMargin="0px">
+      <section id="newsroom" data-testid="newsroom-section" className="bg-white text-ink">
+        <header className="border-b border-border">
+          <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-28">
+            <div className="flex items-center gap-4 mb-6">
+              <span className="h-px w-10 bg-brown" />
+              <span className="text-brown text-xs uppercase tracking-widest-plus">Newsroom</span>
             </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 mt-4">
-            <span data-testid="newsroom-count" className="text-[11px] uppercase tracking-widest-plus text-ink-soft mr-2">
-              {results.length} {results.length === 1 ? "result" : "results"}
-            </span>
-            {categories.map((c) => (
-              <Pill key={c} label={categoryLabel(c)} onRemove={() => setCategories(toggle(categories, c))} />
-            ))}
-            {practices.map((p) => (
-              <Pill key={p} label={p} onRemove={() => setPractices(toggle(practices, p))} />
-            ))}
-            {forums.map((f) => (
-              <Pill key={f} label={f} onRemove={() => setForums(toggle(forums, f))} />
-            ))}
-            {activeCount > 0 && (
-              <button
-                data-testid="newsroom-clear"
-                onClick={clearAll}
-                className="text-[11px] uppercase tracking-widest-plus text-brown font-semibold hover:text-brown-light transition-colors ml-1"
-              >
-                Clear all
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Results */}
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-14 md:py-20">
-        {results.length === 0 ? (
-          <div data-testid="newsroom-empty" className="border border-border py-24 text-center">
-            <p className="font-serif text-2xl text-ink">Nothing matches those filters.</p>
-            <button onClick={clearAll} className="mt-5 text-brown text-[13px] font-semibold uppercase tracking-[0.1em] hover:text-brown-light transition-colors">
-              Clear all filters
-            </button>
-          </div>
-        ) : (
-          <>
-            {spotlight && <Spotlight item={spotlight} />}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {gridItems.slice(0, visible).map((item, i) => (
-                <NewsCard key={item.slug} item={item} index={i} />
-              ))}
-            </div>
-
-            {visible < gridItems.length && (
-              <div className="flex justify-center mt-14">
-                <button
-                  data-testid="newsroom-load-more"
-                  onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                  className="border border-ink px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink hover:bg-ink hover:text-white transition-colors duration-200"
-                >
-                  Load more — {gridItems.length - visible} remaining
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
-      {/* Media & enquiries */}
-      <div className="border-t border-border bg-cream-dark">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-16 grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div className="md:col-span-2">
-            <div className="text-[11px] uppercase tracking-widest-plus text-brown font-semibold">Press &amp; media enquiries</div>
-            <p className="mt-5 text-ink-soft text-sm leading-relaxed max-w-2xl">
-              Journalists seeking comment on a reported judgment or a point of procedure may write to
-              the chambers. Comment is offered on questions of law only, and never on a matter in
-              which the chambers is engaged or on the facts of a pending case.
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05] max-w-4xl">
+              What the chambers is <span className="text-brown">doing</span>, and what it has to say.
+            </h1>
+            <p className="mt-8 text-ink-soft text-base md:text-lg leading-relaxed max-w-3xl">
+              Matter notes, chambers announcements, publications and speaking engagements. In accordance
+              with the Bar Council of India Rules, matters are described generally: no client is
+              identified, no claim value is stated, and nothing on this page is an advertisement or an
+              offer to act.
             </p>
-            <a
-              href="mailto:contact@rdbassociates.in"
-              className="mt-6 inline-flex items-center gap-2 text-brown text-[13px] font-semibold uppercase tracking-[0.1em] hover:gap-3 transition-all duration-200"
-            >
-              contact@rdbassociates.in <ArrowUpRight size={15} />
-            </a>
           </div>
-          <div>
-            <div className="text-[11px] uppercase tracking-widest-plus text-brown font-semibold">Elsewhere</div>
-            <ul className="mt-5 space-y-3 text-sm">
-              {[["Insights", "/insights"], ["Our Work", "/work"], ["Credentials", "/credentials"], ["Newsletter", "/newsletter"]].map(([l, to]) => (
-                <li key={to}>
-                  <Link to={to} className="text-ink-soft hover:text-brown transition-colors">{l}</Link>
-                </li>
+        </header>
+
+        {/* Filter bar */}
+        <div className="sticky top-nav z-30 bg-white border-b border-border">
+          <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-5">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+              <label className="relative flex-1 min-w-0">
+                <Search size={17} strokeWidth={1.6} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft pointer-events-none" />
+                <input
+                  data-testid="newsroom-search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  aria-label="Search the newsroom"
+                  placeholder="Search the newsroom"
+                  className="w-full border border-border bg-white pl-11 pr-4 py-3 text-[15px] text-ink placeholder:text-ink-soft focus:outline-none focus:border-brown transition-colors"
+                />
+              </label>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Facet
+                  label="Category"
+                  testid="facet-category"
+                  options={CATEGORIES.map((c) => [c.id, c.label])}
+                  selected={categories}
+                  onToggle={(v) => setCategories(toggle(categories, v))}
+                />
+                <Facet
+                  label="Practice area"
+                  testid="facet-practice"
+                  options={PRACTICES.map((p) => [p, p])}
+                  selected={practices}
+                  onToggle={(v) => setPractices(toggle(practices, v))}
+                />
+                <Facet
+                  label="Forum"
+                  testid="facet-forum"
+                  options={FORUMS.map((f) => [f, f])}
+                  selected={forums}
+                  onToggle={(v) => setForums(toggle(forums, v))}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 mt-4">
+              <span data-testid="newsroom-count" className="text-[11px] uppercase tracking-widest-plus text-ink-soft mr-2">
+                {results.length} {results.length === 1 ? "result" : "results"}
+              </span>
+              {categories.map((c) => (
+                <Pill key={c} label={categoryLabel(c)} onRemove={() => setCategories(toggle(categories, c))} />
               ))}
-            </ul>
+              {practices.map((p) => (
+                <Pill key={p} label={p} onRemove={() => setPractices(toggle(practices, p))} />
+              ))}
+              {forums.map((f) => (
+                <Pill key={f} label={f} onRemove={() => setForums(toggle(forums, f))} />
+              ))}
+              {activeCount > 0 && (
+                <button
+                  data-testid="newsroom-clear"
+                  onClick={clearAll}
+                  className="text-[11px] uppercase tracking-widest-plus text-brown font-semibold hover:text-brown-light transition-colors ml-1"
+                >
+                  Clear all
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+
+        {/* Results */}
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-14 md:py-20">
+          {results.length === 0 ? (
+            <div data-testid="newsroom-empty" className="border border-border py-24 text-center">
+              <p className="font-serif text-2xl text-ink">Nothing matches those filters.</p>
+              <button onClick={clearAll} className="mt-5 text-brown text-[13px] font-semibold uppercase tracking-[0.1em] hover:text-brown-light transition-colors">
+                Clear all filters
+              </button>
+            </div>
+          ) : (
+            <>
+              {spotlight && <Spotlight item={spotlight} />}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {gridItems.slice(0, visible).map((item, i) => (
+                  <NewsCard key={item.slug} item={item} index={i} />
+                ))}
+              </div>
+
+              {visible < gridItems.length && (
+                <div className="flex justify-center mt-14">
+                  <button
+                    data-testid="newsroom-load-more"
+                    onClick={() => setVisible((v) => v + PAGE_SIZE)}
+                    className="border border-ink px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink hover:bg-ink hover:text-white transition-colors duration-200"
+                  >
+                    Load more — {gridItems.length - visible} remaining
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        {/* Media & enquiries */}
+        <div className="border-t border-border bg-cream-dark">
+          <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-16 grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="md:col-span-2">
+              <div className="text-[11px] uppercase tracking-widest-plus text-brown font-semibold">Press &amp; media enquiries</div>
+              <p className="mt-5 text-ink-soft text-sm leading-relaxed max-w-2xl">
+                Journalists seeking comment on a reported judgment or a point of procedure may write to
+                the chambers. Comment is offered on questions of law only, and never on a matter in
+                which the chambers is engaged or on the facts of a pending case.
+              </p>
+              <a
+                href={`mailto:${EMAIL}`}
+                className="mt-6 inline-flex items-center gap-2 text-brown text-[13px] font-semibold uppercase tracking-[0.1em] hover:gap-3 transition-all duration-200"
+              >
+                {EMAIL} <ArrowUpRight size={15} />
+              </a>
+            </div>
+            <div>
+              <div className="text-[11px] uppercase tracking-widest-plus text-brown font-semibold">Elsewhere</div>
+              <ul className="mt-5 space-y-3 text-sm">
+                {[["Insights", "/insights"], ["Our Work", "/work"], ["Credentials", "/credentials"], ["Newsletter", "/newsletter"]].map(([l, to]) => (
+                  <li key={to}>
+                    <Link to={to} className="text-ink-soft hover:text-brown transition-colors">{l}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </Reveal>
   );
 }
 

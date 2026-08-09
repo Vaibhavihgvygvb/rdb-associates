@@ -1,14 +1,13 @@
-import Nav from "@/components/site/Nav";
+import PageShell from "@/components/site/PageShell";
 import PracticeAreas from "@/components/site/PracticeAreas";
-import Footer from "@/components/site/Footer";
 
 export default function PracticeAreasPage() {
   return (
-    <main data-testid="practice-areas-page" className="bg-white text-ink page-transition">
-      <Nav />
-      <div className="pt-20" />
+    <PageShell testId="practice-areas-page" className="bg-white"
+      title="Practice Areas"
+      description="Civil and commercial litigation, trial advocacy, ADR, medical law, cyber law, tribunals and advisory work — with the Acts each is conducted under."
+    >
       <PracticeAreas />
-      <Footer />
-    </main>
+    </PageShell>
   );
 }

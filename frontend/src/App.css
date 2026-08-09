@@ -1,5 +1,6 @@
+/* dvh so the shell matches the visible viewport on mobile, where `100vh` is
+   the height with the browser toolbars retracted. */
 .App {
-  text-align: left;
-  background-color: #FFFFFF;
-  min-height: 100vh;
+  background-color: #ffffff;
+  min-height: 100dvh;
 }
