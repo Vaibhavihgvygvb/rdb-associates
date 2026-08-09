@@ -19,9 +19,9 @@ const associates = [
 export default function Team() {
   return (
     <Reveal asChild>
-      <section id="team" data-testid="team-section" className="relative py-24 md:py-32 bg-cream-dark text-ink">
+      <section id="team" data-testid="team-section" className="relative section-y bg-cream-dark text-ink">
         <div className="shell">
-          <div className="max-w-3xl mb-14">
+          <div className="max-w-3xl mb-16">
             <div className="eyebrow">
               <span className="eyebrow-label">Meet the Team</span>
             </div>

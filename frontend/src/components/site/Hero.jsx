@@ -29,7 +29,33 @@ export default function Hero() {
       <div className="grid lg:grid-cols-2 min-h-[calc(100dvh-theme(spacing.nav))]">
         {/* Text panel */}
         <div className="flex items-center order-2 lg:order-1">
-          <div className="max-w-[620px] mx-auto lg:ml-auto lg:mr-0 px-6 md:px-12 lg:pr-16 py-16 lg:py-0 w-full">
+          {/* The left inset is computed so the hero's text starts on exactly
+              the same vertical line as `.shell` — the header logo, every page
+              heading and the footer. Previously this column was a 620px box
+              right-aligned inside its half of the split, which put the h1 at
+              141px against the shell's 121px: the one page where the header
+              did not line up with the content under it.
+
+              The arithmetic, in terms of this cell's own width C (half the
+              viewport, since the grid is two equal columns): the shell's
+              content edge is (100vw − 1280)/2 + 48, and 100vw = 2C, which
+              reduces to C − 592px. `max()` holds it at the 48px gutter below
+              1280px, where the shell is gutter-bound rather than centred.
+              Expressed against `100%` rather than `100vw` deliberately — a
+              percentage resolves against this element's containing block, so
+              it excludes the scrollbar and the two edges agree exactly.
+
+              `lg:py-12` replaces `lg:py-0`: with the column vertically centred,
+              a tall hero at a short viewport (1024×900) ran its first line hard
+              against the fixed header. */}
+          {/* `mr-auto`, not `mx-auto`. Centring the 620px column only has an
+              effect once the viewport exceeds it — so between roughly 670px
+              and the `lg` breakpoint the hero's text sat up to 100px inside the
+              gutter that the header above it and every section below it share.
+              The same misalignment `lg:pl` corrects above 1024, one breakpoint
+              band lower. Below ~670px the column is narrower than its own
+              max-width and this changes nothing. */}
+          <div className="w-full py-16 px-6 md:px-12 max-w-[620px] mr-auto lg:max-w-none lg:py-12 lg:pr-16 lg:pl-[max(3rem,calc(100%-37rem))]">
             <Reveal inView={false} delay={STAGE.eyebrow} distance={12} asChild>
               <div className="eyebrow">
                 <span className="eyebrow-label">

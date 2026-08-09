@@ -56,7 +56,7 @@ export default function Newsroom() {
     <Reveal asChild inViewMargin="0px">
       <section id="newsroom" data-testid="newsroom-section" className="bg-white text-ink">
         <header className="border-b border-border">
-          <div className="shell py-20 md:py-28">
+          <div className="shell section-y">
             <div className="eyebrow">
               <span className="eyebrow-label">Newsroom</span>
             </div>
@@ -72,8 +72,21 @@ export default function Newsroom() {
           </div>
         </header>
 
-        {/* Filter bar */}
-        <div className="sticky top-nav z-30 bg-white border-b border-border">
+        {/* Filter bar.
+
+            Sticky from `lg` up only. On a 390×844 phone this bar stacks a
+            search field, three facet buttons that wrap 2-then-1, and the result
+            row — about 237px, which pinned under the 72px header left roughly a
+            third of the screen permanently occupied by chrome on the page most
+            likely to be opened from a shared link.
+
+            Unpinning below `lg` is the smallest change that gives the screen
+            back: every control stays exactly where it was in the flow, still
+            visible, still working. Collapsing the facets behind a "Filters"
+            disclosure would buy more height but invents a mobile-only
+            interaction, and horizontal-scrolling the facets would still leave
+            two rows pinned. */}
+        <div className="lg:sticky lg:top-nav z-30 bg-white border-b border-border">
           <div className="shell py-5">
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               <label className="relative flex-1 min-w-0">
@@ -152,7 +165,7 @@ export default function Newsroom() {
         </div>
 
         {/* Results */}
-        <div className="shell py-14 md:py-20">
+        <div className="shell section-y-sm">
           {results.length === 0 ? (
             <div data-testid="newsroom-empty" className="border border-border py-24 text-center">
               <p className="font-serif text-2xl text-ink">Nothing matches those filters.</p>

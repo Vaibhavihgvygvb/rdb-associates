@@ -1,6 +1,10 @@
 /* dvh so the shell matches the visible viewport on mobile, where `100vh` is
-   the height with the browser toolbars retracted. */
+   the height with the browser toolbars retracted.
+
+   No `background-color` here. This restated `#ffffff` as a raw hex while
+   `body` sets the same value from `theme("colors.cream.DEFAULT")` — two
+   declarations of one colour, one of which could not follow the token if the
+   palette ever moved. The body rule owns it. */
 .App {
-  background-color: #ffffff;
   min-height: 100dvh;
 }

@@ -74,6 +74,19 @@ body {
   h3 { font-weight: 500; letter-spacing: -0.01em; }
   h4 { font-weight: 500; }
 
+  /* Display headings break on meaning, not on fit.
+     Left to the browser these were ragging badly at the sizes they are set —
+     /work orphaned the ampersand and left "clients." alone on line two,
+     /newsletter split "the chambers" so the whole second line was italic, and
+     /practice-areas produced a four-line headline with two very short middle
+     lines. `balance` equalises line lengths across the block.
+
+     Set here rather than per-heading because it is a property of how this site
+     sets display type, not a fix for three particular strings — and every
+     heading on the site is inside the 6-line limit browsers apply to it, so it
+     costs nothing. Explicit <br> (the hero) still wins, as it should. */
+  h1, h2, h3 { text-wrap: balance; }
+
   /* Every interactive element gets the same keyboard focus indicator. Several
      controls set `outline: none` on themselves for the mouse case and left
      nothing behind for the keyboard case — the search dialog's input had no
@@ -98,6 +111,20 @@ body {
      on every route. One class, so that cannot recur. */
   .shell {
     @apply max-w-7xl mx-auto px-6 md:px-12;
+  }
+
+  /* Section vertical rhythm, as two steps instead of five ad-hoc pairs.
+     The site was running `py-24 md:py-32` (14 sections), `py-20 md:py-28`
+     (3), `py-14 md:py-20`, `py-16` and `py-10` — so the interval between a
+     page's edge and its first line never repeated, and the site read as
+     assembled rather than composed. `.section-y` is the full band a top-level
+     section gets; `.section-y-sm` is the tighter one for a band nested inside
+     another section, which is a real distinction and the only one there is. */
+  .section-y {
+    @apply py-24 md:py-32;
+  }
+  .section-y-sm {
+    @apply py-16 md:py-20;
   }
 
   /* The eyebrow lockup — rule plus label — that opens fourteen sections.
@@ -143,6 +170,29 @@ body {
   .eyebrow-center::after {
     content: "";
     @apply h-px w-10 bg-brown flex-shrink-0;
+  }
+
+  /* The success badge, as one rule instead of three hand-written lockups.
+     Contact and Careers drew a 48px pale-mint disc, the footer newsletter a
+     32px solid-emerald one — same component, three sets of values, no stated
+     reason for the differences.
+
+     The circle stays. It is the only curved form left in a 0-radius system
+     (bullet dots aside, which are dots), and that is deliberate rather than
+     drift: a tick inside a square reads as a checkbox — a control you could
+     toggle — where a tick inside a disc reads as a thing that has happened.
+     What was missing was saying so once. The two sizes are a real distinction
+     — a badge heading a confirmation panel against one sitting inline beside a
+     line of text — and the dark variant exists because pale mint on the
+     near-black footer is a bright blob rather than a quiet confirmation. */
+  .confirm-badge {
+    @apply inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-brown-soft text-brown;
+  }
+  .confirm-badge-inline {
+    @apply h-8 w-8;
+  }
+  .confirm-badge[data-tone="dark"] {
+    @apply bg-brown text-white;
   }
 
   /* Elevation, declared once per level rather than as five ad-hoc values.
@@ -288,6 +338,24 @@ a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data
   to { opacity: 1; }
 }
 
+/* The site's signature tracking, moderated on small screens.
+   0.28em is right for a 10px label with a desktop column to sit in. On a phone
+   it is what turned "Confidential consultations available across languages"
+   into four lines and pushed the two meta labels on a /work case card to
+   within 18px of each other. Narrowing to 0.16em below 640px keeps the
+   letter-spaced character — still unmistakably wide — while giving back about
+   a third of the horizontal space.
+
+   One rule against the generated utility rather than responsive variants on
+   ~70 call sites: this is a single decision about the type, and spreading it
+   across the markup would guarantee it drifts. Placed after `@tailwind
+   utilities` so it wins on source order at equal specificity. */
+@media (max-width: 639px) {
+  .tracking-widest-plus {
+    letter-spacing: 0.16em;
+  }
+}
+
 /* Route-chunk loading bar (see RouteFallback in App.js). Indeterminate,
    because the wait is a network fetch of unknown length — a determinate bar
    would have to invent a number. `opacity: 0` for the first 300ms so a chunk
@@ -336,24 +404,29 @@ a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data
 
 /* Printing an article should produce the article. The share row, the fixed
    header, the footer and the site chrome are all screen furniture, and the
-   newsroom's graded imagery lays down a full-bleed dark block on paper. */
+   newsroom's graded imagery lays down a full-bleed dark block on paper.
+
+   Selectors are semantic (`header`, `footer`, `main`) plus one explicit
+   `.print-hide` hook. They were written against `data-testid` attributes,
+   which made a stylesheet depend on test scaffolding — so the test IDs could
+   never be stripped from the production bundle without silently breaking
+   printing, and a renamed test id would have broken it just as quietly.
+   Presentation should not be coupled to test hooks in either direction. */
 @media print {
-  [data-testid="site-nav"],
-  [data-testid="site-footer"],
-  [data-testid="newsroom-share"],
-  [data-testid="newsroom-back"],
-  [data-testid="newsroom-related"],
-  .skip-link {
+  header,
+  footer,
+  .skip-link,
+  .print-hide {
     display: none !important;
   }
   body {
     background: #fff;
   }
-  [data-testid="newsroom-item"] {
+  main {
     font-size: 11pt;
   }
   /* Anchors are meaningless on paper unless the target comes with them. */
-  [data-testid="newsroom-item"] a[href^="http"]::after {
+  main a[href^="http"]::after {
     content: " (" attr(href) ")";
     font-size: 9pt;
     word-break: break-all;

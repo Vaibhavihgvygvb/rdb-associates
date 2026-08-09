@@ -83,7 +83,7 @@ export default function Timeline() {
   const drawn = useSpring(scrollYProgress, { stiffness: 220, damping: 40, bounce: 0 });
 
   return (
-    <section id="timeline" data-testid="timeline-section" className="relative py-24 md:py-32 bg-cream-dark text-ink">
+    <section id="timeline" data-testid="timeline-section" className="relative section-y bg-cream-dark text-ink">
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         <Reveal asChild>

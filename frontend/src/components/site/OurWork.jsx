@@ -1,4 +1,3 @@
-import { Landmark, Users, Briefcase } from "lucide-react";
 import Reveal from "@/components/motion/Reveal";
 
 const previousWorks = [
@@ -28,30 +27,47 @@ const clientCategories = [
 export default function OurWork() {
   return (
     <Reveal asChild>
-      <section id="work" data-testid="work-section" className="relative py-24 md:py-32 bg-cream">
+      <section id="work" data-testid="work-section" className="relative section-y bg-cream">
         <div className="shell">
-          <div className="max-w-3xl mb-16">
-            <div className="eyebrow">
-              <span className="eyebrow-label">Our Work</span>
+          {/* Heading and its standfirst sit side by side, which is the section
+              header this site already uses on /practice-areas. Stacked in one
+              `max-w-3xl` column the h1 filled 768px of a 1440px viewport and
+              left 551px of unshaped emptiness beside it — the page opened with
+              more void than content.
+
+              Top-aligned rather than bottom-aligned: /practice-areas pins its
+              paragraph to `items-end`, which buys a tidy shared baseline at the
+              cost of a ~170px hole above the paragraph. Aligning both columns
+              to the top of the grid row avoids trading one gap for another. */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-16">
+            <div className="lg:col-span-6">
+              <div className="eyebrow">
+                <span className="eyebrow-label">Our Work</span>
+              </div>
+              {/* Non-breaking space inside the accent. `text-wrap: balance`
+                  equalises line lengths, which is what we want — but left to
+                  itself it chose to split "major cases" across the break,
+                  putting half the italic phrase on each line. Binding the two
+                  words lets balance pick any break except the one inside the
+                  phrase. */}
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
+                Previous work, <span className="italic text-brown">major&nbsp;cases</span> &amp; clients.
+              </h1>
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
-              Previous work, <span className="italic text-brown">major cases</span> &amp; clients.
-            </h1>
-            <p className="mt-8 text-ink/70 text-base md:text-lg leading-relaxed">
-              In accordance with the Bar Council of India Rules, matter details below are described
-              generally and do not identify clients. They are illustrative of the nature and scale of
-              work regularly undertaken by the chambers.
-            </p>
+            <div className="lg:col-span-6 lg:pt-2">
+              <p className="text-ink/70 text-base md:text-lg leading-relaxed max-w-xl">
+                In accordance with the Bar Council of India Rules, matter details below are described
+                generally and do not identify clients. They are illustrative of the nature and scale of
+                work regularly undertaken by the chambers.
+              </p>
+            </div>
           </div>
 
           <div className="mb-20">
-            <div className="flex items-center gap-3 mb-8">
-              <Briefcase size={22} strokeWidth={1.3} className="text-brown" />
-              <h2 className="font-serif text-2xl md:text-3xl text-ink">Previous Works</h2>
-            </div>
+            <h2 className="font-serif text-2xl md:text-3xl text-ink mb-8">Previous Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {previousWorks.map((w) => (
-                <div key={w} className="flex items-start gap-3 border-t border-brown/25 pt-4">
+                <div key={w} className="flex items-start gap-3 border-t border-border pt-4">
                   <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brown flex-shrink-0" />
                   <span className="text-ink/80 text-sm md:text-base leading-relaxed">{w}</span>
                 </div>
@@ -60,14 +76,16 @@ export default function OurWork() {
           </div>
 
           <div className="mb-20">
-            <div className="flex items-center gap-3 mb-8">
-              <Landmark size={22} strokeWidth={1.3} className="text-brown" />
-              <h2 className="font-serif text-2xl md:text-3xl text-ink">Major Cases</h2>
-            </div>
+            <h2 className="font-serif text-2xl md:text-3xl text-ink mb-8">Major Cases</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {majorCases.map((c) => (
-                <div key={c.forum + c.type} className="bg-white border border-brown/25 p-8">
-                  <div className="flex items-center justify-between text-[10px] uppercase tracking-widest-plus text-ink/70 mb-4">
+                <div key={c.forum + c.type} className="bg-white border border-border p-8">
+                  {/* Stacked below `sm`. Two wide-tracked uppercase labels
+                      pushed apart by `justify-between` inside a narrow card
+                      both wrapped and closed to within 18px of each other on a
+                      phone, which read as a collision. They only compete for
+                      the same line once there is a line to share. */}
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4 text-[10px] uppercase tracking-widest-plus text-ink/70 mb-4">
                     <span>{c.forum}</span>
                     <span>{c.type}</span>
                   </div>
@@ -78,13 +96,10 @@ export default function OurWork() {
           </div>
 
           <div>
-            <div className="flex items-center gap-3 mb-8">
-              <Users size={22} strokeWidth={1.3} className="text-brown" />
-              <h2 className="font-serif text-2xl md:text-3xl text-ink">Clients</h2>
-            </div>
+            <h2 className="font-serif text-2xl md:text-3xl text-ink mb-8">Clients</h2>
             <div className="flex flex-wrap gap-3">
               {clientCategories.map((c) => (
-                <span key={c} className="border border-brown/25 text-ink/80 text-sm px-5 py-2.5">{c}</span>
+                <span key={c} className="border border-border text-ink/80 text-sm px-5 py-2.5">{c}</span>
               ))}
             </div>
           </div>

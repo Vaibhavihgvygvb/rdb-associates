@@ -30,7 +30,7 @@ const explore = [
 function AboutTeaser() {
   return (
     <Reveal asChild>
-      <section className="relative py-24 md:py-32 bg-cream">
+      <section className="relative section-y bg-cream">
         {/* A measure-limited column. This was a 12-column grid holding a single
             `col-span-7` child — five columns of nothing, left over from an
             image that is no longer here. */}
@@ -61,7 +61,7 @@ function AboutTeaser() {
 function ExploreGrid() {
   return (
     <Reveal asChild>
-      <section className="relative py-24 md:py-32 bg-cream-dark text-ink">
+      <section className="relative section-y bg-cream-dark text-ink">
         <div className="shell">
           <div className="max-w-3xl mb-16">
             <div className="eyebrow">

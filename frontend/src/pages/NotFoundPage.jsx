@@ -18,7 +18,7 @@ export default function NotFoundPage() {
       title="Page not found"
       description="The page you are looking for is not on record."
     >
-      <section className="shell py-24 md:py-32">
+      <section className="shell section-y">
         <div className="max-w-2xl">
           <div className="eyebrow">
               <span className="eyebrow-label">404 · Page not found</span>

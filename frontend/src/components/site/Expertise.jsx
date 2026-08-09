@@ -28,7 +28,7 @@ export default function Expertise() {
 
   return (
     <Reveal asChild>
-      <section id="expertise" data-testid="expertise-section" className="relative py-24 md:py-32 bg-cream">
+      <section id="expertise" data-testid="expertise-section" className="relative section-y bg-cream">
         <div className="shell">
           <div className="max-w-3xl mb-16">
             <div className="eyebrow">
@@ -52,13 +52,16 @@ export default function Expertise() {
               and cannot drift. The clip has to be a *parent* of the grid:
               `overflow-hidden` on the grid clips to the grid's own box, and the
               trailing rules sit exactly on that edge. */}
-          <div className="overflow-hidden border-t border-brown/25">
+          <div className="overflow-hidden border-t border-border">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 -mr-px -mb-px">
             {items.map((it) => (
               <button key={it.n} type="button" onClick={() => setSelected(it)}
                 data-testid={`expertise-item-${it.n}`}
                 aria-haspopup="dialog"
-                className="p-10 border-r border-b border-brown/25 hover:bg-white transition-colors duration-500 text-left cursor-pointer">
+                /* flex flex-col for the same reason as the practice cards: a
+                   stretched <button> centres its content, so cell 3's number
+                   sat 11px below cells 1 and 2 in the same row. */
+                className="flex flex-col p-8 border-r border-b border-border hover:bg-white transition-colors duration-500 text-left cursor-pointer">
                 <div className="text-brown font-serif text-3xl mb-4">{it.n}</div>
                 <h2 className="font-serif text-2xl text-ink mb-3">{it.t}</h2>
                 <p className="text-ink/70 text-sm leading-relaxed">{it.d}</p>

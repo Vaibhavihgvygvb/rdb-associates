@@ -17,7 +17,7 @@ export default function NewsroomItem({ item }) {
           <Link
             to="/newsroom"
             data-testid="newsroom-back"
-            className="inline-flex items-center gap-2 text-ink-soft text-[12px] uppercase tracking-widest-plus hover:text-brown transition-colors"
+            className="print-hide inline-flex items-center gap-2 text-ink-soft text-[12px] uppercase tracking-widest-plus hover:text-brown transition-colors"
           >
             <ArrowLeft size={14} /> Newsroom
           </Link>
@@ -121,8 +121,8 @@ export default function NewsroomItem({ item }) {
         </div>
 
         {related.length > 0 && (
-          <div data-testid="newsroom-related" className="border-t border-border bg-cream-dark">
-            <div className="shell py-16 md:py-20">
+          <div data-testid="newsroom-related" className="print-hide border-t border-border bg-cream-dark">
+            <div className="shell section-y-sm">
               <div className="eyebrow">
                 <span className="eyebrow-label">Related</span>
               </div>
@@ -171,7 +171,7 @@ function ShareRow({ title }) {
   };
 
   return (
-    <div data-testid="newsroom-share" className="mt-12 pt-8 border-t border-border flex flex-wrap items-center gap-3">
+    <div data-testid="newsroom-share" className="print-hide mt-12 pt-8 border-t border-border flex flex-wrap items-center gap-3">
       <span className="text-[11px] uppercase tracking-widest-plus text-ink-soft mr-2">Share</span>
       <ShareBtn onClick={copy} label={copied ? "Link copied" : "Copy link"}>
         {copied ? <Check size={15} /> : <Link2 size={15} />}

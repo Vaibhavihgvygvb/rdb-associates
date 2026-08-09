@@ -126,7 +126,14 @@ export default function Nav() {
       data-testid="site-nav"
       onMouseLeave={closePanel}
       className={`fixed top-0 inset-x-0 z-50 transition-shadow duration-300 bg-white ${
-        scrolled || panel ? "border-b border-border shadow-[0_1px_0_rgba(0,0,0,0.02)]" : "border-b border-border/60"
+        /* The scrolled state used to add `shadow-[0_1px_0_rgba(0,0,0,0.02)]`
+           alongside the border — a 1px offset, zero blur, 2% black. That is a
+           border by construction, not a shadow, and at 2% on white it is below
+           the threshold of visibility (~1.005:1). It was the one elevation on
+           the site that did not come from the `.elevate-*` scale, and it was
+           painting nothing. The border going from 60% to full opacity is the
+           state change, and always was. */
+        scrolled || panel ? "border-b border-border" : "border-b border-border/60"
       }`}
     >
       <div className="shell h-nav flex items-center justify-between">
@@ -154,7 +161,16 @@ export default function Nav() {
           </div>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-8 h-full">
+        {/* The horizontal rhythm tightens between `lg` and `xl` and relaxes
+            again above it. At exactly 1024 — where this nav first appears, and
+            the width of an iPad in landscape — the logo lockup (326px fixed),
+            four 32px gaps and the right-hand cluster demanded ~1100px inside a
+            976px content box, so the row collapsed to a 0px gap between
+            "Careers" and the search icon and the CTA overflowed the container.
+            Buying the 48px back here is preferable to moving the whole desktop
+            nav up to `xl`, which would hand 1024–1279px the mobile hamburger
+            and take the full navigation away from every landscape tablet. */}
+        <nav className="hidden lg:flex items-center lg:gap-5 xl:gap-8 h-full">
           <button
             type="button"
             data-testid="nav-capabilities"
@@ -240,7 +256,7 @@ export default function Nav() {
           </Link>
         </nav>
 
-        <div className="hidden lg:flex items-center gap-5 shrink-0">
+        <div className="hidden lg:flex items-center lg:gap-4 xl:gap-5 shrink-0">
           <button
             onClick={() => setSearchOpen(true)}
             data-testid="nav-search"

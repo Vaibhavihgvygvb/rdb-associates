@@ -97,7 +97,7 @@ export default function Contact({ headingLevel = 2 }) {
 
   return (
     <Reveal asChild>
-      <section id="contact" data-testid="contact-section" className="relative py-24 md:py-32 bg-cream">
+      <section id="contact" data-testid="contact-section" className="relative section-y bg-cream">
         <div className="shell">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-20">
             <div className="lg:col-span-5">
@@ -121,7 +121,7 @@ export default function Contact({ headingLevel = 2 }) {
                   { Icon: Mail, label: "Email", val: EMAIL, href: `mailto:${EMAIL}` },
                   { Icon: Clock, label: "Hours", val: "Mon – Sat · 10:00 – 19:00 IST" },
                 ].map(({ Icon, label, val, href }) => (
-                  <div key={label} className="flex items-start gap-4 border-b border-brown/25 pb-5">
+                  <div key={label} className="flex items-start gap-4 border-b border-border pb-5">
                     <Icon size={20} strokeWidth={1.4} className="text-brown mt-1" />
                     <div>
                       <div className="text-[10px] uppercase tracking-widest-plus text-ink-soft">{label}</div>
@@ -158,13 +158,21 @@ export default function Contact({ headingLevel = 2 }) {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ type: "spring", stiffness: 160, damping: 22 }}
-                  className="bg-white border border-brown/25 p-8 md:p-12 elevate-card"
+                  /* Border only. This panel carried `border` *and* a resting
+                     card shadow — the same doubled elevation already corrected
+                     on the credentials cards, where a 1px border sits under a
+                     wide soft shadow and neither reads as the real edge. The
+                     border is what every other surface on the site uses to
+                     delineate itself, so it is the one that stays; the shadow
+                     scale is now reserved for hover, which is the only place
+                     the rest of the site raises anything. */
+                  className="bg-white border border-border p-8 md:p-12"
                 >
                   <motion.span
                     initial={{ scale: 0.5, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 0.12, type: "spring", stiffness: 300, damping: 18 }}
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-brown-soft text-brown"
+                    className="confirm-badge"
                   >
                     <Check size={22} strokeWidth={1.8} />
                   </motion.span>
@@ -190,7 +198,7 @@ export default function Contact({ headingLevel = 2 }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.25 }}
-                className="bg-white border border-brown/25 p-8 md:p-12 elevate-card">
+                className="bg-white border border-border p-8 md:p-12">
                 <p className="text-xs text-ink-soft mb-8">Fields marked * are required.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <Field label="Full Name *" error={shown("name")} htmlId="contact-name">

@@ -36,6 +36,11 @@
          stops the document waiting to find that out. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- The hero photograph is the LCP element and it is served from this
+         origin, so the connection to it was being negotiated later than the
+         one to the font host — which blocks nothing above the fold. Same
+         treatment for the larger asset. -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600&display=swap"

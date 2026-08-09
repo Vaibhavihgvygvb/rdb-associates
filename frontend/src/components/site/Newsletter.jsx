@@ -52,7 +52,7 @@ export default function Newsletter({ variant = "footer" }) {
       transition={{ type: "spring", stiffness: 200, damping: 22 }}
       className={`flex items-center gap-3 ${tone === "dark" ? "text-cream/80" : "text-ink"}`}
     >
-      <span className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brown text-white">
+      <span className="confirm-badge confirm-badge-inline" data-tone={tone === "dark" ? "dark" : undefined}>
         <Check size={16} strokeWidth={2} />
       </span>
       <span className="text-sm">You&rsquo;re subscribed. Thank you for joining.</span>
@@ -121,7 +121,7 @@ export default function Newsletter({ variant = "footer" }) {
   }
 
   return (
-    <section data-testid="newsletter-page-section" className="relative py-24 md:py-32 bg-cream">
+    <section data-testid="newsletter-page-section" className="relative section-y bg-cream">
       <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
         <div className="eyebrow eyebrow-center">
           <span className="eyebrow-label">Newsletter</span>
@@ -129,7 +129,13 @@ export default function Newsletter({ variant = "footer" }) {
         <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
           Stay informed with <span className="italic text-brown">the chambers</span>.
         </h1>
-        <p className="mt-8 text-ink/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto">
+        {/* max-w-2xl, not max-w-xl. Centred text has no fixed left edge for
+            the eye to return to, so it stays comfortable for two or three
+            lines and stops being so past that; at 576px this ran to five.
+            Widening the measure is the change that removes lines — narrowing
+            it would add them — and it keeps the centred composition the rest
+            of this page is built on. */}
+        <p className="mt-8 text-ink/70 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
           Subscribe to receive periodic updates on firm news, notable matters, and short-form legal
           insights across our practice areas — civil, commercial, medical and cyber law. No spam,
           unsubscribe anytime. Your address is used for the newsletter and nothing else — see the{" "}

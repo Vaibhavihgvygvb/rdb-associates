@@ -62,7 +62,7 @@ export default function Privacy() {
     <Reveal asChild inViewMargin="0px">
       <section data-testid="privacy-section" className="relative bg-white">
         <header className="border-b border-border">
-          <div className="shell py-20 md:py-28">
+          <div className="shell section-y">
             <div className="eyebrow">
               <span className="eyebrow-label">Privacy</span>
             </div>
@@ -80,7 +80,7 @@ export default function Privacy() {
           </div>
         </header>
 
-        <div className="shell grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 py-14 md:py-20">
+        <div className="shell grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 section-y-sm">
           {/* Contents rail */}
           <nav aria-label="On this page" className="lg:col-span-4 lg:order-2">
             <div className="lg:sticky lg:top-[calc(theme(spacing.nav)+2rem)] border border-border p-7">

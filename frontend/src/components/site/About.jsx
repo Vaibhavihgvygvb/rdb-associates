@@ -5,7 +5,7 @@ import { PORTRAIT } from "@/data/chambers";
 export default function About() {
   return (
     <Reveal asChild>
-      <section id="about" data-testid="about-section" className="relative py-24 md:py-32 bg-cream">
+      <section id="about" data-testid="about-section" className="relative section-y bg-cream">
         <div className="shell">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-20">
             <div className="lg:col-span-5 relative">

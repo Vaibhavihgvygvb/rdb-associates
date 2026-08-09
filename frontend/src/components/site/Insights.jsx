@@ -25,9 +25,19 @@ export default function Insights() {
 
   return (
     <Reveal asChild>
-      <section id="insights" data-testid="insights-section" className="relative py-24 md:py-32 bg-white text-ink">
+      {/* The tighter band while nothing is published. Three short placeholder
+          cards inside the full section rhythm left the page mostly air, which
+          compounded the "nothing here yet" read rather than dignifying it —
+          the full band is sized for a section with something in it. This uses
+          the `anyPublished` flag the component already computes and the
+          existing spacing step; it reverts by itself the moment a note ships. */}
+      <section
+        id="insights"
+        data-testid="insights-section"
+        className={`relative bg-white text-ink ${anyPublished ? "section-y" : "section-y-sm"}`}
+      >
         <div className="shell">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-14">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
             <div className="max-w-2xl">
               <div className="eyebrow">
               <span className="eyebrow-label">Legal Insights</span>
@@ -42,11 +52,20 @@ export default function Insights() {
                 </p>
               )}
             </div>
+            {/* Secondary treatment, not the solid emerald fill. This is the
+                site's one accent and the nav's Contact button uses it on every
+                page — so a filled Subscribe button put two equal-weight
+                primaries in the same viewport, and made the newsletter outrank
+                the consultation enquiry that is the page's actual commercial
+                goal. The rule-underline is the same secondary the hero already
+                uses for "Explore capabilities"; the link and its destination
+                are unchanged. */}
             <Link
               to="/newsletter"
-              className="inline-flex items-center gap-2 bg-brown text-white px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] hover:bg-brown-light transition-colors duration-200 shrink-0"
+              className="inline-flex items-center gap-2.5 text-ink px-2 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] border-b-2 border-ink hover:border-brown hover:text-brown transition-colors duration-200 shrink-0 group"
             >
-              Subscribe for updates <ArrowUpRight size={15} />
+              Subscribe for updates
+              <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
             </Link>
           </div>
 

@@ -57,7 +57,7 @@ export default function PracticeAreas() {
 
   return (
     <Reveal asChild>
-      <section id="practice" data-testid="practice-section" className="relative py-24 md:py-32 bg-cream-dark text-ink overflow-hidden">
+      <section id="practice" data-testid="practice-section" className="relative section-y bg-cream-dark text-ink overflow-hidden">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
@@ -71,7 +71,11 @@ export default function PracticeAreas() {
                 Counsel across the <span className="italic text-brown">full arc</span> of dispute and advisory work.
               </h1>
             </div>
-            <div className="lg:col-span-6 lg:col-start-7 flex items-end">
+            {/* Top-aligned, matching /work. `items-end` gave the paragraph a
+                tidy shared baseline with the last line of a four-line heading,
+                and paid for it with a ~170px hole above the paragraph — a gap
+                that read as a layout fault rather than as rest. */}
+            <div className="lg:col-span-6 lg:col-start-7 lg:pt-2">
               <p className="text-ink-soft text-base md:text-lg leading-relaxed">
                 From high-stakes trial advocacy to considered advisory work, the chambers combine deep specialisation with the versatility that modern disputes demand. Every mandate is led personally by Ramandeep Bawa.
               </p>
@@ -85,7 +89,16 @@ export default function PracticeAreas() {
                 <button key={a.title} type="button" onClick={() => setSelected(a)}
                   data-testid={`practice-card-${a.title.replace(/\s+/g, "-").toLowerCase()}`}
                   aria-haspopup="dialog"
-                  className="group relative border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:elevate-card text-left cursor-pointer">
+                  /* `flex flex-col` is load-bearing, not cosmetic. These cards
+                     are <button>s so they can open the dialog, and a stretched
+                     button centres its content block vertically by UA default —
+                     so in a row of equal-height cards the icons sat at four
+                     different offsets (60/33/49/33px) depending on how many
+                     lines of body copy followed. Making the button an explicit
+                     flex column puts the content back on the top edge.
+                     `align-self: start` would also stop the centring, but by
+                     un-stretching the card, which breaks the equal-height row. */
+                  className="group relative flex flex-col border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:elevate-card text-left cursor-pointer">
                   <Icon size={28} strokeWidth={1.3} className="text-brown mb-6 group-hover:scale-110 transition-transform duration-500" />
                   <h2 className="font-serif text-2xl text-ink mb-3">{a.title}</h2>
                   <p className="text-ink-soft text-sm leading-relaxed">{a.body}</p>

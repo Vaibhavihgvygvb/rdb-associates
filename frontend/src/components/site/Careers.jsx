@@ -154,7 +154,7 @@ export default function Careers() {
         </div>
 
         {/* Body */}
-        <div className="shell py-20 md:py-28">
+        <div className="shell section-y">
           <div className="max-w-3xl mb-16">
             <p className="text-ink text-xl md:text-2xl leading-snug font-medium">
               RDB Associates welcomes applications from qualified advocates seeking recruitment opportunities,
@@ -177,7 +177,11 @@ export default function Careers() {
                   onClick={() => selectTrack(key)}
                   aria-pressed={active}
                   data-testid={`careers-track-${key}`}
-                  className={`group border bg-white p-8 text-left transition-[border-color,box-shadow] duration-300 hover:elevate-card ${
+                  /* Same latent defect as the practice and expertise cards.
+                     These two happen to hold equal content today, so nothing is
+                     visibly misaligned — but the moment one track's copy runs a
+                     line longer the icons would drift apart. */
+                  className={`group flex flex-col border bg-white p-8 text-left transition-[border-color,box-shadow] duration-300 hover:elevate-card ${
                     active ? "border-brown elevate-card" : "border-border hover:border-brown"
                   }`}
                 >
@@ -213,13 +217,13 @@ export default function Careers() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 160, damping: 22 }}
-                className="lg:col-span-8 bg-white border border-border p-8 md:p-12 elevate-card"
+                className="lg:col-span-8 bg-white border border-border p-8 md:p-12"
               >
                 <motion.span
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.12, type: "spring", stiffness: 300, damping: 18 }}
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-brown-soft text-brown"
+                  className="confirm-badge"
                 >
                   <Check size={22} strokeWidth={1.8} />
                 </motion.span>
@@ -244,7 +248,7 @@ export default function Careers() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25 }}
-              className="lg:col-span-8 bg-white border border-border p-8 md:p-12 elevate-card">
+              className="lg:col-span-8 bg-white border border-border p-8 md:p-12">
               <p className="text-xs text-ink-soft mb-8">Fields marked * are required.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Field label="Full Name *" error={shown("name")} htmlId="careers-name">

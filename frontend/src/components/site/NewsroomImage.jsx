@@ -45,11 +45,19 @@ export default function NewsroomImage({
 
       {/* Hue from the palette, luminosity from the photograph. Held well below full
           strength: at full opacity the emerald stops reading as a grade and starts
-          reading as a green filter, which is the opposite of the house style. */}
+          reading as a green filter, which is the opposite of the house style.
+
+          "Well below full" was still too strong. `mix-blend-color` replaces hue
+          outright rather than tinting toward it, so over a fully desaturated
+          base the old 0.46/0.34 did not read as a graded photograph — it read
+          as a green one, and full-bleed on a phone that is the loudest thing on
+          the page. Roughly halved. The images still resolve as one set, which
+          is the whole point of the treatment, without the cast announcing
+          itself before the subject does. */}
       <div
         aria-hidden
-        className={`absolute inset-0 bg-brown mix-blend-color transition-opacity duration-500 group-hover:opacity-[0.38] ${
-          grade === "soft" ? "opacity-[0.34]" : "opacity-[0.46]"
+        className={`absolute inset-0 bg-brown mix-blend-color transition-opacity duration-500 group-hover:opacity-[0.20] ${
+          grade === "soft" ? "opacity-[0.16]" : "opacity-[0.22]"
         }`}
       />
 

@@ -13,7 +13,7 @@ const stages = [
 export default function Stages() {
   return (
     <Reveal asChild>
-      <section id="stages" data-testid="stages-section" className="relative py-24 md:py-32 bg-white text-ink">
+      <section id="stages" data-testid="stages-section" className="relative section-y bg-white text-ink">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-6xl mx-auto px-6 md:px-12">
           <div className="max-w-3xl mb-16">
@@ -34,7 +34,15 @@ export default function Stages() {
             <div className="space-y-10">
               {stages.map((s) => (
                 <div key={s.n} data-testid={`stage-item-${s.n}`} className="relative pl-14 md:pl-20">
-                  <span className="absolute left-0 md:left-2 top-0 w-8 h-8 rounded-full bg-white border border-brown flex items-center justify-center text-brown font-serif text-sm">
+                  {/* Square, not a circle. /stages and /journey are the site's
+                      two step-through components and they were marking the same
+                      idea — a point on a vertical spine — in two different
+                      shapes: a circle here, a rotated square on the timeline.
+                      Squaring this one puts both on the same form, and on the
+                      same 0-radius geometry as every other surface on the site.
+                      The number it carries still sits upright, which a rotated
+                      diamond could not do. */}
+                  <span className="absolute left-0 md:left-2 top-0 w-8 h-8 bg-white border border-brown flex items-center justify-center text-brown font-serif text-sm">
                     {s.n}
                   </span>
                   <h2 className="font-serif text-xl md:text-2xl text-ink">{s.t}</h2>

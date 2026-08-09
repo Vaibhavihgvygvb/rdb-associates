@@ -24,9 +24,12 @@ export default function Footer() {
             <p className="mt-8 text-cream/70 text-sm leading-relaxed max-w-md">
               A boutique legal practice in New Delhi focused on courtroom advocacy, commercial disputes and specialised advisory work before the High Court of Delhi and tribunals across India.
             </p>
-            <p className="mt-8 font-serif italic text-brown-on-dark text-lg leading-snug max-w-md">
-              &ldquo;I never lose. I either win or learn.&rdquo;
-            </p>
+            {/* The pull-quote that used to sit here is gone. It was the same
+                sentence, verbatim, that /about already sets as a display quote
+                — so on that page the footer repeated it a second time within
+                one scroll. Of the ten blocks this footer stacks it was the only
+                one carrying no information a visitor needs at the foot of a
+                page, which makes it the one to drop. */}
           </div>
 
           <div className="md:col-span-3">
