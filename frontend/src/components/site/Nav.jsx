@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Search, ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
 import SearchPanel from "@/components/site/SearchPanel";
 import ScrollProgress from "@/components/motion/ScrollProgress";
@@ -42,6 +42,8 @@ export default function Nav() {
   // Keyed by panel id, so Escape can hand focus back to whichever trigger
   // opened the panel.
   const triggerRefs = useRef({});
+  const mobileToggleRef = useRef(null);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -67,6 +69,28 @@ export default function Nav() {
 
   // A pending close must not fire into an unmounted component.
   useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+  // Escape closes the mobile panel too, and hands focus back to the control
+  // that opened it. The desktop panels above already did this; the mobile one
+  // could only be dismissed by finding and tapping the X.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      mobileToggleRef.current?.focus();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  // A route change from inside the panel leaves it open over the new page.
+  // Every <Link> in there calls setOpen(false) on click, but the browser back
+  // button and the search dialog both navigate without touching it.
+  useEffect(() => {
+    setOpen(false);
+    setPanel(null);
+  }, [pathname]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -105,7 +129,7 @@ export default function Nav() {
         scrolled || panel ? "border-b border-border shadow-[0_1px_0_rgba(0,0,0,0.02)]" : "border-b border-border/60"
       }`}
     >
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-nav flex items-center justify-between">
+      <div className="shell h-nav flex items-center justify-between">
         {/* aria-label rather than alt text on the mark: the wordmark beside it
             is `hidden sm:flex`, so on a phone the image is all that is left and
             the link would otherwise have no accessible name at all. With the
@@ -165,23 +189,46 @@ export default function Nav() {
             Newsroom
           </Link>
 
-          {/* Insights keeps its link — clicking still goes to /insights — and reveals
-              a panel on hover, the same interaction Capabilities already uses. */}
-          <Link
-            to="/insights"
-            data-testid="nav-link-insights"
-            ref={(el) => { triggerRefs.current.insights = el; }}
+          {/* Insights is a link *and* a disclosure, so it is drawn as both.
+              It used to be one <Link> that opened its panel on `onMouseEnter`
+              alone while advertising `aria-haspopup` and `aria-expanded` — a
+              disclosure that no keyboard or touch user could ever open, which
+              is the same defect the comment above records fixing for
+              Capabilities. Splitting the chevron into its own button gives the
+              panel a real control without taking away the direct route to
+              /insights that clicking the word still performs. The pair shares
+              one underline so the lockup reads as a single nav item. */}
+          <div
             onMouseEnter={() => openPanel("insights")}
-            aria-expanded={panel === "insights"}
-            aria-haspopup="true"
-            aria-controls="nav-panel-insights"
-            className={`flex items-center gap-1.5 text-[15px] font-medium h-full border-b-2 transition-colors duration-200 ${
-              panel === "insights" ? "text-brown border-brown" : "text-ink border-transparent hover:text-brown"
+            className={`flex items-center gap-1.5 h-full border-b-2 transition-colors duration-200 ${
+              panel === "insights" ? "border-brown" : "border-transparent"
             }`}
           >
-            Insights
-            <ChevronDown size={15} className={`transition-transform duration-200 ${panel === "insights" ? "rotate-180" : ""}`} />
-          </Link>
+            <Link
+              to="/insights"
+              data-testid="nav-link-insights"
+              className={`text-[15px] font-medium transition-colors duration-200 ${
+                panel === "insights" ? "text-brown" : "text-ink hover:text-brown"
+              }`}
+            >
+              Insights
+            </Link>
+            <button
+              type="button"
+              data-testid="nav-insights-toggle"
+              ref={(el) => { triggerRefs.current.insights = el; }}
+              onClick={() => togglePanel("insights")}
+              aria-expanded={panel === "insights"}
+              aria-haspopup="true"
+              aria-controls="nav-panel-insights"
+              aria-label={panel === "insights" ? "Hide insights menu" : "Show insights menu"}
+              className={`flex items-center transition-colors duration-200 ${
+                panel === "insights" ? "text-brown" : "text-ink hover:text-brown"
+              }`}
+            >
+              <ChevronDown size={15} className={`transition-transform duration-200 ${panel === "insights" ? "rotate-180" : ""}`} />
+            </button>
+          </div>
 
           <Link
             to="/careers"
@@ -227,9 +274,12 @@ export default function Nav() {
           {/* w-11/h-11 keeps both controls at the 44px minimum tap target. */}
           <button
             data-testid="nav-mobile-toggle"
+            ref={mobileToggleRef}
             className="text-ink w-11 h-11 flex items-center justify-center"
             onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
+            aria-expanded={open}
+            aria-controls="nav-mobile-panel"
+            aria-label={open ? "Close menu" : "Open menu"}
           >
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -242,13 +292,13 @@ export default function Nav() {
         data-testid="nav-mega"
         onMouseEnter={() => openPanel("capabilities")}
         aria-hidden={panel !== "capabilities"}
-        className={`hidden lg:block absolute inset-x-0 top-nav bg-white border-b border-border shadow-[0_24px_40px_-16px_rgba(0,0,0,0.14)] transition-[opacity,transform] duration-200 ease-out ${
+        className={`hidden lg:block absolute inset-x-0 top-nav bg-white border-b border-border elevate-panel transition-[opacity,transform] duration-200 ease-out ${
           panel === "capabilities"
             ? "visible opacity-100 translate-y-0 pointer-events-auto"
             : "invisible opacity-0 -translate-y-1 pointer-events-none"
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-10 grid grid-cols-12 gap-10">
+        <div className="shell py-10 grid grid-cols-12 gap-10">
           <div className="col-span-4">
             <MegaHeading to="/practice-areas" label="Practice Areas" />
             <ul className="mt-5 space-y-2.5">
@@ -292,13 +342,13 @@ export default function Nav() {
         data-testid="nav-insights-panel"
         onMouseEnter={() => openPanel("insights")}
         aria-hidden={panel !== "insights"}
-        className={`hidden lg:block absolute inset-x-0 top-nav bg-white border-b border-border shadow-[0_24px_40px_-16px_rgba(0,0,0,0.14)] transition-[opacity,transform] duration-200 ease-out ${
+        className={`hidden lg:block absolute inset-x-0 top-nav bg-white border-b border-border elevate-panel transition-[opacity,transform] duration-200 ease-out ${
           panel === "insights"
             ? "visible opacity-100 translate-y-0 pointer-events-auto"
             : "invisible opacity-0 -translate-y-1 pointer-events-none"
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-10 grid grid-cols-12 gap-10">
+        <div className="shell py-10 grid grid-cols-12 gap-10">
           <div className="col-span-5">
             <MegaHeading to="/insights" label="Latest Writing" />
             <div className="mt-5 grid gap-4">
@@ -341,7 +391,7 @@ export default function Nav() {
 
       {/* Mobile panel */}
       {open && (
-        <div data-testid="nav-mobile-panel" data-lenis-prevent className="lg:hidden bg-white border-t border-border px-6 py-6 max-h-[80vh] overflow-y-auto">
+        <div id="nav-mobile-panel" data-testid="nav-mobile-panel" data-lenis-prevent className="lg:hidden bg-white border-t border-border px-6 py-6 max-h-[80dvh] overflow-y-auto">
           <div className="flex flex-col gap-1">
             <MobileGroup label="Practice Areas" items={practiceAreas} onNav={() => setOpen(false)} />
             <MobileGroup label="Expertise" items={expertise} onNav={() => setOpen(false)} />
@@ -400,10 +450,13 @@ function MobileGroup({ label, items, onNav }) {
   return (
     <div className="border-b border-border py-3">
       <div className="text-[11px] uppercase tracking-[0.18em] text-brown font-semibold mb-3">{label}</div>
-      <ul className="space-y-2.5">
+      {/* `block py-2.5` rather than a bare inline link: these were ~22px tall,
+          half the 44px this same file already reserves for the two header
+          controls, and the densest tap targets on the site. */}
+      <ul className="-my-1">
         {items.map(([t, to]) => (
           <li key={t}>
-            <Link to={to} onClick={onNav} className="text-[15px] text-ink-soft">
+            <Link to={to} onClick={onNav} className="block py-2.5 text-[15px] text-ink-soft">
               {t}
             </Link>
           </li>

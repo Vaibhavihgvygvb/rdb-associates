@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, ChevronDown, Search, X } from "lucide-react";
+import { ArrowUpRight, Check, ChevronDown, Search, X } from "lucide-react";
 import NewsroomImage from "@/components/site/NewsroomImage";
 import { CATEGORIES, FORUMS, PRACTICES, categoryLabel, formatDate, sortedItems } from "@/data/newsroom";
 import Reveal from "@/components/motion/Reveal";
@@ -56,10 +56,9 @@ export default function Newsroom() {
     <Reveal asChild inViewMargin="0px">
       <section id="newsroom" data-testid="newsroom-section" className="bg-white text-ink">
         <header className="border-b border-border">
-          <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-28">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">Newsroom</span>
+          <div className="shell py-20 md:py-28">
+            <div className="eyebrow">
+              <span className="eyebrow-label">Newsroom</span>
             </div>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05] max-w-4xl">
               What the chambers is <span className="text-brown">doing</span>, and what it has to say.
@@ -75,7 +74,7 @@ export default function Newsroom() {
 
         {/* Filter bar */}
         <div className="sticky top-nav z-30 bg-white border-b border-border">
-          <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-5">
+          <div className="shell py-5">
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               <label className="relative flex-1 min-w-0">
                 <Search size={17} strokeWidth={1.6} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft pointer-events-none" />
@@ -85,7 +84,11 @@ export default function Newsroom() {
                   onChange={(e) => setQuery(e.target.value)}
                   aria-label="Search the newsroom"
                   placeholder="Search the newsroom"
-                  className="w-full border border-border bg-white pl-11 pr-4 py-3 text-[15px] text-ink placeholder:text-ink-soft focus:outline-none focus:border-brown transition-colors"
+                  /* No `focus:outline-none` here. It out-specified the global
+                     :focus-visible rule in index.css (0,2,0 against 0,1,0), so
+                     this field was the one control on the page a keyboard user
+                     could land in without seeing where they were. */
+                  className="w-full border border-border bg-white pl-11 pr-4 py-3 text-[15px] text-ink placeholder:text-ink-soft focus:border-brown transition-colors"
                 />
               </label>
 
@@ -115,7 +118,15 @@ export default function Newsroom() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2 mt-4">
-              <span data-testid="newsroom-count" className="text-[11px] uppercase tracking-widest-plus text-ink-soft mr-2">
+              {/* Typing in the search field or toggling a facet re-renders the
+                  grid silently. `aria-live="polite"` makes the count the one
+                  thing that announces, which is exactly the feedback a sighted
+                  user gets from the grid redrawing. */}
+              <span
+                data-testid="newsroom-count"
+                aria-live="polite"
+                className="text-[11px] uppercase tracking-widest-plus text-ink-soft mr-2"
+              >
                 {results.length} {results.length === 1 ? "result" : "results"}
               </span>
               {categories.map((c) => (
@@ -141,7 +152,7 @@ export default function Newsroom() {
         </div>
 
         {/* Results */}
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-14 md:py-20">
+        <div className="shell py-14 md:py-20">
           {results.length === 0 ? (
             <div data-testid="newsroom-empty" className="border border-border py-24 text-center">
               <p className="font-serif text-2xl text-ink">Nothing matches those filters.</p>
@@ -176,7 +187,7 @@ export default function Newsroom() {
 
         {/* Media & enquiries */}
         <div className="border-t border-border bg-cream-dark">
-          <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-16 grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="shell py-16 grid grid-cols-1 md:grid-cols-3 gap-10">
             <div className="md:col-span-2">
               <div className="text-[11px] uppercase tracking-widest-plus text-brown font-semibold">Press &amp; media enquiries</div>
               <p className="mt-5 text-ink-soft text-sm leading-relaxed max-w-2xl">
@@ -186,7 +197,7 @@ export default function Newsroom() {
               </p>
               <a
                 href={`mailto:${EMAIL}`}
-                className="mt-6 inline-flex items-center gap-2 text-brown text-[13px] font-semibold uppercase tracking-[0.1em] hover:gap-3 transition-all duration-200"
+                className="mt-6 inline-flex items-center gap-2 text-brown text-[13px] font-semibold uppercase tracking-[0.1em] transition-colors duration-200"
               >
                 {EMAIL} <ArrowUpRight size={15} />
               </a>
@@ -213,7 +224,7 @@ function Spotlight({ item }) {
     <Link
       to={`/newsroom/${item.slug}`}
       data-testid="newsroom-spotlight"
-      className="group relative block border border-border bg-white mb-6 hover:border-brown hover:shadow-[0_32px_64px_-32px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] duration-300"
+      className="group relative block border border-border bg-white mb-6 hover:border-brown hover:elevate-feature transition-[border-color,box-shadow] duration-300"
     >
       <div className="grid grid-cols-1 lg:grid-cols-2">
         <NewsroomImage
@@ -249,7 +260,7 @@ function NewsCard({ item, index }) {
     <Link
       to={`/newsroom/${item.slug}`}
       data-testid={`newsroom-card-${index}`}
-      className="group relative flex flex-col border border-border bg-white hover:border-brown hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)] transition-[border-color,box-shadow] duration-300"
+      className="group relative flex flex-col border border-border bg-white hover:border-brown hover:elevate-card transition-[border-color,box-shadow] duration-300"
     >
       <NewsroomImage
         image={item.image}
@@ -311,18 +322,36 @@ function Facet({ label, options, selected, onToggle, testid }) {
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full mt-2 w-72 max-h-80 overflow-y-auto bg-white border border-border shadow-[0_24px_40px_-16px_rgba(0,0,0,0.18)] animate-fade-in-up p-2 z-40">
+        // role="group" + role="checkbox" rather than bare buttons. The filled
+        // square was drawn purely in CSS, so a screen reader heard "Civil
+        // Litigation, button" whether or not the filter was on — the selected
+        // state existed only for sighted users. A check mark also replaces the
+        // solid fill, so the on-state is not carried by colour alone (1.4.1).
+        <div
+          role="group"
+          aria-label={label}
+          className="absolute left-0 top-full mt-2 w-72 max-h-80 overflow-y-auto bg-white border border-border elevate-panel animate-fade-in-up p-2 z-40"
+        >
           {options.map(([value, text]) => {
             const on = selected.includes(value);
             return (
               <button
                 key={value}
+                role="checkbox"
+                aria-checked={on}
                 onClick={() => onToggle(value)}
                 className={`w-full text-left px-3 py-2.5 text-[14px] flex items-center gap-3 transition-colors duration-150 ${
                   on ? "text-brown" : "text-ink-soft hover:text-ink"
                 }`}
               >
-                <span className={`w-3.5 h-3.5 border flex-shrink-0 ${on ? "bg-brown border-brown" : "border-border"}`} />
+                <span
+                  aria-hidden
+                  className={`w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-colors duration-150 ${
+                    on ? "bg-brown border-brown text-white" : "border-border"
+                  }`}
+                >
+                  {on && <Check size={11} strokeWidth={3} />}
+                </span>
                 {text}
               </button>
             );

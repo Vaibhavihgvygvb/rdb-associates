@@ -92,7 +92,7 @@ export default function SearchPanel({ open, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-label="Search the site"
-        className="relative mx-auto mt-[8dvh] w-[92vw] max-w-2xl bg-white border border-border shadow-[0_40px_80px_-24px_rgba(0,0,0,0.5)] animate-fade-in-up"
+        className="relative mx-auto mt-[8dvh] w-[92vw] max-w-2xl bg-white border border-border elevate-overlay animate-fade-in-up"
       >
         <div className="flex items-center gap-3 border-b border-border px-5">
           <Search size={19} strokeWidth={1.6} className="text-ink-soft shrink-0" />

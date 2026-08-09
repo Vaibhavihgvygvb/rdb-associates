@@ -6,7 +6,7 @@ export default function About() {
   return (
     <Reveal asChild>
       <section id="about" data-testid="about-section" className="relative py-24 md:py-32 bg-cream">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-20">
             <div className="lg:col-span-5 relative">
               {/* Drifts the whole portrait block — frame, image and caption move
@@ -27,10 +27,9 @@ export default function About() {
             </div>
 
             <div className="lg:col-span-7">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="h-px w-10 bg-brown" />
-                <span className="text-brown text-xs uppercase tracking-widest-plus">About the Advocate</span>
-              </div>
+              <div className="eyebrow">
+              <span className="eyebrow-label">About the Advocate</span>
+            </div>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
                 A practice grounded in
                 <span className="italic text-brown"> discipline</span>, shaped by the{" "}

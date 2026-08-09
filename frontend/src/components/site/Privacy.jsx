@@ -62,10 +62,9 @@ export default function Privacy() {
     <Reveal asChild inViewMargin="0px">
       <section data-testid="privacy-section" className="relative bg-white">
         <header className="border-b border-border">
-          <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-28">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">Privacy</span>
+          <div className="shell py-20 md:py-28">
+            <div className="eyebrow">
+              <span className="eyebrow-label">Privacy</span>
             </div>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05] max-w-4xl">
               What this website collects, and <span className="italic text-brown">what becomes of it</span>.
@@ -81,7 +80,7 @@ export default function Privacy() {
           </div>
         </header>
 
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 py-14 md:py-20">
+        <div className="shell grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 py-14 md:py-20">
           {/* Contents rail */}
           <nav aria-label="On this page" className="lg:col-span-4 lg:order-2">
             <div className="lg:sticky lg:top-[calc(theme(spacing.nav)+2rem)] border border-border p-7">

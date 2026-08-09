@@ -17,9 +17,8 @@ export default function Stages() {
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-6xl mx-auto px-6 md:px-12">
           <div className="max-w-3xl mb-16">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">Our Process</span>
+            <div className="eyebrow">
+              <span className="eyebrow-label">Our Process</span>
             </div>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
               Stages of <span className="italic text-brown">a matter</span>.

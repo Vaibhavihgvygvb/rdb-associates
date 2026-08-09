@@ -34,11 +34,28 @@ const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
  * Every page renders its own <Nav />, so an empty fallback would blank the
  * header while a chunk is in flight. Rendering the real Nav keeps it fixed in
  * place across the swap; the spacer holds the background so nothing flashes.
+ *
+ * The spacer used to be all there was: on a slow connection a visitor got a
+ * header over an empty screen with nothing to say a page was on its way, which
+ * is indistinguishable from a site that has simply broken. An indeterminate
+ * bar under the header covers the only case this fallback exists for — a chunk
+ * in flight, of unknowable duration. It is delayed by 300ms so a chunk that
+ * arrives promptly never flashes a loading state on the way past, and carries
+ * role="status" so the wait is announced rather than purely visual.
  */
 function RouteFallback() {
   return (
     <>
       <Nav />
+      <div className="pt-nav">
+        <div
+          role="status"
+          aria-label="Loading page"
+          className="route-loading h-px w-full overflow-hidden bg-border/40"
+        >
+          <span className="block h-full w-1/3 bg-brown" />
+        </div>
+      </div>
       <div className="min-h-screen bg-cream" />
     </>
   );

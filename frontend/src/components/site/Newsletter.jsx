@@ -84,14 +84,20 @@ export default function Newsletter({ variant = "footer" }) {
                   onChange={onChange}
                   onBlur={() => email && setError(validateField("email", email))}
                   aria-invalid={!!error}
-                  className={`flex-1 bg-transparent border border-r-0 px-4 py-3 text-sm text-cream placeholder:text-cream/60 outline-none transition-colors duration-300 ${
+                  /* `outline-none` removed: on this near-black surface the only
+                     remaining focus signal was a border moving from brown/40 to
+                     brown, which is a ~1.2:1 change against the footer and not a
+                     focus indicator by any reading of 2.4.7. The global
+                     :focus-visible ring uses the on-dark emerald, which clears
+                     the 3:1 that 1.4.11 asks for here. */
+                  className={`flex-1 bg-transparent border border-r-0 px-4 py-3 text-sm text-cream placeholder:text-cream/60 transition-colors duration-300 ${
                     error ? "border-red-400" : "border-brown/40 focus:border-brown"
                   }`}
                 />
                 <button
                   data-testid="newsletter-footer-submit"
                   type="submit"
-                  disabled={loading}
+                  disabled={loading} aria-busy={loading}
                   className="bg-brown text-white px-4 flex items-center justify-center hover:bg-brown-light transition-colors duration-300 disabled:opacity-60"
                   aria-label="Subscribe"
                 >
@@ -117,10 +123,8 @@ export default function Newsletter({ variant = "footer" }) {
   return (
     <section data-testid="newsletter-page-section" className="relative py-24 md:py-32 bg-cream">
       <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <span className="h-px w-10 bg-brown" />
-          <span className="text-brown text-xs uppercase tracking-widest-plus">Newsletter</span>
-          <span className="h-px w-10 bg-brown" />
+        <div className="eyebrow eyebrow-center">
+          <span className="eyebrow-label">Newsletter</span>
         </div>
         <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
           Stay informed with <span className="italic text-brown">the chambers</span>.
@@ -138,7 +142,14 @@ export default function Newsletter({ variant = "footer" }) {
           ) : (
             <motion.form key="form" onSubmit={onSubmit} exit={{ opacity: 0 }} className="mt-12 max-w-lg mx-auto">
               <div className="flex flex-col sm:flex-row gap-4">
-                <div className={`flex-1 flex items-center gap-3 bg-white border px-5 py-4 transition-colors duration-300 ${
+                {/* The ring goes on the wrapper, not the input. The input keeps
+                    `outline-none` because it is drawn as part of this box
+                    rather than as a control in its own right — but it had no
+                    focus styling anywhere and the box had none either, so this
+                    field previously showed nothing at all on keyboard focus.
+                    `focus-within` is the same treatment the careers dropzone
+                    already uses for its own visually-hidden input. */}
+                <div className={`flex-1 flex items-center gap-3 bg-white border px-5 py-4 transition-colors duration-300 focus-within:border-brown focus-within:ring-2 focus-within:ring-brown/30 ${
                   error ? "border-red-400" : "border-brown/30"
                 }`}>
                   <Mail size={18} strokeWidth={1.4} className="text-brown flex-shrink-0" />
@@ -157,7 +168,7 @@ export default function Newsletter({ variant = "footer" }) {
                 <button
                   data-testid="newsletter-page-submit"
                   type="submit"
-                  disabled={loading}
+                  disabled={loading} aria-busy={loading}
                   className="inline-flex items-center justify-center gap-3 bg-brown text-white px-8 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 group"
                 >
                   {loading ? "Subscribing" : "Subscribe"}

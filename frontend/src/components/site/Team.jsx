@@ -20,11 +20,10 @@ export default function Team() {
   return (
     <Reveal asChild>
       <section id="team" data-testid="team-section" className="relative py-24 md:py-32 bg-cream-dark text-ink">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="max-w-3xl mb-14">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs font-semibold uppercase tracking-widest-plus">Meet the Team</span>
+            <div className="eyebrow">
+              <span className="eyebrow-label">Meet the Team</span>
             </div>
             <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.04] tracking-tight">
               The people behind <span className="text-brown">the chambers</span>.
@@ -54,7 +53,7 @@ export default function Team() {
                 personally.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-6">
-                <Link to="/journey" className="inline-flex items-center gap-2 text-brown text-[13px] font-semibold uppercase tracking-[0.08em] hover:gap-3 transition-all duration-200">
+                <Link to="/journey" className="inline-flex items-center gap-2 text-brown text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200">
                   View journey <ArrowRight size={15} />
                 </Link>
                 <a href="https://www.linkedin.com/in/ramandeep-bawa-6081b6155/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-ink-soft hover:text-brown transition-colors duration-200">
@@ -69,7 +68,7 @@ export default function Team() {
             {associates.map((p) => (
               <article
                 key={p.name}
-                className="group bg-white border border-border hover:border-brown hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)] transition-[border-color,box-shadow] duration-300"
+                className="group bg-white border border-border hover:border-brown hover:elevate-card transition-[border-color,box-shadow] duration-300"
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <FadeImage src={p.image} alt={p.name} className="absolute inset-0 w-full h-full object-cover grayscale-[10%] group-hover:scale-[1.03] transition-transform duration-500" />

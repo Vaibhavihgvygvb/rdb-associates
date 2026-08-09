@@ -31,9 +31,8 @@ export default function Hero() {
         <div className="flex items-center order-2 lg:order-1">
           <div className="max-w-[620px] mx-auto lg:ml-auto lg:mr-0 px-6 md:px-12 lg:pr-16 py-16 lg:py-0 w-full">
             <Reveal inView={false} delay={STAGE.eyebrow} distance={12} asChild>
-              <div className="flex items-center gap-3 mb-7">
-                <span className="h-px w-8 bg-brown" />
-                <span className="text-brown text-[12px] font-semibold uppercase tracking-[0.16em]">
+              <div className="eyebrow">
+                <span className="eyebrow-label">
                   Advocates &amp; Legal Counsel · New Delhi
                 </span>
               </div>
@@ -82,11 +81,15 @@ export default function Hero() {
             </Reveal>
 
             <Reveal inView={false} delay={STAGE.meta} distance={14} asChild>
+              {/* The bullets were `text-border` (#D9D9D9) on white — 1.35:1,
+                  which is not a separator so much as a gap of unexplained
+                  width — and were not `aria-hidden`, so a screen reader read
+                  each one out between the facts. */}
               <div className="mt-12 pt-6 border-t border-border flex flex-wrap gap-x-8 gap-y-3 text-[13px] text-ink-soft">
                 <span>New Delhi, India</span>
-                <span className="text-border">•</span>
+                <span aria-hidden className="text-ink-soft/50">•</span>
                 <span>NLSIU Alumnus</span>
-                <span className="text-border">•</span>
+                <span aria-hidden className="text-ink-soft/50">•</span>
                 <span>15+ Years at the Bar</span>
               </div>
             </Reveal>
@@ -117,7 +120,7 @@ export default function Hero() {
           </Reveal>
           <div className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent lg:bg-gradient-to-r lg:from-white/10 lg:to-transparent" />
           <Reveal inView={false} delay={STAGE.actions} distance={20} asChild>
-            <div className="absolute bottom-6 left-6 right-6 lg:left-8 lg:right-auto lg:max-w-xs bg-white/95 backdrop-blur-sm px-6 py-5 shadow-[0_16px_40px_-16px_rgba(0,0,0,0.3)]">
+            <div className="absolute bottom-6 left-6 right-6 lg:left-8 lg:right-auto lg:max-w-xs bg-white/95 backdrop-blur-sm px-6 py-5 elevate-card">
               <div className="text-[10px] uppercase tracking-[0.18em] text-brown font-semibold">Est. 2013</div>
               <div className="mt-1.5 font-serif text-ink text-lg leading-snug">Practising before the High Court of Delhi</div>
             </div>

@@ -98,13 +98,12 @@ export default function Contact({ headingLevel = 2 }) {
   return (
     <Reveal asChild>
       <section id="contact" data-testid="contact-section" className="relative py-24 md:py-32 bg-cream">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-20">
             <div className="lg:col-span-5">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="h-px w-10 bg-brown" />
-                <span className="text-brown text-xs uppercase tracking-widest-plus">Contact</span>
-              </div>
+              <div className="eyebrow">
+              <span className="eyebrow-label">Contact</span>
+            </div>
               <Heading className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
                 Speak with <span className="italic text-brown">the chambers</span>.
               </Heading>
@@ -126,8 +125,23 @@ export default function Contact({ headingLevel = 2 }) {
                     <Icon size={20} strokeWidth={1.4} className="text-brown mt-1" />
                     <div>
                       <div className="text-[10px] uppercase tracking-widest-plus text-ink-soft">{label}</div>
+                      {/* The two actionable rows are drawn as actionable. All
+                          four rows were identical `font-serif text-lg` — the
+                          telephone and email were links with no underline, no
+                          colour and no cursor difference until the pointer was
+                          already on them, so nothing distinguished them from
+                          the address and opening hours, which are not links. */}
                       <div className="font-serif text-lg text-ink mt-1">
-                        {href ? <a href={href}>{val}</a> : val}
+                        {href ? (
+                          <a
+                            href={href}
+                            className="underline decoration-brown/35 underline-offset-4 hover:decoration-brown transition-[text-decoration-color] duration-200"
+                          >
+                            {val}
+                          </a>
+                        ) : (
+                          val
+                        )}
                       </div>
                     </div>
                   </div>
@@ -144,7 +158,7 @@ export default function Contact({ headingLevel = 2 }) {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ type: "spring", stiffness: 160, damping: 22 }}
-                  className="bg-white border border-brown/30 p-8 md:p-12 shadow-[0_16px_50px_rgb(21,36,57,0.08)]"
+                  className="bg-white border border-brown/25 p-8 md:p-12 elevate-card"
                 >
                   <motion.span
                     initial={{ scale: 0.5, opacity: 0 }}
@@ -176,7 +190,7 @@ export default function Contact({ headingLevel = 2 }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.25 }}
-                className="bg-white border border-brown/30 p-8 md:p-12 shadow-[0_16px_50px_rgb(21,36,57,0.08)]">
+                className="bg-white border border-brown/25 p-8 md:p-12 elevate-card">
                 <p className="text-xs text-ink-soft mb-8">Fields marked * are required.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <Field label="Full Name *" error={shown("name")} htmlId="contact-name">
@@ -222,8 +236,8 @@ export default function Contact({ headingLevel = 2 }) {
                   <Link to="/privacy" className="text-brown">Privacy Notice</Link>.
                 </p>
 
-                <button type="submit" data-testid="contact-submit" disabled={loading}
-                  className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 group">
+                <button type="submit" data-testid="contact-submit" disabled={loading} aria-busy={loading}
+                  className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed group">
                   {loading ? "Submitting" : "Send Enquiry"}
                   {loading ? (
                     <Loader2 size={16} className="animate-spin" />

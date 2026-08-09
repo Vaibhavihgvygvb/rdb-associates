@@ -88,6 +88,84 @@ body {
 }
 
 @layer components {
+  /* The one horizontal container on the site.
+
+     There used to be two: `max-w-7xl px-6 md:px-12` on thirteen routes, and
+     `max-w-[1400px] px-6 md:px-10` on the header and the two newsroom routes.
+     Because the header used the second and almost every page body used the
+     first, the logo and the <h1> beneath it sat on different left edges at
+     every viewport above 1400px — the header was misaligned with its own page
+     on every route. One class, so that cannot recur. */
+  .shell {
+    @apply max-w-7xl mx-auto px-6 md:px-12;
+  }
+
+  /* The eyebrow lockup — rule plus label — that opens fourteen sections.
+     Each was hand-written, and they had drifted apart on all four axes:
+     `w-8`/`w-10` rules, `gap-3`/`gap-4`, `mb-5`/`mb-6`/`mb-7`, and
+     `text-xs`/`text-[12px]` with `font-semibold` present or absent. */
+  .eyebrow {
+    @apply flex items-center gap-4 mb-6;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-10 bg-brown flex-shrink-0;
+  }
+  .eyebrow-label {
+    @apply text-brown text-xs font-semibold uppercase tracking-widest-plus;
+  }
+  .bg-sage .eyebrow::before,
+  .bg-sage-deep .eyebrow::before,
+  .bg-ink .eyebrow::before {
+    @apply bg-brown-on-dark;
+  }
+  .bg-sage .eyebrow-label,
+  .bg-sage-deep .eyebrow-label,
+  .bg-ink .eyebrow-label {
+    @apply text-brown-on-dark;
+  }
+
+  /* Over a photograph rather than a palette surface, where no ancestor class
+     can be keyed off — the careers banner. `brown-soft` is the pale mint, which
+     is what stays legible against a scrimmed image. */
+  .eyebrow[data-tone="dark"]::before {
+    @apply bg-brown-soft;
+  }
+  .eyebrow[data-tone="dark"] .eyebrow-label {
+    @apply text-brown-soft;
+  }
+
+  /* Centred variant — a rule on both sides. Used by the newsletter page, which
+     is a centred column throughout. */
+  .eyebrow-center {
+    @apply justify-center;
+  }
+  .eyebrow-center::after {
+    content: "";
+    @apply h-px w-10 bg-brown flex-shrink-0;
+  }
+
+  /* Elevation, declared once per level rather than as five ad-hoc values.
+     `--shadow-card` replaces four near-identical strings, one of which
+     (`rgb(21,36,57,0.08)`) was still tinted navy from a palette this site no
+     longer uses, so the consultation form and the structurally identical
+     careers form cast differently coloured shadows. */
+  .elevate-card {
+    box-shadow: 0 24px 48px -28px rgb(0 0 0 / 0.3);
+  }
+  /* One step above a card, for the newsroom spotlight — a physically larger
+     object casting a correspondingly larger shadow, which is the only reason
+     a second card-like level is justified. */
+  .elevate-feature {
+    box-shadow: 0 32px 64px -32px rgb(0 0 0 / 0.35);
+  }
+  .elevate-panel {
+    box-shadow: 0 24px 40px -16px rgb(0 0 0 / 0.16);
+  }
+  .elevate-overlay {
+    box-shadow: 0 40px 80px -24px rgb(0 0 0 / 0.45);
+  }
+
   /* The underlined form control used by both the consultation and careers
      forms. This was previously a <style> block rendered inside Contact.jsx and
      a near-identical copy inside Careers.jsx (as `.input-line-careers`), each
@@ -174,12 +252,110 @@ body {
    nudged whatever sat beside it — visible in the footer's link column
    and the mega-menu lists, where the whole row shifted under the
    cursor. Colour alone gets the same editorial read for free.
+
+   The `opacity: 0.8` that used to accompany the colour change is gone, and
+   that was a contrast bug rather than a taste one. --accent is picked per
+   surface precisely so it clears AA — 5.34:1 on white, and the `on-dark`
+   variant 5.81:1 on sage-deep. Painting it at 80% over the surface composites
+   it back down to 3.67:1 and 4.02:1 respectively, so every link on the site
+   failed 1.4.3 at the exact moment the pointer was on it. The colour shift is
+   the whole signal; it does not need help.
    ============================================================ */
 a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data-testid="nav-logo"]) {
-  transition: color 320ms cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data-testid="nav-logo"]):hover {
   color: var(--accent);
-  opacity: 0.8;
+}
+
+/* `animate-fade-in-up` (tailwind.config.js) drives the search dialog and the
+   newsroom facet dropdowns, and translates 24px doing it. Reveal and Modal ask
+   motion's `useReducedMotion` and stand down on their own; this keyframe is
+   plain CSS and had no such guard, so the two overlays kept sliding for a
+   reader who had asked the OS for less of that. Fading alone still gets them a
+   perceptible entrance.
+
+   Deliberately not a blanket `*, ::before, ::after { animation: none }`: that
+   would also freeze `animate-spin` on the submit buttons, which is the only
+   signal a form gives that it is working. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation-name: reduced-fade-in;
+  }
+}
+@keyframes reduced-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Route-chunk loading bar (see RouteFallback in App.js). Indeterminate,
+   because the wait is a network fetch of unknown length — a determinate bar
+   would have to invent a number. `opacity: 0` for the first 300ms so a chunk
+   that resolves quickly never flashes it. */
+.route-loading {
+  opacity: 0;
+  animation: route-loading-appear 200ms ease 300ms forwards;
+}
+.route-loading > span {
+  animation: route-loading-slide 1.1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes route-loading-appear {
+  to { opacity: 1; }
+}
+@keyframes route-loading-slide {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(400%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-loading > span {
+    animation: none;
+    width: 100%;
+    opacity: 0.5;
+  }
+}
+
+/* Skip link — WCAG 2.4.1. Every route puts a logo, five nav items, a search
+   button and a CTA ahead of the content in the tab order. Visually hidden
+   until focused, then it lands in the top-left corner above the fixed header. */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  transform: translateY(-120%);
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* `:focus`, not `:focus-visible`. A skip link is unreachable by pointer — it
+   is off-screen until focused — so the heuristic buys nothing, and
+   `:focus-visible` does not match focus moved programmatically, which is how
+   assistive tech and `element.focus()` both arrive here. It stayed hidden in
+   exactly the cases it exists for. */
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Printing an article should produce the article. The share row, the fixed
+   header, the footer and the site chrome are all screen furniture, and the
+   newsroom's graded imagery lays down a full-bleed dark block on paper. */
+@media print {
+  [data-testid="site-nav"],
+  [data-testid="site-footer"],
+  [data-testid="newsroom-share"],
+  [data-testid="newsroom-back"],
+  [data-testid="newsroom-related"],
+  .skip-link {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  [data-testid="newsroom-item"] {
+    font-size: 11pt;
+  }
+  /* Anchors are meaningless on paper unless the target comes with them. */
+  [data-testid="newsroom-item"] a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    word-break: break-all;
+  }
 }

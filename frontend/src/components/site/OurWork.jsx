@@ -29,11 +29,10 @@ export default function OurWork() {
   return (
     <Reveal asChild>
       <section id="work" data-testid="work-section" className="relative py-24 md:py-32 bg-cream">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="max-w-3xl mb-16">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">Our Work</span>
+            <div className="eyebrow">
+              <span className="eyebrow-label">Our Work</span>
             </div>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
               Previous work, <span className="italic text-brown">major cases</span> &amp; clients.
@@ -52,7 +51,7 @@ export default function OurWork() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {previousWorks.map((w) => (
-                <div key={w} className="flex items-start gap-3 border-t border-brown/20 pt-4">
+                <div key={w} className="flex items-start gap-3 border-t border-brown/25 pt-4">
                   <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brown flex-shrink-0" />
                   <span className="text-ink/80 text-sm md:text-base leading-relaxed">{w}</span>
                 </div>
@@ -85,7 +84,7 @@ export default function OurWork() {
             </div>
             <div className="flex flex-wrap gap-3">
               {clientCategories.map((c) => (
-                <span key={c} className="border border-brown/30 text-ink/80 text-sm px-5 py-2.5">{c}</span>
+                <span key={c} className="border border-brown/25 text-ink/80 text-sm px-5 py-2.5">{c}</span>
               ))}
             </div>
           </div>

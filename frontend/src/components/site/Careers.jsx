@@ -136,12 +136,15 @@ export default function Careers() {
         <div className="relative h-[56dvh] min-h-[440px] w-full overflow-hidden">
           <FadeImage src={CAREERS_BG} alt="Inside the chambers" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/40" />
-          <div className="relative h-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-end pb-14">
-            <div className="flex items-center gap-3 mb-5">
-              <span className="h-px w-8 bg-brown-soft" />
-              <span className="text-brown-soft text-[12px] font-semibold uppercase tracking-[0.16em]">Careers</span>
+          <div className="relative h-full shell flex flex-col justify-end pb-14">
+            <div className="eyebrow" data-tone="dark">
+              <span className="eyebrow-label">Careers</span>
             </div>
-            <h1 className="font-serif text-white text-4xl md:text-6xl lg:text-[68px] leading-[1.02] tracking-tight max-w-4xl">
+            {/* Was `md:text-6xl lg:text-[68px]`, which made the careers page
+                the loudest headline on the site — four points larger than the
+                home hero it sits beneath in the hierarchy — and skipped the
+                48px rung every other page steps through at `md`. */}
+            <h1 className="font-serif text-white text-4xl md:text-5xl lg:text-6xl leading-[1.02] tracking-tight max-w-4xl">
               No ordinary career.
             </h1>
             <p className="mt-5 text-white/85 text-lg max-w-2xl leading-relaxed">
@@ -151,7 +154,7 @@ export default function Careers() {
         </div>
 
         {/* Body */}
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28">
+        <div className="shell py-20 md:py-28">
           <div className="max-w-3xl mb-16">
             <p className="text-ink text-xl md:text-2xl leading-snug font-medium">
               RDB Associates welcomes applications from qualified advocates seeking recruitment opportunities,
@@ -174,8 +177,8 @@ export default function Careers() {
                   onClick={() => selectTrack(key)}
                   aria-pressed={active}
                   data-testid={`careers-track-${key}`}
-                  className={`group border bg-white p-9 text-left transition-[border-color,box-shadow] duration-300 hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)] ${
-                    active ? "border-brown shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)]" : "border-border hover:border-brown"
+                  className={`group border bg-white p-8 text-left transition-[border-color,box-shadow] duration-300 hover:elevate-card ${
+                    active ? "border-brown elevate-card" : "border-border hover:border-brown"
                   }`}
                 >
                   <Icon size={28} strokeWidth={1.3} className="text-brown mb-6" />
@@ -192,10 +195,9 @@ export default function Careers() {
 
           <div ref={formRef} className="grid lg:grid-cols-12 gap-10 lg:gap-16 scroll-mt-nav">
             <div className="lg:col-span-4">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="h-px w-10 bg-brown" />
-                <span className="text-brown text-xs font-semibold uppercase tracking-widest-plus">Apply</span>
-              </div>
+              <div className="eyebrow">
+              <span className="eyebrow-label">Apply</span>
+            </div>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">Submit your application</h2>
               <p className="mt-5 text-ink-soft leading-relaxed">
                 Share your details and a short note on why you would like to join the chambers. Attach your
@@ -211,7 +213,7 @@ export default function Careers() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 160, damping: 22 }}
-                className="lg:col-span-8 bg-white border border-border p-8 md:p-12 shadow-[0_16px_50px_-20px_rgba(0,0,0,0.12)]"
+                className="lg:col-span-8 bg-white border border-border p-8 md:p-12 elevate-card"
               >
                 <motion.span
                   initial={{ scale: 0.5, opacity: 0 }}
@@ -242,7 +244,7 @@ export default function Careers() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25 }}
-              className="lg:col-span-8 bg-white border border-border p-8 md:p-12 shadow-[0_16px_50px_-20px_rgba(0,0,0,0.12)]">
+              className="lg:col-span-8 bg-white border border-border p-8 md:p-12 elevate-card">
               <p className="text-xs text-ink-soft mb-8">Fields marked * are required.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Field label="Full Name *" error={shown("name")} htmlId="careers-name">
@@ -374,8 +376,8 @@ export default function Careers() {
                 </div>
               </div>
 
-              <button type="submit" data-testid="careers-submit" disabled={loading}
-                className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 group">
+              <button type="submit" data-testid="careers-submit" disabled={loading} aria-busy={loading}
+                className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed group">
                 {loading ? "Submitting" : "Submit Application"}
                 {loading ? (
                   <Loader2 size={16} className="animate-spin" />

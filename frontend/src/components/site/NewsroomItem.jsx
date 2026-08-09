@@ -13,7 +13,7 @@ export default function NewsroomItem({ item }) {
   return (
     <Reveal asChild inViewMargin="0px">
       <article data-testid="newsroom-item" className="bg-white text-ink">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-14 pb-8">
+        <div className="shell pt-14 pb-8">
           <Link
             to="/newsroom"
             data-testid="newsroom-back"
@@ -23,7 +23,7 @@ export default function NewsroomItem({ item }) {
           </Link>
         </div>
 
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+        <div className="shell">
           <NewsroomImage
             image={item.image}
             priority
@@ -34,7 +34,7 @@ export default function NewsroomItem({ item }) {
           />
         </div>
 
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pt-12 pb-20">
+        <div className="shell grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pt-12 pb-20">
           {/* Body */}
           <div className="lg:col-span-8">
             <div className="flex flex-wrap items-center gap-4 text-[10px] uppercase tracking-widest-plus">
@@ -121,11 +121,10 @@ export default function NewsroomItem({ item }) {
         </div>
 
         {related.length > 0 && (
-          <div className="border-t border-border bg-cream-dark">
-            <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-16 md:py-20">
-              <div className="flex items-center gap-4 mb-10">
-                <span className="h-px w-10 bg-brown" />
-                <span className="text-brown text-xs uppercase tracking-widest-plus">Related</span>
+          <div data-testid="newsroom-related" className="border-t border-border bg-cream-dark">
+            <div className="shell py-16 md:py-20">
+              <div className="eyebrow">
+                <span className="eyebrow-label">Related</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {related.map((r) => (
@@ -172,7 +171,7 @@ function ShareRow({ title }) {
   };
 
   return (
-    <div className="mt-12 pt-8 border-t border-border flex flex-wrap items-center gap-3">
+    <div data-testid="newsroom-share" className="mt-12 pt-8 border-t border-border flex flex-wrap items-center gap-3">
       <span className="text-[11px] uppercase tracking-widest-plus text-ink-soft mr-2">Share</span>
       <ShareBtn onClick={copy} label={copied ? "Link copied" : "Copy link"}>
         {copied ? <Check size={15} /> : <Link2 size={15} />}

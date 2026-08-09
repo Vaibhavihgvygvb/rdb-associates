@@ -88,9 +88,8 @@ export default function Timeline() {
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         <Reveal asChild>
           <div className="max-w-3xl mb-16">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">The Journey</span>
+            <div className="eyebrow">
+              <span className="eyebrow-label">The Journey</span>
             </div>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
               A career built <span className="italic text-brown">brief by brief</span>.

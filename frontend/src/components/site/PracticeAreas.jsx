@@ -61,13 +61,12 @@ export default function PracticeAreas() {
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16">
             <div className="lg:col-span-5">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="h-px w-10 bg-brown" />
-                <span className="text-brown text-xs uppercase tracking-widest-plus">Practice Areas</span>
-              </div>
+              <div className="eyebrow">
+              <span className="eyebrow-label">Practice Areas</span>
+            </div>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
                 Counsel across the <span className="italic text-brown">full arc</span> of dispute and advisory work.
               </h1>
@@ -86,7 +85,7 @@ export default function PracticeAreas() {
                 <button key={a.title} type="button" onClick={() => setSelected(a)}
                   data-testid={`practice-card-${a.title.replace(/\s+/g, "-").toLowerCase()}`}
                   aria-haspopup="dialog"
-                  className="group relative border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)] text-left cursor-pointer">
+                  className="group relative border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:elevate-card text-left cursor-pointer">
                   <Icon size={28} strokeWidth={1.3} className="text-brown mb-6 group-hover:scale-110 transition-transform duration-500" />
                   <h2 className="font-serif text-2xl text-ink mb-3">{a.title}</h2>
                   <p className="text-ink-soft text-sm leading-relaxed">{a.body}</p>

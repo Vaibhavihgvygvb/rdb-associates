@@ -34,11 +34,10 @@ function AboutTeaser() {
         {/* A measure-limited column. This was a 12-column grid holding a single
             `col-span-7` child — five columns of nothing, left over from an
             image that is no longer here. */}
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">About the Advocate</span>
+            <div className="eyebrow">
+              <span className="eyebrow-label">About the Advocate</span>
             </div>
             <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
               A practice grounded in <span className="italic text-brown">discipline</span>.
@@ -63,11 +62,10 @@ function ExploreGrid() {
   return (
     <Reveal asChild>
       <section className="relative py-24 md:py-32 bg-cream-dark text-ink">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="max-w-3xl mb-16">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">Explore the Chambers</span>
+            <div className="eyebrow">
+              <span className="eyebrow-label">Explore the Chambers</span>
             </div>
             <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
               Everything about <span className="italic text-brown">the practice</span>.
@@ -80,7 +78,7 @@ function ExploreGrid() {
             <Reveals holdDelay={70} distance={22} blur asChild>
             {explore.map(({ to, Icon, title, body }) => (
               <Link key={to} to={to} data-testid={`explore-card-${title.replace(/\s+/g, "-").toLowerCase()}`}
-                className="group relative border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)]">
+                className="group relative border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:elevate-card">
                 <Icon size={26} strokeWidth={1.3} className="text-brown mb-5 group-hover:scale-110 transition-transform duration-500" />
                 <h3 className="font-serif text-xl text-ink mb-2">{title}</h3>
                 <p className="text-ink-soft text-sm leading-relaxed">{body}</p>

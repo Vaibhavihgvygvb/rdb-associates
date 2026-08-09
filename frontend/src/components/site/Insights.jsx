@@ -26,13 +26,12 @@ export default function Insights() {
   return (
     <Reveal asChild>
       <section id="insights" data-testid="insights-section" className="relative py-24 md:py-32 bg-white text-ink">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-14">
             <div className="max-w-2xl">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="h-px w-10 bg-brown" />
-                <span className="text-brown text-xs uppercase tracking-widest-plus">Legal Insights</span>
-              </div>
+              <div className="eyebrow">
+              <span className="eyebrow-label">Legal Insights</span>
+            </div>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.04] tracking-tight">
                 Notes from the <span className="text-brown">chambers</span>.
               </h1>
@@ -71,7 +70,7 @@ function InsightCard({ post, index }) {
       <Link
         to={post.to}
         data-testid={`insight-card-${index}`}
-        className="group relative flex flex-col border border-border bg-white hover:border-brown hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.3)] transition-[border-color,box-shadow] duration-300"
+        className="group relative flex flex-col border border-border bg-white hover:border-brown hover:elevate-card transition-[border-color,box-shadow] duration-300"
       >
         <span className="block h-1 w-full bg-brown scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
         <span className="p-8 block">

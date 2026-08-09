@@ -29,30 +29,42 @@ export default function Expertise() {
   return (
     <Reveal asChild>
       <section id="expertise" data-testid="expertise-section" className="relative py-24 md:py-32 bg-cream">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="max-w-3xl mb-16">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">Areas of Expertise</span>
+            <div className="eyebrow">
+              <span className="eyebrow-label">Areas of Expertise</span>
             </div>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
               A method for <span className="italic text-brown">every stage</span> of a matter.
             </h1>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {items.map((it, idx) => (
+          {/* The cell rules are drawn by the grid, not by each cell.
+              They used to be per-item Tailwind classes computed from `idx % 3`
+              while the grid is `md:grid-cols-2 lg:grid-cols-3` — so between
+              768px and 1023px the arithmetic was reading against the wrong
+              column count and items 1 and 3 drew a `border-r` on the grid's
+              outer right edge, with the bottom row's suppression equally out of
+              step.
+
+              Now every cell draws the same two rules and the wrapper clips the
+              trailing ones off the outer edges, which is column-count agnostic
+              and cannot drift. The clip has to be a *parent* of the grid:
+              `overflow-hidden` on the grid clips to the grid's own box, and the
+              trailing rules sit exactly on that edge. */}
+          <div className="overflow-hidden border-t border-brown/25">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 -mr-px -mb-px">
+            {items.map((it) => (
               <button key={it.n} type="button" onClick={() => setSelected(it)}
                 data-testid={`expertise-item-${it.n}`}
                 aria-haspopup="dialog"
-                className={`p-10 border-brown/25 hover:bg-white transition-colors duration-500 border-t text-left cursor-pointer ${
-                  idx % 3 !== 2 ? "md:border-r" : ""
-                } ${idx >= items.length - 3 ? "md:border-b-0" : "border-b"}`}>
+                className="p-10 border-r border-b border-brown/25 hover:bg-white transition-colors duration-500 text-left cursor-pointer">
                 <div className="text-brown font-serif text-3xl mb-4">{it.n}</div>
                 <h2 className="font-serif text-2xl text-ink mb-3">{it.t}</h2>
                 <p className="text-ink/70 text-sm leading-relaxed">{it.d}</p>
               </button>
             ))}
+            </div>
           </div>
         </div>
 

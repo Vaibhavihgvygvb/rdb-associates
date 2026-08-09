@@ -6,7 +6,7 @@ import { CHAMBERS_ADDRESS, EMAIL, PHONE_DISPLAY, PHONE_E164 } from "@/data/chamb
 export default function Footer() {
   return (
     <footer data-testid="site-footer" className="relative bg-sage-deep text-cream border-t border-brown/30">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-12">
+      <div className="shell pt-24 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-4">
             {/* The full lockup carries the firm name itself, so it stands in
@@ -31,7 +31,12 @@ export default function Footer() {
 
           <div className="md:col-span-3">
             <div className="text-[10px] uppercase tracking-widest-plus text-brown-on-dark mb-6">Navigate</div>
-            <ul className="space-y-3 text-sm">
+            {/* Twelve links stacked at `space-y-3` gave each a ~20px hit area —
+                the tightest targets on the site, and under the 24px minimum of
+                WCAG 2.5.8. `block py-1.5` takes each to 32px without changing
+                the column's overall height, since the padding replaces the
+                margin it used to sit in. */}
+            <ul className="text-sm -my-1.5">
               {[
                 ["About", "/about"], ["Practice Areas", "/practice-areas"], ["Expertise", "/expertise"],
                 ["Journey", "/journey"], ["Credentials", "/credentials"], ["Our Work", "/work"],
@@ -39,7 +44,7 @@ export default function Footer() {
                 ["Insights", "/insights"], ["Newsletter", "/newsletter"], ["Contact", "/contact"],
               ].map(([l, h]) => (
                 <li key={l}>
-                  <Link to={h} className="text-cream/75 hover:text-brown-on-dark transition-colors duration-300">{l}</Link>
+                  <Link to={h} className="block py-1.5 text-cream/75 hover:text-brown-on-dark transition-colors duration-300">{l}</Link>
                 </li>
               ))}
             </ul>

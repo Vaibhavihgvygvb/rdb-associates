@@ -21,11 +21,10 @@ export default function Credentials() {
   return (
     <Reveal asChild>
       <section id="credentials" data-testid="credentials-section" className="relative py-24 md:py-32 bg-cream">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="shell">
           <div className="max-w-3xl mb-16">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-10 bg-brown" />
-              <span className="text-brown text-xs uppercase tracking-widest-plus">Credentials</span>
+            <div className="eyebrow">
+              <span className="eyebrow-label">Credentials</span>
             </div>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.05]">
               Education, memberships &amp; <span className="italic text-brown">the record</span>.
@@ -33,7 +32,7 @@ export default function Credentials() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="bg-white border border-brown/25 p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <div className="bg-white border border-brown/25 p-8">
               <GraduationCap size={26} strokeWidth={1.3} className="text-brown mb-6" />
               <h2 className="font-serif text-2xl text-ink mb-6">Education</h2>
               <ul className="space-y-5">
@@ -46,7 +45,7 @@ export default function Credentials() {
               </ul>
             </div>
 
-            <div className="bg-sage text-cream p-10 border border-brown/40">
+            <div className="bg-sage text-cream p-8 border border-brown/40">
               <Award size={26} strokeWidth={1.3} className="text-brown-on-dark mb-6" />
               <h2 className="font-serif text-2xl mb-6">Memberships</h2>
               <ul className="space-y-4">
@@ -65,12 +64,12 @@ export default function Credentials() {
               </p>
             </div>
 
-            <div className="bg-white border border-brown/25 p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <div className="bg-white border border-brown/25 p-8">
               <Languages size={26} strokeWidth={1.3} className="text-brown mb-6" />
               <h2 className="font-serif text-2xl text-ink mb-6">Languages</h2>
               <ul className="space-y-4">
                 {languages.map((l) => (
-                  <li key={l} className="border-b border-brown/20 pb-3">
+                  <li key={l} className="border-b border-brown/25 pb-3">
                     <span className="font-serif text-ink text-lg">{l}</span>
                   </li>
                 ))}

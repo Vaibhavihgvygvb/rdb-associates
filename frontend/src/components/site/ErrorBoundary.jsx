@@ -36,10 +36,9 @@ export default class ErrorBoundary extends Component {
     return (
       <main className="min-h-screen bg-cream text-ink flex items-center">
         <div className="max-w-2xl mx-auto px-6 md:px-12 py-24">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="h-px w-10 bg-brown" />
-            <span className="text-brown text-xs uppercase tracking-widest-plus">Something went wrong</span>
-          </div>
+          <div className="eyebrow">
+              <span className="eyebrow-label">Something went wrong</span>
+            </div>
           <h1 className="font-serif text-4xl md:text-5xl leading-[1.05]">
             This page didn&rsquo;t load.
           </h1>

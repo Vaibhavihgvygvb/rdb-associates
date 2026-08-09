@@ -19,17 +19,35 @@ import { cn } from "@/lib/cn";
  * Because every route already renders this, it is also where each one declares
  * its `title` and `description` — see lib/useDocumentMeta.js. Omitting the
  * title falls back to the bare firm name.
+ *
+ * <Nav> and <Footer> are siblings of <main>, not children of it. They used to
+ * be nested inside, which silently cost the site both of its bookend
+ * landmarks: `banner` and `contentinfo` are only exposed when the element is
+ * *not* a descendant of <main>, so on every route the header and footer
+ * announced as generic groups and landmark navigation had one destination.
+ * The `page-transition` fade stays on <main> alone, which is also more correct
+ * — the header is persistent chrome and has no reason to flicker per route.
  */
 export default function PageShell({ testId, className, offset = true, title, description, children }) {
   useDocumentMeta(title, description);
 
   return (
-    <main data-testid={testId} className={cn("bg-cream text-ink page-transition", className)}>
+    <>
+      <a href="#main-content" className="skip-link bg-brown text-white px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.08em]">
+        Skip to content
+      </a>
       <Nav />
-      {offset && <div className="pt-nav" />}
-      {children}
+      <main
+        id="main-content"
+        tabIndex={-1}
+        data-testid={testId}
+        className={cn("bg-cream text-ink page-transition outline-none", className)}
+      >
+        {offset && <div className="pt-nav" />}
+        {children}
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }
 
