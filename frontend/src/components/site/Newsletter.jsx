@@ -98,7 +98,7 @@ export default function Newsletter({ variant = "footer" }) {
                   data-testid="newsletter-footer-submit"
                   type="submit"
                   disabled={loading} aria-busy={loading}
-                  className="bg-brown text-white px-4 flex items-center justify-center hover:bg-brown-light transition-colors duration-300 disabled:opacity-60"
+                  className="bg-brown text-white px-4 flex items-center justify-center hover:bg-brown-light transition-colors duration-300 pressable disabled:opacity-60"
                   aria-label="Subscribe"
                 >
                   {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
@@ -175,7 +175,7 @@ export default function Newsletter({ variant = "footer" }) {
                   data-testid="newsletter-page-submit"
                   type="submit"
                   disabled={loading} aria-busy={loading}
-                  className="inline-flex items-center justify-center gap-3 bg-brown text-white px-8 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 group"
+                  className="inline-flex items-center justify-center gap-3 bg-brown text-white px-8 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 pressable disabled:opacity-60 group"
                 >
                   {loading ? "Subscribing" : "Subscribe"}
                   {loading ? (

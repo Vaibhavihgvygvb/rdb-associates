@@ -245,7 +245,7 @@ export default function Contact({ headingLevel = 2 }) {
                 </p>
 
                 <button type="submit" data-testid="contact-submit" disabled={loading} aria-busy={loading}
-                  className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed group">
+                  className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 pressable disabled:opacity-60 disabled:cursor-not-allowed group">
                   {loading ? "Submitting" : "Send Enquiry"}
                   {loading ? (
                     <Loader2 size={16} className="animate-spin" />

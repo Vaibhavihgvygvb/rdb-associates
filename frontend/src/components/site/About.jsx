@@ -1,6 +1,6 @@
 import { Quote } from "lucide-react";
 import { Reveal, Reveals, Parallax, CountingNumber, FadeImage } from "@/components/motion";
-import { PORTRAIT } from "@/data/chambers";
+import { PORTRAIT, PORTRAIT_SRCSET } from "@/data/chambers";
 
 export default function About() {
   return (
@@ -15,7 +15,7 @@ export default function About() {
                 <div className="relative">
                   <div className="absolute -top-4 -left-4 w-full h-full border border-brown/60" aria-hidden />
                   {/* Sits at the top of /about, so it loads eagerly. */}
-                  <FadeImage src={PORTRAIT} alt="Ramandeep Bawa, Advocate" data-testid="about-portrait" priority
+                  <FadeImage src={PORTRAIT} srcSet={PORTRAIT_SRCSET} sizes="(min-width: 1024px) 480px, (min-width: 768px) 45vw, 92vw" alt="Ramandeep Bawa, Advocate" data-testid="about-portrait" priority
                     className="relative w-full h-[520px] md:h-[620px] object-cover grayscale-[15%]" />
                   <div className="absolute bottom-6 left-6 right-6 bg-sage/95 border border-brown/50 px-6 py-5 backdrop-blur-sm">
                     <p className="text-brown-on-dark text-[10px] uppercase tracking-widest-plus">Founding Advocate</p>
@@ -51,24 +51,43 @@ export default function About() {
 
               <div className="mt-12 relative border-l-2 border-brown pl-8 py-4">
                 <Quote className="absolute -top-3 -left-4 bg-cream text-brown p-1" size={26} strokeWidth={1.2} />
-                <p className="font-serif italic text-ink text-xl md:text-2xl leading-snug">
+                <p className="font-serif italic text-ink text-xl md:text-2xl leading-snug hanging-quote">
                   &ldquo;I never lose. I either win or learn.&rdquo;
                 </p>
+                {/* Attribution removed, quotation kept. "I never lose. I
+                    either win or learn." is attributed to Nelson Mandela all
+                    over the internet and appears in none of his writings or
+                    recorded speeches — it is a well-documented misattribution.
+                    A practice whose entire proposition is rigour cannot afford
+                    to be the site that repeated it, and a reader who knows
+                    will assume the same care went into the legal research.
+                    Standing unattributed it is a statement of the chambers'
+                    own outlook, which is how it was being used anyway. */}
                 <p className="mt-3 text-xs uppercase tracking-widest-plus text-ink-soft">
-                  — Nelson Mandela · Guiding Principle
+                  Guiding Principle
                 </p>
               </div>
 
               <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-8">
                 <Reveals holdDelay={110} distance={18} asChild>
+                  {/* Two corrections here, both about what this row claims.
+                      "3 Postgraduate Diplomas" was contradicted by the
+                      paragraph directly above it, which lists one postgraduate
+                      diploma (Medical Law & Ethics, NLSIU) and two diplomas
+                      (ADR, Cyber Laws). Three specialist diplomas is the true
+                      figure and is what /credentials already itemises.
+                      "1 Guiding Philosophy" was not a credential at all, and a
+                      counted non-fact sitting beside three real ones invites
+                      the reader to discount all four. Bar memberships is a
+                      verifiable figure the credentials page already lists. */}
                   {[
                     { n: 15, suffix: "+", v: "Years at the Bar" },
                     { n: 4, suffix: "", v: "Languages" },
-                    { n: 3, suffix: "", v: "Postgraduate Diplomas" },
-                    { n: 1, suffix: "", v: "Guiding Philosophy" },
+                    { n: 3, suffix: "", v: "Specialist Diplomas" },
+                    { n: 4, suffix: "", v: "Bar Memberships" },
                   ].map((f) => (
                     <div key={f.v} className="border-t border-brown/40 pt-4">
-                      <div className="font-serif text-3xl md:text-4xl text-brown">
+                      <div className="font-serif text-3xl md:text-4xl text-brown tnum">
                         <CountingNumber number={f.n} />
                         {f.suffix}
                       </div>

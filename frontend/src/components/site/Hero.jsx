@@ -2,8 +2,18 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Reveal from "@/components/motion/Reveal";
 
-const HERO_IMG =
-  "https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=1400&q=80";
+// The hero photograph, at the widths the split-screen actually renders it.
+//
+// This was one fixed `w=1400` URL for every device — so a phone painting the
+// image roughly 390px wide downloaded the desktop asset in full, on the one
+// request that decides the page's Largest Contentful Paint. The newsroom's
+// images have had a srcset since they were built; the largest image on the
+// site did not.
+const HERO_ID = "photo-1505664194779-8beaceb93744";
+const unsplash = (w) =>
+  `https://images.unsplash.com/${HERO_ID}?auto=format&fit=crop&w=${w}&q=80`;
+const HERO_IMG = unsplash(1400);
+const HERO_SRCSET = [640, 960, 1400, 1920].map((w) => `${unsplash(w)} ${w}w`).join(", ");
 
 /**
  * The hero sits above the fold, so nothing here is scroll-triggered —
@@ -91,7 +101,7 @@ export default function Hero() {
                 <Link
                   to="/contact"
                   data-testid="hero-cta-consult"
-                  className="inline-flex items-center gap-2.5 bg-brown text-white px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] hover:bg-brown-light transition-colors duration-200 group"
+                  className="inline-flex items-center gap-2.5 bg-brown text-white px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] hover:bg-brown-light transition-colors duration-200 pressable group"
                 >
                   Request a consultation
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
@@ -135,6 +145,10 @@ export default function Hero() {
           >
             <img
               src={HERO_IMG}
+              srcSet={HERO_SRCSET}
+              /* The image occupies the right half above `lg` and the full
+                 width below it. */
+              sizes="(min-width: 1024px) 50vw, 100vw"
               alt="Courthouse colonnade"
               /* LCP element: must not be lazy, and wants priority over the
                  route chunks the browser is fetching in parallel. Reveal

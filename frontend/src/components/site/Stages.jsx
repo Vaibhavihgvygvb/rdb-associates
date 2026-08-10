@@ -42,7 +42,7 @@ export default function Stages() {
                       same 0-radius geometry as every other surface on the site.
                       The number it carries still sits upright, which a rotated
                       diamond could not do. */}
-                  <span className="absolute left-0 md:left-2 top-0 w-8 h-8 bg-white border border-brown flex items-center justify-center text-brown font-serif text-sm">
+                  <span className="absolute left-0 md:left-2 top-0 w-8 h-8 bg-white border border-brown flex items-center justify-center text-brown font-serif text-sm tnum">
                     {s.n}
                   </span>
                   <h2 className="font-serif text-xl md:text-2xl text-ink">{s.t}</h2>

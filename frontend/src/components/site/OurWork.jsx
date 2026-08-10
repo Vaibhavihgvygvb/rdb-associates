@@ -10,7 +10,14 @@ const previousWorks = [
 ];
 
 const majorCases = [
-  { forum: "High Court of Delhi", type: "Commercial Suit", note: "Represented a mid-sized enterprise in a multi-crore recovery and specific performance dispute; secured an interim injunction restraining alienation of the disputed assets pending trial." },
+  // "multi-crore" removed. The intro to this section, the newsroom header and
+  // the disclaimer in the footer of every page all state that matters are
+  // described generally and that no claim value is disclosed — and this line
+  // disclosed one. Whether it crosses the Bar Council line is for the chambers'
+  // own judgement; that the page asserted a standard and then broke it two
+  // paragraphs later is the part no reader misses. The description of the work
+  // is unchanged.
+  { forum: "High Court of Delhi", type: "Commercial Suit", note: "Represented a mid-sized enterprise in a recovery and specific performance dispute; secured an interim injunction restraining alienation of the disputed assets pending trial." },
   { forum: "District Court, Delhi", type: "Civil Appeal", note: "Successfully defended a decree in a property partition matter through appellate proceedings, upholding the trial court's findings on title and possession." },
   { forum: "Consumer Disputes Redressal Commission", type: "Medical Negligence", note: "Advised a private hospital through a professional negligence complaint, achieving a negotiated resolution prior to final adjudication." },
   { forum: "Debt Recovery Tribunal", type: "Recovery Proceeding", note: "Acted for a financial institution in a secured-debt recovery matter, coordinating enforcement under the SARFAESI framework." },

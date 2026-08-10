@@ -40,7 +40,7 @@ export default function NewsroomItem({ item }) {
             <div className="flex flex-wrap items-center gap-4 text-[10px] uppercase tracking-widest-plus">
               <span className="text-brown font-semibold">{categoryLabel(item.category)}</span>
               <span className="h-px w-6 bg-border" />
-              <span className="text-ink-soft">{formatDate(item.date)}</span>
+              <span className="text-ink-soft tnum">{formatDate(item.date)}</span>
             </div>
 
             <h1 className="font-serif text-3xl md:text-4xl lg:text-[46px] leading-[1.08] mt-6">{item.title}</h1>
@@ -57,7 +57,7 @@ export default function NewsroomItem({ item }) {
 
             {item.quote && (
               <figure className="mt-12 border-t border-border pt-10">
-                <blockquote className="font-serif text-2xl md:text-[28px] leading-snug text-ink">
+                <blockquote className="font-serif text-2xl md:text-[28px] leading-snug text-ink hanging-quote">
                   &ldquo;{item.quote.text}&rdquo;
                 </blockquote>
                 <figcaption className="mt-6 text-[11px] uppercase tracking-widest-plus text-ink-soft">
@@ -141,7 +141,7 @@ export default function NewsroomItem({ item }) {
                     <div className="p-7">
                       <div className="flex items-center justify-between text-[10px] uppercase tracking-widest-plus">
                         <span className="text-brown font-semibold">{categoryLabel(r.category)}</span>
-                        <span className="text-ink-soft">{formatDate(r.date)}</span>
+                        <span className="text-ink-soft tnum">{formatDate(r.date)}</span>
                       </div>
                       <h2 className="font-serif text-lg text-ink mt-5 leading-snug group-hover:text-brown transition-colors">{r.title}</h2>
                     </div>

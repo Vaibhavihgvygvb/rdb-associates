@@ -46,7 +46,7 @@ function TimelineEvent({ event, index }) {
         transition={{ type: "spring", stiffness: 160, damping: 24 }}
         className={`pl-14 md:pl-0 ${index % 2 === 0 ? "md:text-right md:pr-16" : "md:pl-16"}`}
       >
-        <div className="text-brown font-serif text-3xl md:text-4xl">{event.year}</div>
+        <div className="text-brown font-serif text-3xl md:text-4xl tnum">{event.year}</div>
         <h2 className="font-serif text-xl md:text-2xl text-ink mt-2">{event.title}</h2>
         <p className="text-ink-soft text-sm md:text-base mt-3 leading-relaxed max-w-md md:inline-block">{event.body}</p>
       </motion.div>

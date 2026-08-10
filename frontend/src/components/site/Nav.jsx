@@ -268,7 +268,7 @@ export default function Nav() {
           <Link
             to="/contact"
             data-testid="nav-cta-contact"
-            className="inline-flex items-center gap-2 bg-brown text-white px-5 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] hover:bg-brown-light transition-colors duration-200"
+            className="inline-flex items-center gap-2 bg-brown text-white px-5 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] hover:bg-brown-light transition-colors duration-200 pressable pressable"
           >
             Contact
             <ArrowRight size={15} />

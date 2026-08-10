@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 // Newsroom imagery.
 //
 // Photographs are never shown raw. Each one is desaturated, then an emerald layer
@@ -29,18 +31,39 @@ export default function NewsroomImage({
   // A chambers photograph (`src`) overrides the library id, and is graded the same.
   const fixed = image.src;
 
+  // These images used to snap to full opacity the instant each bitmap decoded.
+  // Every other photograph on the site — the hero, the portrait on /about and
+  // /team, the careers banner — resolves through <FadeImage>, which holds at
+  // zero until the image is ready and then fades it up. The newsroom was the
+  // one place that did not, and it is the most image-dense page on the site:
+  // eighteen lazily-loaded frames popping in against a near-black block while
+  // the reader scrolls. Same treatment as everything else now.
+  //
+  // `complete` is checked on mount for the same reason FadeImage checks it: a
+  // cached image can finish decoding before React attaches onLoad, which would
+  // otherwise strand it at opacity 0 forever. onError does the same, so a frame
+  // that fails to decode is never left invisible.
+  const imgRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    if (imgRef.current?.complete) setLoaded(true);
+  }, []);
+
   return (
     <div className={`relative isolate overflow-hidden bg-ink ${className}`}>
       <img
+        ref={imgRef}
         src={fixed ?? unsplash(image.id, 1440)}
         srcSet={fixed ? undefined : SRCSET_WIDTHS.map((w) => `${unsplash(image.id, w)} ${w}w`).join(", ")}
         sizes={fixed ? undefined : sizes}
         alt={image.alt}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
-        className={`absolute inset-0 h-full w-full object-cover grayscale contrast-[1.08] transition-[transform,filter] duration-700 ease-out group-hover:grayscale-[0.45] group-hover:scale-[1.04] ${
-          scrim ? "brightness-[0.82] group-hover:brightness-[0.9]" : "brightness-[0.97]"
-        }`}
+        onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
+        className={`absolute inset-0 h-full w-full object-cover grayscale contrast-[1.08] transition-[transform,filter,opacity] duration-700 ease-out group-hover:grayscale-[0.45] group-hover:scale-[1.04] ${
+          loaded ? "opacity-100" : "opacity-0"
+        } ${scrim ? "brightness-[0.82] group-hover:brightness-[0.9]" : "brightness-[0.97]"}`}
       />
 
       {/* Hue from the palette, luminosity from the photograph. Held well below full

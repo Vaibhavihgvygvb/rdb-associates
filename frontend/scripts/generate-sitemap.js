@@ -91,3 +91,47 @@ if (fs.existsSync(robotsPath)) {
 }
 
 console.log(`[sitemap] Wrote ${urls.length} URLs for ${SITE_URL}`);
+
+/**
+ * Absolute social-card URLs in the built index.html.
+ *
+ * `og:image` shipped as the relative path `/ramandeep-bawa.jpg`. Open Graph
+ * requires an absolute URL, so LinkedIn, WhatsApp, Slack and iMessage — none
+ * of which run JavaScript, and all of which read this file rather than the
+ * rendered page — resolved nothing and drew an imageless card. The runtime
+ * hook in lib/useDocumentMeta.js writes the absolute form correctly, but it
+ * writes it far too late for any of them.
+ *
+ * Stamped here, at build time, for the same reason the sitemap is: this is the
+ * only point where the production origin is known. `og:url` gets the same
+ * treatment so the canonical in the served HTML is absolute too.
+ */
+const indexPath = path.join(BUILD_DIR, "index.html");
+if (fs.existsSync(indexPath)) {
+  let html = fs.readFileSync(indexPath, "utf8");
+  const before = html;
+
+  html = html.replace(
+    /(<meta\s+property="og:image"\s+content=")(\/[^"]*)(")/g,
+    (_, a, p, b) => `${a}${SITE_URL}${p}${b}`,
+  );
+
+  // og:url and a canonical are absent from the static head entirely; add them.
+  if (!/property="og:url"/.test(html)) {
+    html = html.replace(
+      /(<meta\s+property="og:type"[^>]*>)/,
+      `$1\n    <meta property="og:url" content="${SITE_URL}/" />`,
+    );
+  }
+  if (!/rel="canonical"/.test(html)) {
+    html = html.replace(
+      /(<\/title>)/,
+      `$1\n    <link rel="canonical" href="${SITE_URL}/" />`,
+    );
+  }
+
+  if (html !== before) {
+    fs.writeFileSync(indexPath, html);
+    console.log("[sitemap] Rewrote social-card URLs in index.html to absolute.");
+  }
+}

@@ -14,10 +14,13 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
 UPLOADS_DIR = ROOT_DIR / "uploads" / "resumes"
+# Content type -> the extension the stored file is given. A mapping rather
+# than a set because the stored filename's extension is now derived from the
+# verified content type instead of from the client-supplied filename.
 RESUME_CONTENT_TYPES = {
-    "application/pdf",
-    "application/msword",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/pdf": ".pdf",
+    "application/msword": ".doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
 }
 MAX_RESUME_SIZE = 5 * 1024 * 1024
 
@@ -208,13 +211,40 @@ async def create_career_application(
     if resume is not None:
         if resume.content_type not in RESUME_CONTENT_TYPES:
             raise HTTPException(status_code=400, detail="Resume must be a PDF or Word document.")
-        contents = await resume.read()
-        if len(contents) > MAX_RESUME_SIZE:
-            raise HTTPException(status_code=400, detail="Resume must be under 5MB.")
-        stored_name = f"{uuid.uuid4()}_{resume.filename}"
-        target_path = UPLOADS_DIR / stored_name
-        target_path.write_bytes(contents)
-        resume_filename = resume.filename
+
+        # Read in bounded chunks and stop at the first byte over the limit.
+        # This used to be a single `await resume.read()` followed by a length
+        # check, which meant the whole body was resident in memory before the
+        # limit was consulted — a 2GB POST was fully buffered in order to be
+        # rejected. With no rate limiting in front of this endpoint that is a
+        # one-request denial of service.
+        contents = bytearray()
+        while chunk := await resume.read(64 * 1024):
+            contents.extend(chunk)
+            if len(contents) > MAX_RESUME_SIZE:
+                raise HTTPException(status_code=400, detail="Resume must be under 5MB.")
+
+        # The stored name is derived, never taken from the client.
+        #
+        # It was `f"{uuid4()}_{resume.filename}"` joined onto UPLOADS_DIR.
+        # `resume.filename` is attacker-controlled, and while the UUID prefix
+        # neutralises the *first* path segment, any `../` segments after it
+        # resolve normally — so a filename like `x/../../../etc/cron.d/job`
+        # escaped the upload directory entirely. Only the basename is kept, the
+        # extension is taken from the verified content type rather than from
+        # the name, and the result is confirmed to sit inside UPLOADS_DIR
+        # before anything is written.
+        suffix = RESUME_CONTENT_TYPES[resume.content_type]
+        target_path = (UPLOADS_DIR / f"{uuid.uuid4()}{suffix}").resolve()
+        if not target_path.is_relative_to(UPLOADS_DIR.resolve()):
+            raise HTTPException(status_code=400, detail="Invalid upload.")
+
+        UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
+        target_path.write_bytes(bytes(contents))
+
+        # The original name is still recorded for the reader's benefit, but as
+        # data in a column — never as part of a filesystem path.
+        resume_filename = Path(resume.filename or "resume").name
         resume_path = str(target_path)
 
     record = CareerApplication(

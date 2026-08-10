@@ -62,7 +62,7 @@ export default function Expertise() {
                    stretched <button> centres its content, so cell 3's number
                    sat 11px below cells 1 and 2 in the same row. */
                 className="flex flex-col p-8 border-r border-b border-border hover:bg-white transition-colors duration-500 text-left cursor-pointer">
-                <div className="text-brown font-serif text-3xl mb-4">{it.n}</div>
+                <div className="text-brown font-serif text-3xl mb-4 tnum">{it.n}</div>
                 <h2 className="font-serif text-2xl text-ink mb-3">{it.t}</h2>
                 <p className="text-ink/70 text-sm leading-relaxed">{it.d}</p>
               </button>
@@ -75,7 +75,7 @@ export default function Expertise() {
           {({ titleId }) =>
             shown && (
               <>
-                <div className="text-brown font-serif text-3xl mb-4">{shown.n}</div>
+                <div className="text-brown font-serif text-3xl mb-4 tnum">{shown.n}</div>
                 <h2 id={titleId} className="font-serif text-3xl md:text-4xl text-ink mb-6">{shown.t}</h2>
                 <p className="text-ink/80 text-base md:text-lg leading-relaxed">{shown.detail}</p>
               </>

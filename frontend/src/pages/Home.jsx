@@ -75,7 +75,13 @@ function ExploreGrid() {
           <div data-testid="explore-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* asChild so each Link stays the direct grid item — a wrapper div
                 here would collapse the card's hover transform and shadow. */}
-            <Reveals holdDelay={70} distance={22} blur asChild>
+            {/* 40ms, not 70. Twelve cards at 70ms put the last one 770ms
+                behind the first, and with the spring still settling after that
+                the grid was not at rest for well over a second — long enough
+                that a reader who has already started scanning watches the
+                bottom row arrive late. The stagger should read the grid in, not
+                perform it. */}
+            <Reveals holdDelay={40} distance={22} blur asChild>
             {explore.map(({ to, Icon, title, body }) => (
               <Link key={to} to={to} data-testid={`explore-card-${title.replace(/\s+/g, "-").toLowerCase()}`}
                 className="group relative border border-border bg-white p-8 hover:border-brown hover:-translate-y-1 transition-[transform,border-color,box-shadow] duration-300 hover:elevate-card">

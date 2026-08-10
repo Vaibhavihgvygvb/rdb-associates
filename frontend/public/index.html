@@ -3,8 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
+    <!-- One theme colour, because there is one theme. The dark-scheme entry
+         used to declare #121212, which put near-black browser chrome above a
+         page that is white in every colour scheme — the address bar and the
+         page disagreed for every visitor whose OS is set to dark. -->
+    <meta name="theme-color" content="#FFFFFF" />
 
     <!-- Defaults only. Every route overwrites the title, description, canonical
          and social tags on mount — see src/lib/useDocumentMeta.js. These are
@@ -26,8 +29,13 @@
 
     <!-- The firm's monogram on the brand's near-black, so it stays legible in
          both light and dark browser chrome. -->
+    <!-- `favicon.ico` is the one a browser requests at the site root without
+         being asked, and for bookmarks, history and older clients. There was
+         none, so every one of those requests 404'd. -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Non-blocking font load. The stylesheet was previously fetched as a
          render-blocking <link>, holding first paint for a round trip to
@@ -41,6 +49,37 @@
          one to the font host — which blocks nothing above the fold. Same
          treatment for the larger asset. -->
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+
+    <!-- The hero photograph, started during HTML parse.
+         This is a client-rendered app, so the <img> that paints the hero does
+         not exist until React has downloaded, parsed and mounted — which means
+         the single request that decides Largest Contentful Paint was queued
+         behind the entire JavaScript bundle. Declaring it here lets the
+         preload scanner open the connection and start the bytes immediately.
+         `imagesrcset`/`imagesizes` mirror the values in Hero.jsx exactly, so
+         the preload and the element resolve to the same candidate and the
+         image is fetched once. Keep them in step. -->
+    <link
+      rel="preload"
+      as="image"
+      fetchpriority="high"
+      imagesrcset="
+        https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&amp;fit=crop&amp;w=640&amp;q=80 640w,
+        https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&amp;fit=crop&amp;w=960&amp;q=80 960w,
+        https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&amp;fit=crop&amp;w=1400&amp;q=80 1400w,
+        https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&amp;fit=crop&amp;w=1920&amp;q=80 1920w"
+      imagesizes="(min-width: 1024px) 50vw, 100vw"
+    />
+
+    <!-- Raises the font stylesheet's fetch priority. The `media="print"`
+         swap below already keeps it off the render-blocking path, but it also
+         drops it to Lowest — so on a slow connection the page painted in the
+         system fallback and reflowed to Inter noticeably late. -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Inter+Tight:wght@300;400;500;600&amp;display=swap"
+    />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600&display=swap"
@@ -68,7 +107,12 @@
         "image": "/ramandeep-bawa.jpg",
         "email": "chambersofrb@gmail.com",
         "telephone": "+919711429298",
-        "priceRange": "$$",
+        "memberOf": [
+          { "@type": "Organization", "name": "Bar Council of India" },
+          { "@type": "Organization", "name": "Bar Council of Delhi" },
+          { "@type": "Organization", "name": "Delhi High Court Bar Association" },
+          { "@type": "Organization", "name": "Indian Lawyers Association" }
+        ],
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "A-86, Lower Ground Floor, Defence Colony",

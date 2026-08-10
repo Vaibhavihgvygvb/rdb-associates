@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Linkedin } from "lucide-react";
-import { PORTRAIT } from "@/data/chambers";
+import { PORTRAIT, PORTRAIT_SRCSET } from "@/data/chambers";
 import { Reveal, FadeImage } from "@/components/motion";
 
 // The founding advocate leads the chambers. As associates and interns join,
@@ -40,7 +40,7 @@ export default function Team() {
             <div className="md:col-span-5 lg:col-span-4 relative min-h-[380px]">
               {/* object-top: this frame is close to square while the portrait is taller
                   than it is wide, so a centred crop would cut the hairline. */}
-              <FadeImage src={PORTRAIT} alt="Ramandeep Bawa, Founding Advocate" className="absolute inset-0 w-full h-full object-cover object-top grayscale-[10%]" />
+              <FadeImage src={PORTRAIT} srcSet={PORTRAIT_SRCSET} sizes="(min-width: 1024px) 400px, (min-width: 768px) 42vw, 100vw" alt="Ramandeep Bawa, Founding Advocate" className="absolute inset-0 w-full h-full object-cover object-top grayscale-[10%]" />
             </div>
             <div className="md:col-span-7 lg:col-span-8 p-8 md:p-12 flex flex-col justify-center">
               <div className="text-[11px] uppercase tracking-widest-plus text-brown font-semibold">Founding Advocate</div>

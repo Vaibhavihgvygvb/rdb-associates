@@ -86,6 +86,10 @@ export default function Newsroom() {
             disclosure would buy more height but invents a mobile-only
             interaction, and horizontal-scrolling the facets would still leave
             two rows pinned. */}
+        {/* Hidden entirely when there is nothing to filter — a search field
+            and three facet menus over an empty set is furniture pretending to
+            be function. */}
+        {all.length > 0 && (
         <div className="lg:sticky lg:top-nav z-30 bg-white border-b border-border">
           <div className="shell py-5">
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
@@ -163,11 +167,33 @@ export default function Newsroom() {
             </div>
           </div>
         </div>
+        )}
 
         {/* Results */}
         <div className="shell section-y-sm">
-          {results.length === 0 ? (
-            <div data-testid="newsroom-empty" className="border border-border py-24 text-center">
+          {/* Two different emptinesses, which were previously one.
+              "No records have been published yet" and "your filter matched
+              nothing" are not the same message, and the page only had the
+              second — so a newsroom with no entries at all told the reader to
+              clear filters they had never set. That mattered: it meant the
+              honest state, an empty newsroom, was the one state the page could
+              not render, and the only way to make it look right was to leave
+              placeholder entries in it. */}
+          {all.length === 0 ? (
+            <div data-testid="newsroom-none" className="border border-border py-24 px-6 text-center">
+              <p className="font-serif text-2xl text-ink">No entries have been published yet.</p>
+              <p className="mt-4 text-ink-soft text-sm leading-relaxed max-w-md mx-auto">
+                Matter notes, chambers announcements and speaking engagements will be recorded here.
+              </p>
+              <Link
+                to="/contact"
+                className="mt-8 inline-flex items-center gap-2 text-brown text-[13px] font-semibold uppercase tracking-[0.1em] hover:text-brown-light transition-colors"
+              >
+                Contact the chambers <ArrowUpRight size={15} />
+              </Link>
+            </div>
+          ) : results.length === 0 ? (
+            <div data-testid="newsroom-empty" className="border border-border py-24 px-6 text-center">
               <p className="font-serif text-2xl text-ink">Nothing matches those filters.</p>
               <button onClick={clearAll} className="mt-5 text-brown text-[13px] font-semibold uppercase tracking-[0.1em] hover:text-brown-light transition-colors">
                 Clear all filters
@@ -188,7 +214,7 @@ export default function Newsroom() {
                   <button
                     data-testid="newsroom-load-more"
                     onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                    className="border border-ink px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink hover:bg-ink hover:text-white transition-colors duration-200"
+                    className="border border-ink px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink hover:bg-ink hover:text-white transition-colors duration-200 pressable"
                   >
                     Load more — {gridItems.length - visible} remaining
                   </button>
@@ -285,7 +311,7 @@ function NewsCard({ item, index }) {
       </span>
 
       <div className="p-8 flex flex-col flex-1">
-        <div className="text-[10px] uppercase tracking-widest-plus text-ink-soft">{formatDate(item.date)}</div>
+        <div className="text-[10px] uppercase tracking-widest-plus text-ink-soft tnum">{formatDate(item.date)}</div>
         <h3 className="font-serif text-xl md:text-[22px] text-ink mt-4 leading-snug group-hover:text-brown transition-colors duration-200">
           {item.title}
         </h3>

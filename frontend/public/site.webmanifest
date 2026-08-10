@@ -1,0 +1,14 @@
+{
+  "name": "RDB Associates — Chambers of Ramandeep Bawa",
+  "short_name": "RDB Associates",
+  "description": "A boutique litigation practice in New Delhi representing individuals and enterprises before the High Court of Delhi, District Courts and tribunals across India.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
+  "icons": [
+    { "src": "/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

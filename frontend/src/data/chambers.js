@@ -8,6 +8,23 @@
 // The file sits in public/, so the path is served from the site root as-is.
 export const PORTRAIT = "/ramandeep-bawa.jpg";
 
+/**
+ * Responsive WebP derivatives of the portrait.
+ *
+ * The JPEG above is 990×1150 and 317KB, and it was being sent at full weight
+ * to every device — including a phone rendering it about 340px wide, which is
+ * roughly five times the bytes that frame can use. These are the same image at
+ * the three widths the layout actually asks for: 13KB, 40KB and 64KB.
+ *
+ * WebP without a JPEG fallback is deliberate — it has been supported by every
+ * browser this site targets for years. The original JPEG stays on disk because
+ * `og:image` still needs it: social crawlers are the one consumer that should
+ * not be handed a WebP.
+ */
+export const PORTRAIT_SRCSET = [480, 720, 990]
+  .map((w) => `/ramandeep-bawa-${w}.webp ${w}w`)
+  .join(", ");
+
 // Contact details, for the same reason: these were restated in the contact
 // section, the footer, the newsroom's press block, the error page and the
 // JSON-LD in index.html — five places to keep in step by hand, which is how a

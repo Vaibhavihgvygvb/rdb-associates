@@ -48,7 +48,6 @@ body {
     --background: 0 0% 100%;
     --foreground: 0 0% 12%;
     --border: 0 0% 85%;
-    --radius: 0.125rem;
 
     /* Emerald that is correct against the surface it sits on. The default
        #007A5A is tuned for white and drops to 3.5–3.7:1 on the dark surfaces,
@@ -86,6 +85,47 @@ body {
      heading on the site is inside the 6-line limit browsers apply to it, so it
      costs nothing. Explicit <br> (the hero) still wins, as it should. */
   h1, h2, h3 { text-wrap: balance; }
+
+  /* The paragraph counterpart to `balance` on headings. `pretty` leaves line
+     lengths alone and only prevents the last line from being a single word,
+     which is the one ragging fault that reads as carelessness in running text.
+     Every standfirst and body column on the site is a candidate; several were
+     ending on an orphan at specific widths. Degrades to normal wrapping where
+     unsupported. */
+  p { text-wrap: pretty; }
+
+  /* Figures line up in columns.
+     Inter's default numerals are proportional — a "1" is materially narrower
+     than a "4" — which shows in three places here: the stat row on /about
+     counts up through a dozen digit widths and reflows its own label on every
+     frame; the step numbers on /stages and /expertise sit in a grid where
+     01 and 07 should occupy the same box; and the newsroom's dates are read
+     down a column. Tabular figures are what that job wants. This is scoped to
+     numerals and leaves prose figures proportional, which is correct. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Quotation marks hang into the margin.
+     An opening curly quote is mostly sidebearing, so setting it inline pushes
+     the first word right and leaves the quotation's left edge visibly out of
+     line with the rule, caption or column it sits against — the flush edge
+     breaks on the one line the eye lands on first. A negative indent equal to
+     the glyph's width puts the text back on the margin and lets the mark hang
+     outside it, which is what the mark is for. */
+  .hanging-quote {
+    text-indent: -0.42em;
+  }
+
+  /* Browser surfaces the design system should still own. The caret was
+     inheriting `color` (near-black) and the scrollbar was fully default. */
+  input,
+  textarea {
+    caret-color: theme("colors.brown.DEFAULT");
+  }
+  html {
+    scrollbar-color: theme("colors.ink.soft") theme("colors.cream.dark");
+  }
 
   /* Every interactive element gets the same keyboard focus indicator. Several
      controls set `outline: none` on themselves for the mouse case and left
@@ -195,6 +235,22 @@ body {
     @apply bg-brown text-white;
   }
 
+  /* Pressed feedback. Every control on the site had hover and focus and
+     nothing for the moment of the press itself — so on touch, where hover does
+     not exist, tapping a call to action returned no acknowledgement at all
+     until the next route painted. A 1px depression is the smallest gesture
+     that reads as a button taking the press, and it belongs to the vocabulary
+     the cards already use in the opposite direction when they lift on hover.
+
+     No transition declared here on purpose. Every one of these buttons already
+     carries a `transition-colors` utility, and utilities win the cascade over
+     this layer — a `transition-transform` here would simply be overridden. It
+     would also be the wrong call: a press wants to register on the frame it
+     happens, not ease into place over 100ms. */
+  .pressable {
+    @apply active:translate-y-px;
+  }
+
   /* Elevation, declared once per level rather than as five ad-hoc values.
      `--shadow-card` replaces four near-identical strings, one of which
      (`rgb(21,36,57,0.08)`) was still tinted navy from a palette this site no
@@ -246,17 +302,6 @@ body {
   }
 }
 
-.paper-grain { position: relative; }
-.paper-grain::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.35;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.05 0 0 0 0 0.1 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
 .brown-hairline {
   height: 1px;
   background: linear-gradient(
@@ -266,25 +311,6 @@ body {
     theme("colors.brown.DEFAULT") 80%,
     transparent
   );
-}
-
-.brown-underline { position: relative; display: inline-block; }
-.brown-underline::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: -6px;
-  height: 1px;
-  background: theme("colors.brown.DEFAULT");
-  transform-origin: left;
-  transform: scaleX(0);
-  transition: transform 400ms ease;
-}
-.brown-underline:hover::after { transform: scaleX(1); }
-
-.vertical-text {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  letter-spacing: 0.4em;
 }
 
 /* Section reveals now live in components/motion/Reveal.jsx, which handles
@@ -311,10 +337,10 @@ body {
    failed 1.4.3 at the exact moment the pointer was on it. The colour shift is
    the whole signal; it does not need help.
    ============================================================ */
-a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data-testid="nav-logo"]) {
+a:not([class*="bg-"]):not([class*="border-b-2"]):not([data-testid="nav-logo"]) {
   transition: color 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-a:not([class*="bg-"]):not([class*="border-b-2"]):not(.brown-underline):not([data-testid="nav-logo"]):hover {
+a:not([class*="bg-"]):not([class*="border-b-2"]):not([data-testid="nav-logo"]):hover {
   color: var(--accent);
 }
 

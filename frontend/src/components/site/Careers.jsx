@@ -14,8 +14,15 @@ import { RESUME_RETENTION_MONTHS } from "@/data/privacy";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const CAREERS_BG =
-  "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80";
+// Full-bleed banner, so it is requested at the viewport's own width rather
+// than always at 1600 — same reasoning as the hero.
+const CAREERS_ID = "photo-1521737604893-d14cc237f11d";
+const careersUnsplash = (w) =>
+  `https://images.unsplash.com/${CAREERS_ID}?auto=format&fit=crop&w=${w}&q=80`;
+const CAREERS_BG = careersUnsplash(1600);
+const CAREERS_SRCSET = [640, 960, 1440, 1920]
+  .map((w) => `${careersUnsplash(w)} ${w}w`)
+  .join(", ");
 
 const tracks = [
   { key: "recruitment", Icon: Briefcase, title: "Recruitment", body: "Openings for qualified advocates and associates to join the chambers across litigation and advisory practice." },
@@ -134,7 +141,14 @@ export default function Careers() {
       <section id="careers" data-testid="careers-section" className="relative bg-white">
         {/* Editorial image banner */}
         <div className="relative h-[56dvh] min-h-[440px] w-full overflow-hidden">
-          <FadeImage src={CAREERS_BG} alt="Inside the chambers" className="absolute inset-0 w-full h-full object-cover" />
+          {/* The alt text said "Inside the chambers". This is a stock
+              photograph of an unrelated office and unrelated people, so that
+              caption told a screen-reader user — and any reader inspecting the
+              page — that they were looking at these premises and this team.
+              The newsroom's own data module sets the rule the rest of the site
+              follows: alt text describes the photograph, never implies it
+              records the firm. */}
+          <FadeImage src={CAREERS_BG} srcSet={CAREERS_SRCSET} sizes="100vw" priority alt="A meeting in progress in a naturally lit office" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/40" />
           <div className="relative h-full shell flex flex-col justify-end pb-14">
             <div className="eyebrow" data-tone="dark">
@@ -381,7 +395,7 @@ export default function Careers() {
               </div>
 
               <button type="submit" data-testid="careers-submit" disabled={loading} aria-busy={loading}
-                className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed group">
+                className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 pressable disabled:opacity-60 disabled:cursor-not-allowed group">
                 {loading ? "Submitting" : "Submit Application"}
                 {loading ? (
                   <Loader2 size={16} className="animate-spin" />

@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
+  // `darkMode: ["class"]` removed along with the `borderRadius` scale below.
+  // Neither had a single consumer: there is not one `dark:` variant in the
+  // codebase, and `rounded-lg` / `rounded-md` / `rounded-sm` — the only three
+  // utilities the radius scale fed — appear nowhere. Configuration that
+  // describes capabilities the site does not use is a claim the code cannot
+  // support, and the next person to read it has to prove that themselves.
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   theme: {
     extend: {
@@ -40,11 +45,6 @@ module.exports = {
           soft: "#666666",
         },
         border: "hsl(var(--border))",
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
         "fade-in-up": {
