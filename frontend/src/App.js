@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import SmoothScroll from "@/components/motion/SmoothScroll";
 import ErrorBoundary from "@/components/site/ErrorBoundary";
 import Nav from "@/components/site/Nav";
+import { DisclaimerProvider } from "@/components/site/Disclaimer";
 
 // The landing page stays in the main bundle — splitting it would only add a
 // round trip to the one route most visitors see first. Every other route is
@@ -70,27 +71,32 @@ function App() {
         <BrowserRouter>
           {/* Owns Lenis smooth scrolling and the per-route scroll reset. */}
           <SmoothScroll>
-            <Suspense fallback={<RouteFallback />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/practice-areas" element={<PracticeAreasPage />} />
-                <Route path="/expertise" element={<ExpertisePage />} />
-                <Route path="/journey" element={<JourneyPage />} />
-                <Route path="/credentials" element={<CredentialsPage />} />
-                <Route path="/work" element={<WorkPage />} />
-                <Route path="/stages" element={<StagesPage />} />
-                <Route path="/careers" element={<CareersPage />} />
-                <Route path="/newsletter" element={<NewsletterPage />} />
-                <Route path="/insights" element={<InsightsPage />} />
-                <Route path="/newsroom" element={<NewsroomPage />} />
-                <Route path="/newsroom/:slug" element={<NewsroomItemPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/privacy" element={<PrivacyPage />} />
-                {/* Any other path rendered nothing at all before this. */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
+            {/* Inside SmoothScroll because the notice's scroll lock has to
+                tell Lenis to stand down, and above Routes so the footer's
+                Disclaimer link can reopen it from any page. */}
+            <DisclaimerProvider>
+              <Suspense fallback={<RouteFallback />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/practice-areas" element={<PracticeAreasPage />} />
+                  <Route path="/expertise" element={<ExpertisePage />} />
+                  <Route path="/journey" element={<JourneyPage />} />
+                  <Route path="/credentials" element={<CredentialsPage />} />
+                  <Route path="/work" element={<WorkPage />} />
+                  <Route path="/stages" element={<StagesPage />} />
+                  <Route path="/careers" element={<CareersPage />} />
+                  <Route path="/newsletter" element={<NewsletterPage />} />
+                  <Route path="/insights" element={<InsightsPage />} />
+                  <Route path="/newsroom" element={<NewsroomPage />} />
+                  <Route path="/newsroom/:slug" element={<NewsroomItemPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/privacy" element={<PrivacyPage />} />
+                  {/* Any other path rendered nothing at all before this. */}
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </Suspense>
+            </DisclaimerProvider>
           </SmoothScroll>
         </BrowserRouter>
       </ErrorBoundary>

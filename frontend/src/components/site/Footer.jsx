@@ -1,9 +1,12 @@
 import { Linkedin, Mail, Phone, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import Newsletter from "@/components/site/Newsletter";
+import { useDisclaimer } from "@/components/site/Disclaimer";
 import { CHAMBERS_ADDRESS, EMAIL, PHONE_DISPLAY, PHONE_E164 } from "@/data/chambers";
 
 export default function Footer() {
+  const { reopen } = useDisclaimer();
+
   return (
     <footer data-testid="site-footer" className="relative bg-sage-deep text-cream border-t border-brown/30">
       <div className="shell pt-24 pb-12">
@@ -90,6 +93,19 @@ export default function Footer() {
             <Link to="/privacy" className="text-cream/75 hover:text-brown-on-dark transition-colors duration-300">
               Privacy Notice
             </Link>
+            <span aria-hidden className="text-cream/30">·</span>
+            {/* A button, not a Link: the notice is a dialog rather than a
+                route, and it has to be reachable again after it has been
+                acknowledged — the paragraph below states the terms, this
+                re-opens the acknowledgement itself. */}
+            <button
+              type="button"
+              onClick={reopen}
+              data-testid="footer-disclaimer"
+              className="uppercase tracking-widest-plus text-cream/75 hover:text-brown-on-dark transition-colors duration-300"
+            >
+              Disclaimer
+            </button>
             <span aria-hidden className="text-cream/30">·</span>
             <span>Bar Council of India · Rule 36 · No solicitation of work</span>
           </div>
