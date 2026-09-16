@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Search, ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
 import SearchPanel from "@/components/site/SearchPanel";
+import { useDisclaimer } from "@/components/site/Disclaimer";
 import ScrollProgress from "@/components/motion/ScrollProgress";
 import { POSTS as insightPieces, TOPICS as insightTopics } from "@/data/insights";
 
@@ -44,6 +45,8 @@ export default function Nav() {
   const triggerRefs = useRef({});
   const mobileToggleRef = useRef(null);
   const { pathname } = useLocation();
+  // The Rule 36 gate has to be answered before anything else opens over it.
+  const { blocking } = useDisclaimer();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -92,16 +95,26 @@ export default function Nav() {
     setPanel(null);
   }, [pathname]);
 
+  // ⌘K / Ctrl+K opens search — but not while the disclaimer gate is up. The
+  // panel renders at z-60, below the gate, so opening it there put focus in a
+  // dialog nobody could see and left two focus traps fighting over Tab.
   useEffect(() => {
+    if (blocking) return;
     const onKey = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      if ((e.metaKey || e.ctrlKey) && e.key?.toLowerCase() === "k") {
         e.preventDefault();
         setSearchOpen(true);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [blocking]);
+
+  // Belt and braces: if the gate is reopened from the footer while search is
+  // already up, close search rather than leaving it stranded behind.
+  useEffect(() => {
+    if (blocking) setSearchOpen(false);
+  }, [blocking]);
 
   const openPanel = (id) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);

@@ -423,6 +423,19 @@ export const sortedItems = () => [...ITEMS].sort((a, b) => b.date.localeCompare(
 
 export const getItem = (slug) => ITEMS.find((i) => i.slug === slug);
 
+/**
+ * Items on which a named advocate is credited, newest first.
+ *
+ * Drives the "Matters & mentions" section of /team/<slug>. Matching is on the
+ * credited name, so an advocate appears on their own profile only where the
+ * newsroom actually names them — the placeholder `ASSOCIATE` / `JUNIOR`
+ * entries above credit no one and therefore surface nowhere.
+ */
+export const itemsByCounsel = (name, limit = 4) =>
+  sortedItems()
+    .filter((i) => i.counsel?.some((c) => c.name === name))
+    .slice(0, limit);
+
 export const relatedItems = (item, limit = 3) =>
   sortedItems()
     .filter((i) => i.slug !== item.slug)

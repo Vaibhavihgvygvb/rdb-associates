@@ -18,7 +18,7 @@ const SITE_URL = (process.env.REACT_APP_SITE_URL || "").trim().replace(/\/$/, ""
 const BUILD_DIR = path.resolve(__dirname, "..", "build");
 
 // Static routes, mirroring the <Route> list in src/App.js. Newsroom articles
-// are added from the data module below.
+// and advocate profiles are appended from their data modules below.
 const STATIC_ROUTES = [
   ["/", "1.0"],
   ["/about", "0.9"],
@@ -36,15 +36,12 @@ const STATIC_ROUTES = [
   ["/privacy", "0.3"],
 ];
 
-function newsroomSlugs() {
-  // The data module is ESM with a `@/` alias, so it is read as text and the
+function slugsFrom(file) {
+  // Data modules are ESM with a `@/` alias, so they are read as text and the
   // slugs pulled out rather than imported — this script runs in plain Node
   // before webpack exists.
   try {
-    const src = fs.readFileSync(
-      path.resolve(__dirname, "..", "src", "data", "newsroom.js"),
-      "utf8",
-    );
+    const src = fs.readFileSync(path.resolve(__dirname, "..", "src", "data", file), "utf8");
     return [...src.matchAll(/slug:\s*["'`]([^"'`]+)["'`]/g)].map((m) => m[1]);
   } catch {
     return [];
@@ -68,7 +65,10 @@ if (!fs.existsSync(BUILD_DIR)) {
 const today = new Date().toISOString().slice(0, 10);
 const urls = [
   ...STATIC_ROUTES.map(([loc, priority]) => ({ loc, priority })),
-  ...newsroomSlugs().map((slug) => ({ loc: `/newsroom/${slug}`, priority: "0.6" })),
+  ...slugsFrom("newsroom.js").map((slug) => ({ loc: `/newsroom/${slug}`, priority: "0.6" })),
+  // Advocate profiles. These are the pages someone searching a name lands on,
+  // so they rank above an ordinary article.
+  ...slugsFrom("team.js").map((slug) => ({ loc: `/team/${slug}`, priority: "0.7" })),
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>

@@ -37,7 +37,17 @@ import {
 
 const DisclaimerContext = createContext(null);
 
-/** Lets anything below the provider reopen the notice — see Footer.jsx. */
+/**
+ * Lets anything below the provider reopen the notice (see Footer.jsx) and,
+ * through `blocking`, know that the gate is currently up.
+ *
+ * `blocking` exists because stopping pointer input and scrolling is not the
+ * same as stopping interaction. Global keyboard shortcuts keep firing while
+ * the gate is open — Nav's ⌘K opened the search panel at z-60, underneath the
+ * gate's z-200 backdrop, and its focus trap then pulled focus into a dialog
+ * the reader could not see. Anything that opens UI from a global listener has
+ * to consult this first.
+ */
 export function useDisclaimer() {
   const value = useContext(DisclaimerContext);
   if (!value) {
@@ -93,7 +103,7 @@ export function DisclaimerProvider({ children }) {
     setOpen(true);
   }, []);
 
-  const value = useMemo(() => ({ reopen }), [reopen]);
+  const value = useMemo(() => ({ reopen, blocking: open }), [reopen, open]);
 
   return (
     <DisclaimerContext.Provider value={value}>
@@ -134,8 +144,8 @@ function DisclaimerDialog({ open, declined, onAccept, onDecline, onReconsider })
   return createPortal(
     <AnimatePresence>
       {open && (
-        /* Above Modal's z-[100] and the fixed header: nothing on the site may
-           paint over a notice that has to be read first. */
+        /* Above Modal's z-[100] and the fixed header's z-50: nothing on the
+           site may paint over a notice that has to be read first. */
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8">
           {/* No onClick. A click outside is not an acknowledgement. */}
           <motion.div
@@ -155,28 +165,46 @@ function DisclaimerDialog({ open, declined, onAccept, onDecline, onReconsider })
             aria-describedby={bodyId}
             tabIndex={-1}
             data-testid="disclaimer-dialog"
-            data-lenis-prevent
             initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 14, scale: 0.98 }}
             animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 260, damping: 26 }}
-            className="relative w-full max-w-2xl bg-white border border-border shadow-2xl outline-none max-h-[88dvh] overflow-y-auto p-8 md:p-12"
+            /* A flex column, not one scrolling box. Capping the whole panel at
+               88dvh and letting the whole thing scroll put both buttons below
+               the fold on an ordinary laptop — 687px of content in a 584px
+               panel, so what a visitor met was a wall of text with no visible
+               way forward. Only the prose scrolls now; the heading and the
+               actions stay put. `min-h-0` on the scroller is what lets a flex
+               child shrink under its content instead of forcing the parent
+               taller. */
+            className="relative flex w-full max-w-2xl flex-col bg-white border border-border shadow-2xl outline-none max-h-[88dvh]"
           >
-            <div className="flex items-center gap-4">
-              <span aria-hidden className="inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-brown-soft text-brown">
-                <Scale size={22} strokeWidth={1.5} />
-              </span>
-              <div>
-                <div className="eyebrow-label">Bar Council of India · Rule 36</div>
-                <h2 id={titleId} className="font-serif text-2xl md:text-3xl text-ink mt-1">
-                  {DISCLAIMER_TITLE}
-                </h2>
+            <div className="flex-shrink-0 px-8 pt-8 md:px-12 md:pt-12">
+              <div className="flex items-center gap-4">
+                <span
+                  aria-hidden
+                  className="inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-brown-soft text-brown"
+                >
+                  <Scale size={22} strokeWidth={1.5} />
+                </span>
+                <div>
+                  <div className="eyebrow-label">Bar Council of India · Rule 36</div>
+                  <h2 id={titleId} className="font-serif text-2xl md:text-3xl text-ink mt-1">
+                    {DISCLAIMER_TITLE}
+                  </h2>
+                </div>
               </div>
+              <div className="brown-hairline mt-8" />
             </div>
 
-            <div className="brown-hairline mt-8" />
-
-            <div id={bodyId} className="mt-8 space-y-5">
+            {/* The only scrolling region, so `data-lenis-prevent` belongs here
+                rather than on the panel: these are the wheel events that would
+                otherwise reach Lenis and move the page behind. */}
+            <div
+              id={bodyId}
+              data-lenis-prevent
+              className="min-h-0 flex-1 space-y-5 overflow-y-auto px-8 py-8 md:px-12"
+            >
               {paragraphs.map((text) => (
                 <p key={text} className="text-sm leading-relaxed text-ink-soft">
                   {text}
@@ -184,39 +212,41 @@ function DisclaimerDialog({ open, declined, onAccept, onDecline, onReconsider })
               ))}
             </div>
 
-            {declined ? (
-              <div className="mt-10 flex flex-col sm:flex-row gap-3 sm:justify-end">
-                <button
-                  type="button"
-                  onClick={onReconsider}
-                  data-testid="disclaimer-back"
-                  className="border border-brown text-brown px-8 py-3.5 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown hover:text-white transition-colors duration-300 pressable"
-                >
-                  Back to the notice
-                </button>
+            <div className="flex-shrink-0 border-t border-border/60 px-8 pb-8 pt-6 md:px-12 md:pb-12">
+              <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
+                {declined ? (
+                  <button
+                    type="button"
+                    onClick={onReconsider}
+                    data-testid="disclaimer-back"
+                    className="border border-brown text-brown px-8 py-3.5 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown hover:text-white transition-colors duration-300 pressable"
+                  >
+                    Back to the notice
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={onDecline}
+                      data-testid="disclaimer-decline"
+                      className="border border-ink/20 text-ink-soft px-8 py-3.5 text-xs uppercase tracking-widest-plus font-semibold hover:border-ink/40 hover:text-ink transition-colors duration-300 pressable"
+                    >
+                      {DECLINE_LABEL}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={onAccept}
+                      data-testid="disclaimer-agree"
+                      className="bg-brown text-white px-10 py-3.5 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 pressable"
+                    >
+                      {AGREE_LABEL}
+                    </button>
+                  </>
+                )}
               </div>
-            ) : (
-              <div className="mt-10 flex flex-col sm:flex-row gap-3 sm:justify-end">
-                <button
-                  type="button"
-                  onClick={onDecline}
-                  data-testid="disclaimer-decline"
-                  className="border border-ink/20 text-ink-soft px-8 py-3.5 text-xs uppercase tracking-widest-plus font-semibold hover:border-ink/40 hover:text-ink transition-colors duration-300 pressable"
-                >
-                  {DECLINE_LABEL}
-                </button>
-                <button
-                  type="button"
-                  onClick={onAccept}
-                  data-testid="disclaimer-agree"
-                  className="bg-brown text-white px-10 py-3.5 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 pressable"
-                >
-                  {AGREE_LABEL}
-                </button>
-              </div>
-            )}
 
-            <p className="mt-8 text-[11px] text-ink-soft/80">Last reviewed · {LAST_REVIEWED}</p>
+              <p className="mt-6 text-[11px] text-ink-soft/80">Last reviewed · {LAST_REVIEWED}</p>
+            </div>
           </motion.div>
         </div>
       )}

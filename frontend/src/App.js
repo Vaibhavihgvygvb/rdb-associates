@@ -28,6 +28,7 @@ const NewsletterPage = lazy(() => import("@/pages/NewsletterPage"));
 const InsightsPage = lazy(() => import("@/pages/InsightsPage"));
 const NewsroomPage = lazy(() => import("@/pages/NewsroomPage"));
 const NewsroomItemPage = lazy(() => import("@/pages/NewsroomItemPage"));
+const TeamMemberPage = lazy(() => import("@/pages/TeamMemberPage"));
 const ContactPage = lazy(() => import("@/pages/ContactPage"));
 const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
 
@@ -90,6 +91,7 @@ function App() {
                   <Route path="/insights" element={<InsightsPage />} />
                   <Route path="/newsroom" element={<NewsroomPage />} />
                   <Route path="/newsroom/:slug" element={<NewsroomItemPage />} />
+                  <Route path="/team/:slug" element={<TeamMemberPage />} />
                   <Route path="/contact" element={<ContactPage />} />
                   <Route path="/privacy" element={<PrivacyPage />} />
                   {/* Any other path rendered nothing at all before this. */}

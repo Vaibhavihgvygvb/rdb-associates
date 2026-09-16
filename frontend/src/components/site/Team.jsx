@@ -1,22 +1,12 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Linkedin } from "lucide-react";
-import { PORTRAIT, PORTRAIT_SRCSET } from "@/data/chambers";
+import { associates, founder, initials } from "@/data/team";
 import { Reveal, FadeImage } from "@/components/motion";
 
-// The founding advocate leads the chambers. As associates and interns join,
-// add them to this array — each renders as a card in the grid below.
-// Shape: { name, role, credentials, image, focus }
-const associates = [
-  // {
-  //   name: "Associate Name",
-  //   role: "Associate",
-  //   credentials: "LL.B",
-  //   image: "https://…",
-  //   focus: "Civil & commercial litigation",
-  // },
-];
-
 export default function Team() {
+  const lead = founder();
+  const others = associates();
+
   return (
     <Reveal asChild>
       <section id="team" data-testid="team-section" className="relative section-y bg-cream-dark text-ink">
@@ -40,7 +30,7 @@ export default function Team() {
             <div className="md:col-span-5 lg:col-span-4 relative min-h-[380px]">
               {/* object-top: this frame is close to square while the portrait is taller
                   than it is wide, so a centred crop would cut the hairline. */}
-              <FadeImage src={PORTRAIT} srcSet={PORTRAIT_SRCSET} sizes="(min-width: 1024px) 400px, (min-width: 768px) 42vw, 100vw" alt="Ramandeep Bawa, Founding Advocate" className="absolute inset-0 w-full h-full object-cover object-top grayscale-[10%]" />
+              <FadeImage src={lead.image.src} srcSet={lead.image.srcSet} sizes="(min-width: 1024px) 400px, (min-width: 768px) 42vw, 100vw" alt={`${lead.name}, ${lead.role}`} className="absolute inset-0 w-full h-full object-cover object-top grayscale-[10%]" />
             </div>
             <div className="md:col-span-7 lg:col-span-8 p-8 md:p-12 flex flex-col justify-center">
               <div className="text-[11px] uppercase tracking-widest-plus text-brown font-semibold">Founding Advocate</div>
@@ -53,8 +43,11 @@ export default function Team() {
                 personally.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-6">
-                <Link to="/journey" className="inline-flex items-center gap-2 text-brown text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200">
-                  View journey <ArrowRight size={15} />
+                <Link to={`/team/${lead.slug}`} data-testid="team-featured-profile" className="inline-flex items-center gap-2 text-brown text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200">
+                  Full profile <ArrowRight size={15} />
+                </Link>
+                <Link to="/journey" className="inline-flex items-center gap-2 text-ink-soft hover:text-brown text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200">
+                  View journey
                 </Link>
                 <a href="https://www.linkedin.com/in/ramandeep-bawa-6081b6155/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-ink-soft hover:text-brown transition-colors duration-200">
                   <Linkedin size={17} strokeWidth={1.6} /> <span className="text-sm">LinkedIn</span>
@@ -65,23 +58,36 @@ export default function Team() {
 
           {/* Associates — rendered as the team grows */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            {associates.map((p) => (
-              <article
-                key={p.name}
+            {others.map((p) => (
+              <Link
+                key={p.slug}
+                to={`/team/${p.slug}`}
+                data-testid={`team-card-${p.slug}`}
                 className="group bg-white border border-border hover:border-brown hover:elevate-card transition-[border-color,box-shadow] duration-300"
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
-                  <FadeImage src={p.image} alt={p.name} className="absolute inset-0 w-full h-full object-cover grayscale-[10%] group-hover:scale-[1.03] transition-transform duration-500" />
+                  {p.image ? (
+                    <FadeImage src={p.image.src} srcSet={p.image.srcSet} alt={`${p.name}, ${p.role}`} className="absolute inset-0 w-full h-full object-cover grayscale-[10%] group-hover:scale-[1.03] transition-transform duration-500" />
+                  ) : (
+                    /* Decorative: the name is set immediately below, so the
+                       monogram would only repeat it to a screen reader. */
+                    <div aria-hidden className="absolute inset-0 flex items-center justify-center bg-brown-soft">
+                      <span className="font-serif text-[clamp(3.25rem,7vw,4.5rem)] leading-none text-brown/85 tracking-tight">{initials(p.name)}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-6">
                   <h3 className="font-serif text-xl text-ink">{p.name}</h3>
                   <div className="text-sm text-ink-soft mt-1">{p.role}</div>
-                  {p.focus && <div className="text-[13px] text-ink-soft mt-3 leading-relaxed">{p.focus}</div>}
-                  {p.credentials && (
-                    <div className="text-[10px] uppercase tracking-widest-plus text-brown font-semibold mt-4">{p.credentials}</div>
+                  {p.practices?.length > 0 && (
+                    <div className="text-[13px] text-ink-soft mt-3 leading-relaxed">{p.practices.join(" · ")}</div>
                   )}
+                  <div className="mt-5 inline-flex items-center gap-2 text-brown text-[11px] font-semibold uppercase tracking-widest-plus">
+                    Full profile
+                    <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-200" />
+                  </div>
                 </div>
-              </article>
+              </Link>
             ))}
 
             {/* Growing-practice / careers invitation — always shown */}
