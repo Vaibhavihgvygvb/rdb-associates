@@ -67,7 +67,10 @@ export default function Team() {
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   {p.image ? (
-                    <FadeImage src={p.image.src} srcSet={p.image.srcSet} alt={`${p.name}, ${p.role}`} className="absolute inset-0 w-full h-full object-cover grayscale-[10%] group-hover:scale-[1.03] transition-transform duration-500" />
+                    /* objectPosition honours the member record: these are
+                       portraits taller than the 4:5 frame, and a centred crop
+                       takes it off the top of the head. */
+                    <FadeImage src={p.image.src} srcSet={p.image.srcSet} sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 100vw" alt={`${p.name}, ${p.role}`} className="absolute inset-0 w-full h-full object-cover grayscale-[10%] group-hover:scale-[1.03] transition-transform duration-500" style={p.image.objectPosition ? { objectPosition: p.image.objectPosition } : undefined} />
                   ) : (
                     /* Decorative: the name is set immediately below, so the
                        monogram would only repeat it to a screen reader. */

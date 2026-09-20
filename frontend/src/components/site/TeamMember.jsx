@@ -47,6 +47,10 @@ export default function TeamMember({ member: m }) {
   // Matters are never listed on the member record — they come from wherever
   // the newsroom already credits this advocate by name.
   const matters = itemsByCounsel(m.name);
+  // The rail's contents, decided here so the block itself can be dropped when
+  // there is nothing to put in it.
+  const since = m.since ? [`Since ${m.since}`] : [];
+  const hasGlance = [since, m.forums, m.memberships, m.languages].some((f) => f?.length);
 
   return (
     <Reveal asChild inViewMargin="0px">
@@ -135,23 +139,49 @@ export default function TeamMember({ member: m }) {
               </Section>
             )}
 
-            {m.practices?.length > 0 && (
+            {(m.practiceDetail?.length > 0 || m.practices?.length > 0) && (
               <Section title="Areas of Practice">
-                {/* Linked, not inert tags: /practice-areas is a real page and
-                    a reader who clicks a practice on a profile is asking to
-                    see it. */}
-                <ul className="flex flex-wrap gap-2.5">
-                  {m.practices.map((p) => (
-                    <li key={p}>
-                      <Link
-                        to="/practice-areas"
-                        className="block border border-border bg-cream px-4 py-2 text-[13px] text-ink hover:border-brown hover:text-brown transition-colors duration-200"
-                      >
-                        {p}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {/* Two renderings of the same list. Where an advocate has set
+                    out what each area covers, that detail is the substance of
+                    the section and the areas become headings; where only the
+                    area names exist, they are tags. Either way they link to
+                    /practice-areas, which is a real page — a reader clicking a
+                    practice on a profile is asking to see it. */}
+                {m.practiceDetail?.length > 0 ? (
+                  <div className="grid sm:grid-cols-2 gap-px bg-border border border-border">
+                    {m.practiceDetail.map((d) => (
+                      <div key={d.area} className="bg-white p-6">
+                        <Link
+                          to="/practice-areas"
+                          className="font-serif text-lg text-ink hover:text-brown transition-colors duration-200"
+                        >
+                          {d.area}
+                        </Link>
+                        <ul className="mt-3 space-y-1.5">
+                          {d.items.map((item) => (
+                            <li key={item} className="text-[13px] text-ink-soft leading-relaxed pl-4 relative">
+                              <span aria-hidden className="absolute left-0 top-[0.7em] h-px w-2 bg-brown/50" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <ul className="flex flex-wrap gap-2.5">
+                    {m.practices.map((p) => (
+                      <li key={p}>
+                        <Link
+                          to="/practice-areas"
+                          className="block border border-border bg-cream px-4 py-2 text-[13px] text-ink hover:border-brown hover:text-brown transition-colors duration-200"
+                        >
+                          {p}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </Section>
             )}
 
@@ -278,22 +308,27 @@ export default function TeamMember({ member: m }) {
 
           {/* Rail */}
           <aside className="lg:col-span-4">
-            <div className="border border-border p-7 bg-cream">
-              <div className="text-[10px] uppercase tracking-widest-plus text-brown font-semibold">
-                At a glance
-              </div>
+            {/* Whole block, not just its rows: every fact in it is optional, and
+                an advocate whose record carries none of them was getting a
+                headed box with nothing under it. */}
+            {hasGlance && (
+              <div className="border border-border p-7 bg-cream">
+                <div className="text-[10px] uppercase tracking-widest-plus text-brown font-semibold">
+                  At a glance
+                </div>
 
-              <div className="mt-6">
-                <Facts title="With the chambers" items={m.since ? [`Since ${m.since}`] : []} />
-                <Facts title="Forums" items={m.forums} />
-                <Facts title="Memberships" items={m.memberships} />
-                <Facts title="Languages" items={m.languages} />
+                <div className="mt-6">
+                  <Facts title="With the chambers" items={since} />
+                  <Facts title="Forums" items={m.forums} />
+                  <Facts title="Memberships" items={m.memberships} />
+                  <Facts title="Languages" items={m.languages} />
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Contact is the chambers', not a personal line — every enquiry is
                 reviewed centrally, which is what /contact already tells people. */}
-            <div className="border border-border border-t-0 p-7 bg-white">
+            <div className={`border border-border p-7 bg-white ${hasGlance ? "border-t-0" : ""}`}>
               <div className="text-[10px] uppercase tracking-widest-plus text-brown font-semibold">
                 Get in touch
               </div>

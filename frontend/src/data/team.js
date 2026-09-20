@@ -18,6 +18,9 @@
 //   enrolment   { council, number, year }
 //   bio         [paragraph, …]
 //   practices   [str]   forums [str]   languages [str]   memberships [str]
+//   practiceDetail [{ area, items: [str] }]   — optional breakdown of the
+//               practices above; supply it and the profile lists each area's
+//               work in full instead of showing the practices as plain tags
 //   education   [{ qualification, institution, year }]
 //   experience  { years, previous: [{ firm, period }] }
 //   recognition [str]   publications [{ title, where, year }]
@@ -114,12 +117,17 @@ export const MEMBERS = [
     role: "Associate",
     since: 2026,
 
-    // No photograph supplied yet. Both the grid card and the profile page fall
-    // back to a monogram, so this can stay null until one is taken — then put
-    // the file in public/ and set `image: { src: "/gaurang-bhalotia.jpg" }`.
-    // scripts/optimise-images.mjs generates the responsive WebP set the
-    // founding advocate's portrait uses.
-    image: null,
+    // Supplied photograph, run through scripts/optimise-images.mjs. Only one
+    // width: the original is 360×450, so the larger derivatives the other
+    // portraits carry would be upscaled pixels at three times the bytes. The
+    // frame it fills is about 320px wide, which this covers at 1x but not on
+    // a retina screen — worth re-shooting at 990px when there is a chance to,
+    // and re-running the script to get the full set.
+    image: {
+      src: "/gaurang-bhalotia-360.webp",
+      srcSet: "/gaurang-bhalotia-360.webp 360w",
+      objectPosition: "top",
+    },
 
     enrolment: {
       council: "Bar Council of Delhi",
@@ -160,6 +168,101 @@ export const MEMBERS = [
     // Sections F through I of the intake form came back blank. Each stays
     // empty until it can be filled with something the chambers can evidence;
     // an empty section does not render.
+    memberships: [],
+    languages: [],
+    experience: null,
+    recognition: [],
+    publications: [],
+    speaking: [],
+    related: [],
+  },
+
+  {
+    slug: "amit-singh",
+    name: "Amit Singh",
+    role: "Advocate",
+
+    // Supplied photograph at 973×1175, through scripts/optimise-images.mjs.
+    image: {
+      src: "/amit-singh-973.webp",
+      srcSet: "/amit-singh-480.webp 480w, /amit-singh-720.webp 720w, /amit-singh-973.webp 973w",
+      objectPosition: "top",
+    },
+
+    // The council and year are read off the enrolment number — a D/ prefix is
+    // the Bar Council of Delhi and the trailing four digits are the year of
+    // enrolment. That is how the number is formed, but it is an inference
+    // rather than something the chambers has been handed: confirm both
+    // against the enrolment certificate before treating them as verified.
+    enrolment: {
+      council: "Bar Council of Delhi",
+      number: "D/542/2012",
+      year: "2012",
+    },
+
+    tagline: "Thorough preparation, practical legal advice and effective courtroom advocacy.",
+
+    bio: [
+      "Amit Singh is a practising advocate with experience in civil and criminal litigation, along with matters relating to consumer disputes and motor vehicle claims. His practice involves representation and legal assistance across a range of contentious matters, with particular focus on effective courtroom advocacy, case preparation and strategic handling of litigation.",
+      "He regularly handles matters involving civil disputes, criminal proceedings, consumer complaints and motor vehicle-related claims, including proceedings arising from accidents, compensation claims and related legal issues.",
+      "His practice encompasses the complete litigation process, including case assessment, drafting and pleadings, preparation of legal submissions, evidence and documentation, court appearances, arguments and conduct of proceedings before the appropriate judicial and quasi-judicial forums.",
+      "With a litigation-oriented approach, he focuses on understanding the factual and legal issues involved in each matter and developing a case strategy suited to the client's objectives. His practice is centred on strong preparation, detailed appreciation of facts and documents, and effective courtroom representation, examining each matter from both its factual and legal dimensions.",
+    ],
+
+    practices: [
+      "Civil Litigation",
+      "Criminal Litigation",
+      "Consumer Disputes",
+      "Motor Vehicle Matters",
+    ],
+
+    practiceDetail: [
+      {
+        area: "Civil Litigation",
+        items: [
+          "Property and ownership disputes",
+          "Recovery and contractual disputes",
+          "Injunction and declaration matters",
+          "Civil suits and related proceedings",
+        ],
+      },
+      {
+        area: "Criminal Litigation",
+        items: [
+          "Criminal complaints and proceedings",
+          "Bail and related applications",
+          "Defence in criminal matters",
+          "Trial and appellate proceedings",
+        ],
+      },
+      {
+        area: "Consumer Disputes",
+        items: [
+          "Consumer complaints",
+          "Deficiency in service and unfair trade practice matters",
+          "Insurance and service-related disputes",
+          "Consumer appeals and related proceedings",
+        ],
+      },
+      {
+        area: "Motor Vehicle Matters",
+        items: [
+          "Motor accident claims",
+          "Compensation proceedings",
+          "Motor vehicle-related disputes",
+          "Claims arising from road accidents and insurance matters",
+        ],
+      },
+    ],
+
+    // The profile supplied names no court or tribunal — it describes "the
+    // appropriate judicial and quasi-judicial forums" and nothing more
+    // specific. Naming the forums would be the chambers' claim, not his, so
+    // this stays empty until he confirms where he in fact appears. Same for
+    // the sections below: none of it was supplied, and an empty section does
+    // not render.
+    forums: [],
+    education: [],
     memberships: [],
     languages: [],
     experience: null,
