@@ -1,0 +1,183 @@
+{
+  "version": 1,
+  "project": {
+    "name": "rdb-associates-frontend",
+    "productType": "law-chambers-marketing-site",
+    "stack": [
+      "react",
+      "tailwind-v3"
+    ]
+  },
+  "sources": {
+    "tokens": [
+      "src/index.css",
+      "src/app.css"
+    ],
+    "components": [],
+    "assets": [],
+    "instructions": []
+  },
+  "design": {
+    "colorMode": "light-and-dark",
+    "colors": {
+      "--background": {
+        "value": "0 0% 100%",
+        "source": "src/index.css"
+      },
+      "--foreground": {
+        "value": "0 0% 12%",
+        "source": "src/index.css"
+      },
+      "--border": {
+        "value": "0 0% 85%",
+        "source": "src/index.css"
+      },
+      "--accent": {
+        "value": "theme(\"colors.brown.on-dark\")",
+        "source": "src/index.css"
+      },
+      "brown.DEFAULT": {
+        "value": "#007A5A",
+        "source": "tailwind.config.js",
+        "note": "accent \u2014 emerald; links, CTAs, eyebrows, rules"
+      },
+      "brown.light": {
+        "value": "#005C43",
+        "source": "tailwind.config.js",
+        "note": "accent hover"
+      },
+      "brown.soft": {
+        "value": "#EAF5F1",
+        "source": "tailwind.config.js",
+        "note": "accent tint fill"
+      },
+      "brown.on-dark": {
+        "value": "#0E9E75",
+        "source": "tailwind.config.js",
+        "note": "accent TEXT on dark only (5.81:1); DEFAULT fails AA there"
+      },
+      "ink.DEFAULT": {
+        "value": "#1F1F1F",
+        "source": "tailwind.config.js"
+      },
+      "ink.soft": {
+        "value": "#666666",
+        "source": "tailwind.config.js"
+      },
+      "cream.DEFAULT": {
+        "value": "#FFFFFF",
+        "source": "tailwind.config.js"
+      },
+      "cream.dark": {
+        "value": "#F5F5F4",
+        "source": "tailwind.config.js"
+      },
+      "sage.DEFAULT": {
+        "value": "#121212",
+        "source": "tailwind.config.js",
+        "note": "dark surfaces"
+      },
+      "sage.deep": {
+        "value": "#0A0A0A",
+        "source": "tailwind.config.js"
+      }
+    },
+    "typography": {
+      "display": {
+        "value": "\"Inter Tight\", Inter, system-ui",
+        "source": "tailwind.config.js",
+        "note": "the `font-serif` token is the DISPLAY face, not a serif \u2014 used by every heading"
+      },
+      "body": {
+        "value": "\"Inter\", system-ui",
+        "source": "tailwind.config.js"
+      },
+      "eyebrow": {
+        "value": "10-12px uppercase, tracking-widest-plus (0.28em), brown, semibold",
+        "source": "index.css .eyebrow / .eyebrow-label"
+      }
+    },
+    "spacing": {},
+    "radius": {
+      "all": {
+        "value": "0",
+        "source": "tailwind.config.js",
+        "note": "the borderRadius scale was deliberately REMOVED; no rounded-* utility appears in the codebase"
+      }
+    },
+    "shadows": {
+      "elevate-card": {
+        "value": "0 24px 48px -28px rgb(0 0 0 / .3)",
+        "source": "index.css"
+      },
+      "elevate-feature": {
+        "value": "0 32px 64px -32px rgb(0 0 0 / .35)",
+        "source": "index.css"
+      },
+      "policy": "surfaces are delineated by a 1px border; shadow is reserved for hover"
+    },
+    "motion": {},
+    "density": "editorial \u2014 generous section padding, 8-unit field gaps, hairline dividers"
+  },
+  "components": {
+    "installed": [
+      "site/Field.jsx \u2014 labelled control + animated inline error, explicit htmlFor/aria-describedby",
+      "site/FormParts.jsx \u2014 FieldGroup, ErrorSummary, FormSuccess, SubmitButton",
+      "lib/useFormState.js \u2014 shared form state/validation hook",
+      "motion/Reveal.jsx, motion/FadeImage.jsx"
+    ],
+    "preferredPrimitives": [
+      "Field",
+      "FieldGroup",
+      "SubmitButton",
+      "FormSuccess",
+      "Reveal",
+      "FadeImage"
+    ],
+    "patterns": [
+      "`.input-line` \u2014 underlined control, transparent bg, no box",
+      "`.eyebrow` + `.eyebrow-label` above every section heading",
+      "1px `border-border` panels on white/cream; never a card shadow at rest"
+    ]
+  },
+  "constraints": {
+    "must": [
+      "Use project tokens (brown/ink/cream/sage/border) \u2014 never raw hex.",
+      "Square corners: no border-radius anywhere.",
+      "Headings use font-serif (Inter Tight display face).",
+      "Emerald text on dark surfaces must use brown.on-dark for AA contrast.",
+      "Forms reuse Field / FieldGroup / SubmitButton / FormSuccess and useFormState.",
+      "Bar Council of India Rule 36: no advertising or solicitation language."
+    ],
+    "avoid": [
+      "shadcn/ui or Radix components \u2014 the project has neither, and they carry a radius scale this design removed.",
+      "Decorative gradients, glass effects, resting card shadows.",
+      "Headlines larger than the home hero (text-4xl md:text-5xl lg:text-6xl is the ceiling).",
+      "Emoji as icons \u2014 lucide-react only."
+    ]
+  },
+  "decisions": [],
+  "evidence": [
+    {
+      "fact": "design.colorMode:light-and-dark",
+      "source": "src/index.css, src/app.css"
+    },
+    {
+      "fact": "design.tokens",
+      "source": "src/app.css"
+    },
+    {
+      "fact": "design.tokens",
+      "source": "src/index.css"
+    },
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:tailwind-v3",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-09-22T20:47:18.774Z"
+}

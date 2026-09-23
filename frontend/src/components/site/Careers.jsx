@@ -4,29 +4,33 @@ import axios from "axios";
 import { useLenis } from "lenis/react";
 import { toast } from "sonner";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowRight, Upload, Briefcase, GraduationCap, Check, Loader2, X, FileText } from "lucide-react";
-import { Reveal, FadeImage } from "@/components/motion";
+import { ArrowRight, Upload, Briefcase, GraduationCap, X, FileText } from "lucide-react";
+import { Reveal } from "@/components/motion";
 import Field from "@/components/site/Field";
-import { validateForm, validateField, validateResume, formatBytes } from "@/lib/validate";
+import { FieldGroup, ErrorSummary, FormSuccess, SubmitButton } from "@/components/site/FormParts";
+import useFormState from "@/lib/useFormState";
+import { validateResume, formatBytes } from "@/lib/validate";
 import { NAV_HEIGHT } from "@/lib/layout";
 import { RESUME_RETENTION_MONTHS } from "@/data/privacy";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Full-bleed banner, so it is requested at the viewport's own width rather
-// than always at 1600 — same reasoning as the hero.
-const CAREERS_ID = "photo-1521737604893-d14cc237f11d";
-const careersUnsplash = (w) =>
-  `https://images.unsplash.com/${CAREERS_ID}?auto=format&fit=crop&w=${w}&q=80`;
-const CAREERS_BG = careersUnsplash(1600);
-const CAREERS_SRCSET = [640, 960, 1440, 1920]
-  .map((w) => `${careersUnsplash(w)} ${w}w`)
-  .join(", ");
-
 const tracks = [
-  { key: "recruitment", Icon: Briefcase, title: "Recruitment", body: "Openings for qualified advocates and associates to join the chambers across litigation and advisory practice." },
-  { key: "internship", Icon: GraduationCap, title: "Internship", body: "Structured internships for law students seeking hands-on exposure to courtroom advocacy, drafting and research." },
+  {
+    key: "recruitment",
+    Icon: Briefcase,
+    title: "Recruitment",
+    body: "Openings for qualified advocates and associates to join the chambers across litigation and advisory practice.",
+    eligibility: "For advocates enrolled with a State Bar Council.",
+  },
+  {
+    key: "internship",
+    Icon: GraduationCap,
+    title: "Internship",
+    body: "Structured internships for law students seeking hands-on exposure to courtroom advocacy, drafting and research.",
+    eligibility: "For students currently reading for a law degree.",
+  },
 ];
 
 const initial = { name: "", email: "", phone: "", applicant_type: "recruitment", position: "", message: "" };
@@ -41,18 +45,27 @@ const SCHEMA = {
   message: "message",
 };
 
+// Field -> the name the error summary calls it by.
+const LABELS = {
+  name: "Full Name",
+  email: "Email",
+  phone: "Phone",
+  position: "Position / Area of Interest",
+  message: "Message",
+};
+
 export default function Careers() {
-  const [form, setForm] = useState(initial);
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
   const [resume, setResume] = useState(null);
   const [resumeError, setResumeError] = useState(null);
   const [dragging, setDragging] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
   const lenis = useLenis();
+
+  const {
+    values: form, setValues: setForm, loading, sent, setSent,
+    shown, onChange, onBlur, submit, problems, focusField,
+  } = useFormState(initial, SCHEMA, { blockSubmit: Boolean(resumeError) });
 
   // The two track cards describe exactly the two values of the applicant_type
   // select sitting in the form below, and previously did nothing at all —
@@ -66,22 +79,6 @@ export default function Careers() {
     // the two fighting over the scroll position.
     if (lenis) lenis.scrollTo(target, { offset: -NAV_HEIGHT - 24 });
     else target.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const shown = (field) => (touched[field] ? errors[field] : undefined);
-
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setForm((f) => ({ ...f, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: validateField(SCHEMA[name], value) ?? undefined }));
-    }
-  };
-
-  const onBlur = (e) => {
-    const { name, value } = e.target;
-    setTouched((t) => ({ ...t, [name]: true }));
-    setErrors((prev) => ({ ...prev, [name]: validateField(SCHEMA[name], value) ?? undefined }));
   };
 
   // Checked here as well as on the server so a 6MB PDF fails instantly instead
@@ -105,65 +102,77 @@ export default function Careers() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const found = validateForm(SCHEMA, form);
-
-    if (Object.keys(found).length || resumeError) {
-      setErrors(found);
-      setTouched(Object.fromEntries(Object.keys(SCHEMA).map((k) => [k, true])));
-      const first = Object.keys(SCHEMA).find((k) => found[k]);
-      if (first) document.querySelector(`[name="${first}"]`)?.focus();
-      return;
-    }
-
-    setLoading(true);
+  const onSubmit = submit(async (payload) => {
+    const data = new FormData();
+    Object.entries(payload).forEach(([k, v]) => data.append(k, v));
+    if (resume) data.append("resume", resume);
     try {
-      const data = new FormData();
-      Object.entries(form).forEach(([k, v]) => data.append(k, v));
-      if (resume) data.append("resume", resume);
       await axios.post(`${API}/careers`, data);
-      setSent(true);
-      setForm(initial);
-      setErrors({});
-      setTouched({});
       clearResume();
     } catch (err) {
-      const msg = err?.response?.data?.detail || "Unable to submit application. Please try again.";
+      const msg = err?.response?.data?.detail || "Unable to submit. Please try again.";
       toast.error(typeof msg === "string" ? msg : "Submission failed.");
-    } finally {
-      setLoading(false);
+      throw err;
     }
-  };
+  });
 
   return (
     <Reveal asChild>
       <section id="careers" data-testid="careers-section" className="relative bg-white">
-        {/* Editorial image banner */}
-        <div className="relative h-[56dvh] min-h-[440px] w-full overflow-hidden">
-          {/* The alt text said "Inside the chambers". This is a stock
-              photograph of an unrelated office and unrelated people, so that
-              caption told a screen-reader user — and any reader inspecting the
-              page — that they were looking at these premises and this team.
-              The newsroom's own data module sets the rule the rest of the site
-              follows: alt text describes the photograph, never implies it
-              records the firm. */}
-          <FadeImage src={CAREERS_BG} srcSet={CAREERS_SRCSET} sizes="100vw" priority alt="A meeting in progress in a naturally lit office" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/40" />
-          <div className="relative h-full shell flex flex-col justify-end pb-14">
+        {/* Hero.
+            Typographic rather than photographic. What stood here was a stock
+            photograph of an unrelated office and unrelated people — the code
+            comment removed with it said as much, and had already been forced to
+            write alt text disowning the image ("A meeting in progress in a
+            naturally lit office"). A careers page for a chambers that opens on
+            a picture of strangers it has no connection to reads as borrowed,
+            which is the opposite of the impression this page exists to make.
+            It also removes the page's only Unsplash request — a third party the
+            Privacy Notice has to disclose precisely because it sees the
+            reader's IP address.
+
+            The dark ground is `sage-deep`, the surface the footer and the other
+            accent blocks already use, so the page opens in the site's own
+            register instead of a one-off. */}
+        <div className="relative bg-sage-deep text-white overflow-hidden">
+          {/* A single hairline grid, drawn from the border token at low opacity
+              — the same device the site uses to delineate everything else,
+              rather than a gradient or a texture. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)",
+              backgroundSize: "88px 88px",
+            }}
+          />
+          <div className="relative shell pt-28 pb-20 md:pt-36 md:pb-28">
             <div className="eyebrow" data-tone="dark">
               <span className="eyebrow-label">Careers</span>
             </div>
-            {/* Was `md:text-6xl lg:text-[68px]`, which made the careers page
-                the loudest headline on the site — four points larger than the
-                home hero it sits beneath in the hierarchy — and skipped the
-                48px rung every other page steps through at `md`. */}
             <h1 className="font-serif text-white text-4xl md:text-5xl lg:text-6xl leading-[1.02] tracking-tight max-w-4xl">
               No ordinary career.
             </h1>
-            <p className="mt-5 text-white/85 text-lg max-w-2xl leading-relaxed">
+            <p className="mt-6 text-white/80 text-lg md:text-xl max-w-2xl leading-relaxed">
               Build a practice at the intersection of rigorous advocacy and considered counsel.
             </p>
+
+            {/* Three standing facts, each already stated elsewhere on this page
+                or evidenced in the data — not new claims. `brown-on-dark` is
+                the emerald tuned for dark grounds; the DEFAULT fails AA here. */}
+            <dl className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/10 border border-white/10">
+              {[
+                { k: "Reviewed by", v: "Ramandeep Bawa, personally" },
+                { k: "You will work on", v: "Live matters, from day one" },
+                { k: "Open to", v: "Advocates and law students" },
+              ].map(({ k, v }) => (
+                <div key={k} className="bg-sage-deep px-6 py-6">
+                  <dt className="text-[10px] uppercase tracking-widest-plus text-brown-on-dark font-semibold">{k}</dt>
+                  <dd className="mt-2 text-white/90 leading-snug">{v}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
 
@@ -181,34 +190,58 @@ export default function Careers() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
-            {tracks.map(({ key, Icon, title, body }) => {
-              const active = form.applicant_type === key;
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => selectTrack(key)}
-                  aria-pressed={active}
-                  data-testid={`careers-track-${key}`}
-                  /* Same latent defect as the practice and expertise cards.
-                     These two happen to hold equal content today, so nothing is
-                     visibly misaligned — but the moment one track's copy runs a
-                     line longer the icons would drift apart. */
-                  className={`group flex flex-col border bg-white p-8 text-left transition-[border-color,box-shadow] duration-300 hover:elevate-card ${
-                    active ? "border-brown elevate-card" : "border-border hover:border-brown"
-                  }`}
-                >
-                  <Icon size={28} strokeWidth={1.3} className="text-brown mb-6" />
-                  <h2 className="font-serif text-2xl text-ink mb-3">{title}</h2>
-                  <p className="text-ink-soft text-sm md:text-base leading-relaxed">{body}</p>
-                  <span className="mt-6 inline-flex items-center gap-2 text-brown text-xs font-semibold uppercase tracking-widest-plus">
-                    {active ? "Selected — apply below" : "Apply for this"}
-                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-200" />
-                  </span>
-                </button>
-              );
-            })}
+          <div className="mb-20">
+            <div className="eyebrow">
+              <span className="eyebrow-label">Two ways in</span>
+            </div>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-10">
+              Choose the track that fits.
+            </h2>
+
+            {/* One hairline grid rather than two detached cards: `gap-px` over a
+                border-coloured ground is how the rest of the site joins related
+                panels (the team profile's practice grid does the same), and it
+                keeps the two tracks reading as one choice. */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border border border-border">
+              {tracks.map(({ key, Icon, title, body, eligibility }, i) => {
+                const active = form.applicant_type === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => selectTrack(key)}
+                    aria-pressed={active}
+                    data-testid={`careers-track-${key}`}
+                    className={`group relative flex flex-col p-8 md:p-10 text-left transition-colors duration-300 ${
+                      active ? "bg-brown-soft" : "bg-white hover:bg-cream-dark"
+                    }`}
+                  >
+                    {/* The selected track is marked by a solid rule along its
+                        top edge — a border the layout already reserves space
+                        for, so selecting one shifts nothing. */}
+                    <span
+                      aria-hidden
+                      className={`absolute inset-x-0 top-0 h-0.5 transition-colors duration-300 ${
+                        active ? "bg-brown" : "bg-transparent"
+                      }`}
+                    />
+                    <div className="flex items-center justify-between">
+                      <Icon size={26} strokeWidth={1.3} className="text-brown" />
+                      <span className="font-serif text-2xl text-ink-soft/30 tabular-nums">0{i + 1}</span>
+                    </div>
+                    <h3 className="font-serif text-2xl text-ink mt-6 mb-3">{title}</h3>
+                    <p className="text-ink-soft text-sm md:text-base leading-relaxed">{body}</p>
+                    <p className="mt-4 text-[13px] text-ink-soft leading-relaxed border-t border-border pt-4">
+                      {eligibility}
+                    </p>
+                    <span className="mt-6 inline-flex items-center gap-2 text-brown text-xs font-semibold uppercase tracking-widest-plus">
+                      {active ? "Selected — apply below" : "Apply for this"}
+                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-200" />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div ref={formRef} className="grid lg:grid-cols-12 gap-10 lg:gap-16 scroll-mt-nav">
@@ -225,35 +258,14 @@ export default function Careers() {
 
             <AnimatePresence mode="wait" initial={false}>
             {sent ? (
-              <motion.div
-                key="sent"
-                data-testid="careers-success"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", stiffness: 160, damping: 22 }}
-                className="lg:col-span-8 bg-white border border-border p-8 md:p-12"
-              >
-                <motion.span
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.12, type: "spring", stiffness: 300, damping: 18 }}
-                  className="confirm-badge"
-                >
-                  <Check size={22} strokeWidth={1.8} />
-                </motion.span>
-                <h3 className="font-serif text-2xl md:text-3xl text-ink mt-6">Your application has been received.</h3>
-                <p className="mt-4 text-ink-soft leading-relaxed max-w-lg">
-                  Applications are reviewed as they arrive. We will be in touch if there is a fit.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setSent(false)}
-                  className="mt-8 inline-flex items-center gap-3 text-brown text-xs uppercase tracking-widest-plus border-b border-brown/40 pb-1 hover:border-brown transition-colors duration-300"
-                >
-                  Submit another application
-                  <ArrowRight size={14} />
-                </button>
-              </motion.div>
+              <FormSuccess
+                className="lg:col-span-8"
+                testId="careers-success"
+                title="Your application has been received."
+                body="Applications are reviewed as they arrive. We will be in touch if there is a fit."
+                actionLabel="Submit another application"
+                onReset={() => setSent(false)}
+              />
             ) : (
             <motion.form
               key="form"
@@ -263,38 +275,76 @@ export default function Careers() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25 }}
               className="lg:col-span-8 bg-white border border-border p-8 md:p-12">
-              <p className="text-xs text-ink-soft mb-8">Fields marked * are required.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Field label="Full Name *" error={shown("name")} htmlId="careers-name">
-                  <input data-testid="careers-name" name="name" required aria-required="true" value={form.name} onChange={onChange} onBlur={onBlur}
-                    aria-invalid={!!shown("name")} className="input-line" />
-                </Field>
-                <Field label="Email *" error={shown("email")} htmlId="careers-email">
-                  <input data-testid="careers-email" name="email" required aria-required="true" type="email" value={form.email} onChange={onChange} onBlur={onBlur}
-                    aria-invalid={!!shown("email")} className="input-line" />
-                </Field>
-                <Field label="Phone" error={shown("phone")} htmlId="careers-phone">
-                  <input data-testid="careers-phone" name="phone" value={form.phone} onChange={onChange} onBlur={onBlur}
-                    aria-invalid={!!shown("phone")} className="input-line" />
-                </Field>
-                <Field label="Applying For *">
-                  <select data-testid="careers-type" name="applicant_type" required aria-required="true" value={form.applicant_type} onChange={onChange} className="input-line bg-transparent">
-                    <option value="recruitment">Recruitment</option>
-                    <option value="internship">Internship</option>
-                  </select>
-                </Field>
-                <div className="md:col-span-2">
+              <ErrorSummary problems={problems} labels={LABELS} onFocus={focusField} />
+
+              <div className="space-y-10">
+                <FieldGroup title="Your details" note="* required">
+                  <Field label="Full Name *" error={shown("name")} htmlId="careers-name">
+                    <input data-testid="careers-name" name="name" required aria-required="true" value={form.name} onChange={onChange} onBlur={onBlur}
+                      aria-invalid={!!shown("name")} className="input-line" />
+                  </Field>
+                  <Field label="Email *" error={shown("email")} htmlId="careers-email">
+                    <input data-testid="careers-email" name="email" required aria-required="true" type="email" value={form.email} onChange={onChange} onBlur={onBlur}
+                      aria-invalid={!!shown("email")} className="input-line" />
+                  </Field>
+                  <Field label="Phone" error={shown("phone")} htmlId="careers-phone">
+                    <input data-testid="careers-phone" name="phone" value={form.phone} onChange={onChange} onBlur={onBlur}
+                      aria-invalid={!!shown("phone")} className="input-line" />
+                  </Field>
                   <Field label="Position / Area of Interest" error={shown("position")} htmlId="careers-position">
                     <input data-testid="careers-position" name="position" value={form.position} onChange={onChange} onBlur={onBlur}
                       aria-invalid={!!shown("position")} className="input-line" placeholder="e.g. Associate — Civil Litigation" />
                   </Field>
-                </div>
-                <div className="md:col-span-2">
-                  <Field label="Message *" error={shown("message")} htmlId="careers-message">
-                    <textarea data-testid="careers-message" name="message" rows={5} required aria-required="true" value={form.message} onChange={onChange} onBlur={onBlur}
-                      aria-invalid={!!shown("message")} className="input-line resize-none" />
-                  </Field>
-                </div>
+                </FieldGroup>
+
+                <FieldGroup title="Your application">
+                  {/* Native radios rather than the previous <select>. The two
+                      options are the same two the track cards above offer, so a
+                      dropdown hid a choice the page had already made visible —
+                      and the cards set this value, which a closed select gave
+                      no feedback about. Radios keep arrow-key behaviour and the
+                      grouping semantics for free. */}
+                  <div className="md:col-span-2">
+                    <span className="text-[10px] uppercase tracking-widest-plus text-ink-soft">Applying For *</span>
+                    <div role="radiogroup" aria-label="Applying for" className="mt-3 flex flex-wrap gap-3">
+                      {tracks.map(({ key, Icon, title }) => {
+                        const active = form.applicant_type === key;
+                        return (
+                          <label
+                            key={key}
+                            data-testid={`careers-type-${key}`}
+                            className={`inline-flex cursor-pointer items-center gap-2.5 border px-5 py-3 text-sm transition-colors duration-200 focus-within:ring-2 focus-within:ring-brown/30 ${
+                              active ? "border-brown bg-brown-soft text-ink" : "border-border text-ink-soft hover:border-brown"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="applicant_type"
+                              value={key}
+                              checked={active}
+                              onChange={onChange}
+                              className="sr-only"
+                            />
+                            <Icon size={16} strokeWidth={1.5} className={active ? "text-brown" : "text-ink-soft"} />
+                            {title}
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <Field
+                      label="Message *"
+                      error={shown("message")}
+                      htmlId="careers-message"
+                      hint={`${form.message.trim().length}/3000 · a short note on why you would like to join`}
+                    >
+                      <textarea data-testid="careers-message" name="message" rows={5} required aria-required="true" value={form.message} onChange={onChange} onBlur={onBlur}
+                        aria-invalid={!!shown("message")} className="input-line resize-none" />
+                    </Field>
+                  </div>
+
                 <div className="md:col-span-2">
                   <label htmlFor="careers-resume" className="text-[10px] uppercase tracking-widest-plus text-ink-soft">
                     Resume / CV (PDF or Word, max 5MB)
@@ -391,18 +441,13 @@ export default function Careers() {
                     and then deleted. You can ask for yours to be removed sooner at any time — see the{" "}
                     <Link to="/privacy" className="text-brown">Privacy Notice</Link>.
                   </p>
-                </div>
+                  </div>
+                </FieldGroup>
               </div>
 
-              <button type="submit" data-testid="careers-submit" disabled={loading} aria-busy={loading}
-                className="mt-8 inline-flex items-center gap-3 bg-brown text-white px-10 py-4 text-xs uppercase tracking-widest-plus font-semibold hover:bg-brown-light transition-colors duration-300 pressable disabled:opacity-60 disabled:cursor-not-allowed group">
-                {loading ? "Submitting" : "Submit Application"}
-                {loading ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
-                )}
-              </button>
+              <div className="mt-10">
+                <SubmitButton testId="careers-submit" loading={loading} idle="Submit Application" pending="Submitting" />
+              </div>
             </motion.form>
             )}
             </AnimatePresence>
